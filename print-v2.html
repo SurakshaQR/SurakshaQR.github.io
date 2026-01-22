@@ -1,0 +1,145 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>SurakshaQR - Official Print Template</title>
+    <style>
+        :root { 
+            --gold: #FFD700; 
+            --bg: #05070a; 
+            --white: #ffffff;
+        }
+
+        body { 
+            background: #f0f2f5; 
+            display: flex; 
+            justify-content: center; 
+            align-items: center; 
+            min-height: 100vh; 
+            margin: 0; 
+            font-family: 'Segoe UI', Roboto, Helvetica, Arial, sans-serif; 
+        }
+        
+        /* Main Sticker Container */
+        .sticker-container {
+            width: 380px;
+            background: var(--bg);
+            padding: 40px;
+            border-radius: 50px;
+            text-align: center;
+            border: 4px solid var(--gold);
+            position: relative;
+            box-shadow: 0 20px 50px rgba(0,0,0,0.3);
+        }
+
+        .logo-top { 
+            width: 90px; 
+            margin-bottom: 20px; 
+            filter: drop-shadow(0 0 5px rgba(255,215,0,0.3));
+        }
+
+        /* The Circular Text Frame (Static - No Rotation) */
+        .qr-frame {
+            position: relative;
+            width: 280px;
+            height: 280px;
+            margin: 0 auto;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+        }
+
+        .circular-text {
+            position: absolute;
+            width: 100%;
+            height: 100%;
+            /* Animation removed as per your request */
+        }
+
+        .circular-text text { 
+            fill: var(--gold); 
+            font-size: 13.5px; 
+            font-weight: 900; 
+            letter-spacing: 4px; 
+            text-transform: uppercase;
+        }
+
+        /* The QR Code Box */
+        .qr-white-box {
+            width: 180px;
+            height: 180px;
+            background: white;
+            padding: 12px;
+            border-radius: 20px;
+            z-index: 10;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            box-shadow: 0 0 20px rgba(255,255,255,0.1);
+        }
+
+        .qr-white-box img { 
+            width: 100%; 
+            height: 100%; 
+        }
+
+        .footer-id { 
+            color: var(--gold); 
+            font-size: 14px; 
+            margin-top: 30px; 
+            font-weight: bold; 
+            letter-spacing: 2px;
+            opacity: 0.8;
+        }
+
+        /* Print Specific Optimization */
+        @media print {
+            body { background: white; }
+            .sticker-container { 
+                box-shadow: none; 
+                border: 3px solid black; /* Cleaner for some printers */
+            }
+            .qr-white-box { border: 1px solid #eee; }
+        }
+    </style>
+</head>
+<body>
+
+    <div class="sticker-container">
+        <img src="logo.png.png" class="logo-top" alt="SurakshaQR Logo">
+        
+        <div class="qr-frame">
+            <svg class="circular-text" viewBox="0 0 100 100">
+                <path id="circlePath" d="M 50, 50 m -40, 0 a 40,40 0 1,1 80,0 a 40,40 0 1,1 -80,0" fill="transparent"/>
+                <text>
+                    <textPath xlink:href="#circlePath" startOffset="0%">
+                        • IN EMERGENCY SCAN ME • IN EMERGENCY SCAN ME •
+                    </textPath>
+                </text>
+            </svg>
+
+            <div class="qr-white-box">
+                <img id="qrImage" src="" alt="QR Code">
+            </div>
+        </div>
+
+        <div id="displayId" class="footer-id">ID: LOADING...</div>
+    </div>
+
+    <script>
+        // Extract the ID from the URL (e.g., ?id=SQ100)
+        const urlParams = new URLSearchParams(window.location.search);
+        const userId = urlParams.get('id') || 'SQ100';
+        
+        // Generate QR Code with Error Correction Level H (High) for print durability
+        // We use encodeURIComponent to ensure the URL inside the QR is perfectly formatted
+        const targetUrl = "https://SurakshaQR.github.io/index.html?id=" + userId;
+        const qrUrl = "https://api.qrserver.com/v1/create-qr-code/?size=300x300&margin=2&ecc=H&data=" + encodeURIComponent(targetUrl);
+        
+        // Apply to the page
+        document.getElementById('qrImage').src = qrUrl;
+        document.getElementById('displayId').innerText = "ID: " + userId.toUpperCase();
+    </script>
+</body>
+</html>
