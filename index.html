@@ -3,71 +3,67 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>SurakshaQR | Connection Test</title>
+    <title>SurakshaQR | Emergency Profile</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
     <style>
-        body { font-family: sans-serif; background: #05070a; color: white; display: flex; justify-content: center; padding: 20px; }
-        .card { background: rgba(255,255,255,0.05); border: 1px solid rgba(255,255,255,0.1); border-radius: 15px; padding: 25px; width: 100%; max-width: 400px; }
-        .status { color: #FFD700; font-weight: bold; margin-bottom: 10px; }
-        .log { background: black; padding: 10px; font-family: monospace; font-size: 12px; border-radius: 5px; color: #2ed573; overflow-x: auto; }
-        .error { color: #ff4757; }
+        :root { --gold: #FFD700; --bg: #05070a; --glass: rgba(255, 255, 255, 0.05); --red: #ff4757; }
+        body { margin: 0; font-family: sans-serif; background: var(--bg); color: white; display: flex; justify-content: center; }
+        .container { width: 90%; max-width: 400px; padding: 40px 0; }
+        .bento-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 15px; margin-top: 20px; }
+        .card { background: var(--glass); border: 1px solid rgba(255,255,255,0.1); border-radius: 20px; padding: 20px; }
+        .full { grid-column: span 2; }
+        .val { font-size: 22px; font-weight: bold; margin-top: 5px; }
+        .label { font-size: 11px; opacity: 0.5; text-transform: uppercase; }
+        .btn { display: block; text-align: center; padding: 18px; border-radius: 15px; text-decoration: none; font-weight: bold; margin-top: 15px; }
+        .btn-red { background: var(--red); color: white; }
     </style>
 </head>
 <body>
-    <div class="card">
-        <h2>SurakshaQR Test</h2>
-        <div id="step" class="status">Step 1: Reading Browser URL...</div>
-        <div id="logger" class="log">Initializing...</div>
+    <div class="container" id="mainDisplay">
+        <h2 style="text-align:center; color:var(--gold);">SURAKSHAQR</h2>
+        <p style="text-align:center; opacity:0.6;">Loading Secure Profile...</p>
     </div>
 
     <script>
-        const logger = document.getElementById('logger');
-        const step = document.getElementById('step');
-
-        function log(msg) { logger.innerHTML += `<br>> ${msg}`; }
-
-        async function runTest() {
-            // 1. Capture ID from URL
+        async function loadProfile() {
             const urlParams = new URLSearchParams(window.location.search);
             const qrId = urlParams.get('id');
-            
-            // YOUR ACTUAL SCRIPT URL
-            const scriptUrl = "https://script.google.com/macros/s/AKfycbzi9Mp6nkIZk7XhlhvaA2tPSowAhW8Ai8EBFZHrCGXKyE0kqSrGFZ67eThCBwLkW1AZ/exec";
+            const scriptUrl = "https://script.google.com/macros/s/AKfycbzoYLLd8rPqJge8MmOkCddfcqmNrMWGeLXTpVdtoi6CHlwfvmKWIOfzxA5pUJAAb90k/exec";
 
-            if (!qrId) {
-                step.innerText = "Error: No ID Found";
-                log("<span class='error'>FAIL: Please add ?id=SQ100 to your browser URL.</span>");
-                return;
-            }
-            
-            log(`Success: Found ID [${qrId}]`);
-            step.innerText = "Step 2: Connecting to Google...";
+            if (!qrId) return;
 
             try {
-                // THE FIX: Forcing the parameter into the URL string
                 const finalUrl = `${scriptUrl}?id=${encodeURIComponent(qrId)}`;
-                log(`Sending request to: ${finalUrl}`);
-
                 const response = await fetch(finalUrl);
-                
-                // Read as text first to handle your current "Testing" script
-                const resultText = await response.text();
-                
-                step.innerText = "Step 3: Server Responded!";
-                log(`SERVER OUTPUT: <span style="color:white; font-size:16px;">${resultText}</span>`);
+                const data = await response.json();
+                const display = document.getElementById('mainDisplay');
 
-                if (resultText.includes("undefined")) {
-                    log("<span class='error'>WARNING: Script received the call but 'id' is still undefined inside Apps Script. Check doGet(e) spelling.</span>");
+                if (data.Status === "Active") {
+                    display.innerHTML = `
+                        <div class="bento-grid">
+                            <div class="card full">
+                                <div class="label">Owner Name</div>
+                                <div class="val">${data.Name}</div>
+                            </div>
+                            <div class="card">
+                                <div class="label">Blood Group</div>
+                                <div class="val" style="color:var(--red)">${data.Blood_Group}</div>
+                            </div>
+                            <div class="card">
+                                <div class="label">Status</div>
+                                <div class="val" style="color:#2ed573">Verified</div>
+                            </div>
+                        </div>
+                        <a href="tel:${data.Emergency_Phone}" class="btn btn-red">CALL EMERGENCY CONTACT</a>
+                    `;
                 } else {
-                    log("CONGRATULATIONS: Connection is stable.");
+                    display.innerHTML = `<div class="card full" style="text-align:center;"><h3>System Ready</h3><p>Unlinked Tag Detected.</p></div>`;
                 }
-
-            } catch (err) {
-                step.innerText = "Connection Failed";
-                log(`<span class='error'>ERROR: ${err.message}</span>`);
+            } catch (e) {
+                console.error(e);
             }
         }
-
-        runTest();
+        loadProfile();
     </script>
 </body>
 </html>
