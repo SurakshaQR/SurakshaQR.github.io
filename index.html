@@ -57,9 +57,10 @@
         .social-row a { color: white; font-size: 22px; opacity: 0.6; transition: 0.3s; }
         .social-row a:hover { opacity: 1; color: var(--gold); transform: translateY(-3px); }
 
-        /* Loading Animation */
+        /* Loading & Debug Info */
         .loader { text-align: center; padding: 40px; }
         .fa-spin { color: var(--gold); font-size: 30px; }
+        .debug-info { font-size: 10px; color: #444; margin-top: 20px; text-align: center; font-family: monospace; }
     </style>
 </head>
 <body>
@@ -74,15 +75,17 @@
         </div>
 
         <div class="social-row" id="socialLinks" style="display:none;"></div>
+        <div id="debugBox" class="debug-info"></div>
     </div>
 
     <script>
         async function initProfile() {
             const urlParams = new URLSearchParams(window.location.search);
             const qrId = urlParams.get('id');
+            const debug = document.getElementById('debugBox');
             
-            // !!! PASTE YOUR GOOGLE APPS SCRIPT WEB APP URL HERE !!!
-            const scriptUrl = "https://script.google.com/macros/s/AKfycbwCxRygp3RmKVWesgCo_-oRyyqkfsaQ4rhcpTk-0mZ7sUVV9Jzia-f_-EdmHzbRTgXJ/exec"; 
+            // !!! PASTE YOUR NEW GOOGLE APPS SCRIPT WEB APP URL HERE !!!
+            const scriptUrl = "https://script.google.com/macros/s/AKfycbyWLwX_tjApPM1H0kZB-ZS9sf1w5an-MT_4nHsCwaSvvt74OXR41qzDazpJ-3oc7JDF/exec"; 
 
             if(!qrId) {
                 document.getElementById('mainDisplay').innerHTML = '<div class="card full">Invalid Scan. No ID detected.</div>';
@@ -148,9 +151,10 @@
                             <div class="val">System Ready</div>
                             <p style="opacity:0.6; margin-top:10px;">This SurakshaQR tag is currently unlinked. Please use the App to activate your profile.</p>
                         </div>`;
+                    debug.innerText = "Current Status in Sheet: " + (data.Found_Status || "Unknown");
                 }
             } catch (err) {
-                document.getElementById('mainDisplay').innerHTML = '<div class="card full">Network Error. Please try again.</div>';
+                document.getElementById('mainDisplay').innerHTML = '<div class="card full">Network Error. Check Script URL.</div>';
             }
         }
 
