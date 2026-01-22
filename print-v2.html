@@ -2,112 +2,85 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <title>SurakshaQR - Neon Print Template</title>
+    <title>SurakshaQR - Professional Decal</title>
     <style>
-        :root { 
-            --gold: #FFD700; 
-            --gold-glow: rgba(255, 215, 0, 0.6);
-            --bg: #05070a; 
-        }
-
+        :root { --gold: #FFD700; --bg: #05070a; }
+        
         body { 
-            background: #111; 
-            display: flex; 
-            justify-content: center; 
-            align-items: center; 
-            min-height: 100vh; 
-            margin: 0; 
-            font-family: 'Arial Black', sans-serif; 
+            background: #000; /* Represents the black car body */
+            display: flex; justify-content: center; align-items: center; 
+            min-height: 100vh; margin: 0; font-family: 'Arial Black', sans-serif; 
         }
         
-        /* Premium Card with Outer Glow */
+        /* Compact Square Card with No Wasted Space */
         .sticker-card {
-            width: 400px;
+            width: 320px; /* Tightened width */
             background: var(--bg);
-            padding: 35px;
-            border-radius: 60px;
+            padding: 15px; /* Minimal padding */
+            border-radius: 15px; /* Subtle round for square look */
             text-align: center;
-            border: 4px solid var(--gold);
-            /* This creates the yellow glowing border around the whole card */
-            box-shadow: 0 0 25px var(--gold-glow), inset 0 0 15px var(--gold-glow);
-            position: relative;
+            border: 3px solid var(--gold);
+            box-shadow: 0 0 20px rgba(255, 215, 0, 0.5); /* Glowing Border */
         }
 
-        .logo-img { 
-            width: 90px; 
-            margin-bottom: 5px; 
-            filter: drop-shadow(0 0 8px var(--gold-glow));
-        }
+        .logo-top { width: 60px; margin-bottom: 5px; filter: drop-shadow(0 0 5px var(--gold)); }
 
         .qr-wrapper {
             position: relative;
-            width: 320px;
-            height: 320px;
+            width: 280px; /* Maximum size for the box */
+            height: 280px;
             margin: 0 auto;
             display: flex;
             justify-content: center;
             align-items: center;
         }
 
-        /* The Glowing Text Circle */
+        /* The Gold Text Circle - Hugging the Border */
         .circular-svg {
             position: absolute;
             width: 100%;
             height: 100%;
-            /* Makes the gold text itself glow */
             filter: drop-shadow(0 0 5px var(--gold));
         }
 
         .circular-svg text { 
             fill: var(--gold); 
-            font-size: 13.5px; 
+            font-size: 11.5px; 
             font-weight: 900; 
-            letter-spacing: 4px;
+            letter-spacing: 2px;
             text-transform: uppercase;
         }
 
-        /* The QR Code Container with Inner Glow */
+        /* The QR Code - Large for easy scanning */
         .qr-white-box {
             width: 190px;
             height: 190px;
             background: white;
-            padding: 15px;
-            border-radius: 25px;
+            padding: 10px;
+            border-radius: 12px;
             z-index: 10;
-            box-shadow: 0 0 30px rgba(255, 255, 255, 0.2);
         }
 
-        .qr-white-box img { 
-            width: 100%; 
-            height: 100%; 
-            border-radius: 5px; 
-        }
+        .qr-white-box img { width: 100%; height: 100%; }
 
-        /* ID Label with Glow */
-        .id-text { 
+        .id-footer { 
             color: var(--gold); 
-            font-size: 18px; 
-            margin-top: 15px; 
+            font-size: 14px; 
+            margin-top: 10px; 
             font-weight: 900; 
-            letter-spacing: 3px;
-            text-shadow: 0 0 10px var(--gold);
-        }
-
-        /* Print Settings to preserve glow */
-        @media print {
-            .sticker-card { -webkit-print-color-adjust: exact; }
-            body { background: white; }
+            letter-spacing: 2px;
+            text-shadow: 0 0 5px var(--gold);
         }
     </style>
 </head>
 <body>
 
     <div class="sticker-card">
-        <img src="logo.png.png" class="logo-img">
+        <img src="logo.png.png" class="logo-top">
         
         <div class="qr-wrapper">
             <svg class="circular-svg" viewBox="0 0 100 100">
-                <path id="circlePath" d="M 50, 50 m -43, 0 a 43,43 0 1,1 86,0 a 43,43 0 1,1 -86,0" fill="transparent"/>
+                <path id="circlePath" d="M 50, 50 m -46, 0 a 46,46 0 1,1 92,0 a 46,46 0 1,1 -92,0" fill="transparent"/>
                 <text>
                     <textPath xlink:href="#circlePath">
                         • IN EMERGENCY SCAN ME • IN EMERGENCY SCAN ME •
@@ -116,15 +89,17 @@
             </svg>
 
             <div class="qr-white-box">
-                <img id="stickerQr" src="">
+                <img id="qrImg" src="">
             </div>
         </div>
 
-        <div id="idDisplay" class="id-text">ID: SQ100</div>
+        <div id="idTag" class="id-footer">ID: SQ100</div>
     </div>
 
     <script>
         const urlParams = new URLSearchParams(window.location.search);
         const userId = urlParams.get('id') || 'SQ100';
+        const profileUrl = "https://SurakshaQR.github.io/index.html?id=" + userId;
         
-        const
+        // High Error Correction (H) for reliability on vehicles
+        const qrUrl = "
