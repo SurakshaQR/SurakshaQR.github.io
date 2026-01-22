@@ -3,96 +3,217 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>SurakshaQR - Safety Portal</title>
+    <title>SurakshaQR - Official Safety Portal</title>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
     <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;800&display=swap" rel="stylesheet">
     <style>
-        :root { --glass: rgba(255, 255, 255, 0.05); --border: rgba(255, 255, 255, 0.12); --gold: #FFD700; --bg: #0b0f1a; }
-        body { margin: 0; font-family: 'Plus Jakarta Sans', sans-serif; background: var(--bg); color: white; display: flex; justify-content: center; min-height: 100vh; background-image: radial-gradient(at 0% 0%, #1a1f2c 0, transparent 50%), radial-gradient(at 100% 0%, #2c1a1a 0, transparent 50%); }
-        .container { width: 92%; max-width: 400px; padding: 20px 0; }
-        .header { text-align: center; margin-bottom: 20px; }
-        .logo-img { width: 70px; height: 70px; border-radius: 50%; margin-bottom: 10px; border: 2px solid var(--gold); }
-        .brand-name { font-weight: 500; font-size: 18px; color: var(--gold); letter-spacing: 2px; }
-        .brand-name span { font-weight: 800; font-size: 26px; }
+        :root {
+            --glass: rgba(255, 255, 255, 0.03);
+            --border: rgba(255, 255, 255, 0.08);
+            --gold: #FFD700;
+            --accent: #ff4757;
+            --bg: #05070a;
+        }
+
+        body {
+            margin: 0; font-family: 'Plus Jakarta Sans', sans-serif;
+            background: var(--bg); color: white; overflow-x: hidden;
+            /* AURORA MESH BACKGROUND */
+            background-image: 
+                radial-gradient(at 0% 0%, hsla(253,16%,15%,1) 0, transparent 50%), 
+                radial-gradient(at 100% 0%, hsla(339,49%,20%,1) 0, transparent 50%),
+                radial-gradient(at 50% 100%, hsla(220,50%,15%,1) 0, transparent 50%);
+            display: flex; justify-content: center; min-height: 100vh;
+        }
+
+        .container { width: 92%; max-width: 420px; padding: 25px 0; }
+
+        /* BRANDING & TRUST BADGE */
+        .header { display: flex; flex-direction: column; align-items: center; margin-bottom: 30px; }
+        .logo-img { width: 85px; height: 85px; border-radius: 50%; border: 2px solid var(--gold); padding: 5px; background: rgba(0,0,0,0.3); margin-bottom: 12px; filter: drop-shadow(0 0 15px rgba(255,215,0,0.2)); }
+        .brand-name { font-weight: 500; font-size: 16px; letter-spacing: 4px; color: var(--gold); text-transform: uppercase; margin-bottom: 5px; }
+        .brand-name span { font-weight: 800; font-size: 28px; letter-spacing: 1px; }
+        .trust-badge { font-size: 10px; color: #2ed573; background: rgba(46, 213, 115, 0.1); padding: 5px 15px; border-radius: 30px; border: 1px solid rgba(46, 213, 115, 0.2); text-transform: uppercase; font-weight: 800; letter-spacing: 1px; }
+
+        /* BENTO GRID ANIMATION */
         .bento-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; }
-        .card { background: var(--glass); backdrop-filter: blur(20px); border: 1px solid var(--border); border-radius: 20px; padding: 15px; }
+        .card { 
+            background: var(--glass); backdrop-filter: blur(20px); -webkit-backdrop-filter: blur(20px);
+            border: 1px solid var(--border); border-radius: 28px; padding: 20px;
+            opacity: 0; transform: translateY(30px); animation: slideIn 0.8s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+        }
+        @keyframes slideIn { to { opacity: 1; transform: translateY(0); } }
         .full { grid-column: span 2; }
-        .label { font-size: 10px; opacity: 0.6; text-transform: uppercase; margin-bottom: 5px; }
-        h1 { margin: 0; font-size: 22px; }
-        .blood-badge { background: rgba(255, 71, 87, 0.2); color: #ff4757; padding: 4px 10px; border-radius: 8px; font-weight: 800; font-size: 12px; display: inline-block; margin-top: 5px; }
-        .btn { display: flex; align-items: center; justify-content: center; gap: 10px; text-decoration: none; color: white; font-weight: 800; padding: 15px; border-radius: 15px; margin-top: 10px; font-size: 14px; }
-        .btn-call { background: #ff4757; }
-        .btn-notify { background: #2ed573; }
-        .social-row { display: flex; justify-content: center; gap: 20px; margin-top: 20px; }
-        .social-row a { color: white; font-size: 20px; opacity: 0.7; }
+
+        .label { font-size: 10px; opacity: 0.5; font-weight: 600; text-transform: uppercase; letter-spacing: 1.5px; margin-bottom: 8px; }
+        h1 { margin: 0; font-size: 26px; font-weight: 800; letter-spacing: -0.5px; }
+        .blood-tag { display: inline-flex; align-items: center; gap: 6px; background: rgba(255, 71, 87, 0.15); color: #ff4757; padding: 6px 14px; border-radius: 12px; font-size: 13px; font-weight: 800; margin-top: 10px; }
+
+        /* BUTTONS */
+        .btn { 
+            display: flex; align-items: center; justify-content: center; gap: 12px; 
+            text-decoration: none; font-weight: 800; font-size: 15px; padding: 18px; 
+            border-radius: 22px; margin-top: 10px; transition: all 0.3s ease;
+        }
+        .btn:active { transform: scale(0.96); }
+        .btn-call { background: linear-gradient(135deg, #ff4757, #ff6b81); color: white; box-shadow: 0 10px 20px rgba(255, 71, 87, 0.2); }
+        .btn-notify { background: linear-gradient(135deg, #2ed573, #7bed9f); color: #052c14; }
+        .btn-vault { background: rgba(255, 215, 0, 0.05); border: 1px solid var(--gold); color: var(--gold); }
+
+        /* BUDDIES DRAWER */
+        #buddyDrawer { 
+            display: none; grid-column: span 2; background: rgba(255,255,255,0.02); 
+            border-radius: 22px; padding: 15px; border: 1px solid var(--border); margin-top: 5px;
+            animation: fadeIn 0.5s ease;
+        }
+        @keyframes fadeIn { from { opacity: 0; } to { opacity: 1; } }
+        .buddy-item { display: flex; justify-content: space-between; align-items: center; padding: 12px; border-bottom: 1px solid var(--border); }
+        .buddy-item:last-child { border-bottom: none; }
+
+        /* SOCIAL PILL */
+        .social-pill { 
+            margin-top: 25px; background: var(--glass); border-radius: 50px; 
+            padding: 18px; display: flex; justify-content: space-around; border: 1px solid var(--border); 
+        }
+        .social-pill a { color: white; font-size: 24px; transition: 0.3s; opacity: 0.6; }
+        .social-pill a:hover { opacity: 1; color: var(--gold); }
+
+        /* PRO FOOTER */
+        .safety-footer { 
+            margin-top: 40px; text-align: center; padding: 30px 20px; 
+            background: linear-gradient(to bottom, transparent, rgba(255,215,0,0.03));
+            border-radius: 40px; border: 1px solid var(--border);
+        }
+        .web-link { 
+            display: inline-block; color: var(--gold); text-decoration: none; font-weight: 800; 
+            font-size: 13px; border: 1px solid var(--gold); padding: 10px 25px; border-radius: 50px; 
+            margin-top: 15px; transition: 0.3s;
+        }
+        .web-link:hover { background: var(--gold); color: black; }
+
+        /* LOADING SHIMMER */
+        .shimmer { color: rgba(255,215,0,0.5); animation: loading 1.5s infinite; }
+        @keyframes loading { 0% { opacity: 0.3; } 50% { opacity: 1; } 100% { opacity: 0.3; } }
     </style>
 </head>
 <body>
     <div class="container">
         <div class="header">
-            <img src="logo.png" class="logo-img" alt="Logo">
+            <img src="logo.png" class="logo-img" alt="SurakshaQR Logo">
             <div class="brand-name">SURAKSHA<span>QR</span></div>
+            <div class="trust-badge"><i class="fas fa-shield-check"></i> OFFICIAL SAFETY PORTAL</div>
         </div>
+
         <div class="bento-grid">
-            <div class="card full">
+            <div class="card full" style="animation-delay: 0.1s;">
                 <div class="label">Primary Member</div>
-                <h1 id="userName">Verifying...</h1>
-                <div id="bloodGroup" class="blood-badge">---</div>
+                <h1 id="userName" class="shimmer">Initializing...</h1>
+                <div id="bloodGroup" class="blood-tag">---</div>
             </div>
-            <div class="card">
-                <div class="label">Vault</div>
-                <div style="color:var(--gold); font-weight: 800; font-size: 12px;">SECURED</div>
+
+            <div class="card" style="animation-delay: 0.2s;">
+                <div class="label">Medical Vault</div>
+                <div style="font-size:12px; font-weight:800; color:var(--gold)"><i class="fas fa-lock"></i> ENCRYPTED</div>
             </div>
-            <div class="card">
-                <div class="label">Status</div>
-                <div id="statusLabel" style="color:#2ed573; font-weight: 800; font-size: 12px;">ACTIVE</div>
+
+            <div class="card" style="animation-delay: 0.3s;">
+                <div class="label">Live Status</div>
+                <div id="statusLabel" style="font-size:12px; font-weight:800; color:#2ed573"><i class="fas fa-check-circle"></i> VERIFIED</div>
             </div>
-            <a href="#" id="callBtn" class="btn btn-call full"><i class="fas fa-phone"></i> EMERGENCY CALL</a>
-            <a href="#" id="notifyBtn" class="btn btn-notify full"><i class="fab fa-whatsapp"></i> NOTIFY OWNER</a>
+
+            <a href="#" id="callBtn" class="btn btn-call full" style="animation-delay: 0.4s;"><i class="fas fa-phone-alt"></i> EMERGENCY CALL</a>
+            
+            <a href="javascript:void(0)" onclick="toggleBuddies()" class="btn btn-vault full" id="buddyBtn" style="animation-delay: 0.5s;"><i class="fas fa-users"></i> VIEW BLOOD BUDDIES</a>
+            
+            <div id="buddyDrawer">
+                <div id="buddyList"></div>
+            </div>
+
+            <a href="#" id="notifyBtn" class="btn btn-notify full" style="animation-delay: 0.6s;"><i class="fab fa-whatsapp"></i> NOTIFY VEHICLE OWNER</a>
+            
+            <a href="https://www.google.com/maps/search/hospital+near+me" target="_blank" class="btn btn-vault full" style="animation-delay: 0.7s;"><i class="fas fa-ambulance"></i> NEAREST HOSPITAL</a>
         </div>
-        <div class="social-row" id="socialLinks"></div>
+
+        <div class="social-pill" id="socialLinks" style="animation-delay: 0.8s;"></div>
+
+        <div class="safety-footer" style="animation-delay: 0.9s;">
+            <p style="font-size:13px; font-weight:600; color:#94a3b8; margin:0;">Protect your loved ones & vehicle.</p>
+            <p style="font-size:11px; opacity:0.5; margin-top:5px;">SurakshaQR Smart Safety System</p>
+            <a href="https://surakshaqr.com" class="web-link">JOIN THE REVOLUTION <i class="fas fa-external-link-alt"></i></a>
+        </div>
     </div>
 
     <script>
         const urlParams = new URLSearchParams(window.location.search);
         const userId = urlParams.get('id');
-        // PASTE YOUR NEW DEPLOYMENT URL BELOW
-        const apiURL = "https://script.google.com/macros/s/AKfycbxRtvdrBBTee3cUvEa7j_M5CRpsgxgPz1UKK_7vmC-JLj33Donr0bpLZXL_3zwAneCN/exec";
+        // REPLACE WITH YOUR NEW EXEC URL
+        const apiURL = "https://script.google.com/macros/s/AKfycbz0sOgPPBQdT3ChkXGYJ_X0pni0mhn2rSMJHfZY-AY1S7dNKtFK2ymTpuOjIKqEdzpL/exec";
+
+        function toggleBuddies() {
+            const d = document.getElementById('buddyDrawer');
+            d.style.display = d.style.display === 'block' ? 'none' : 'block';
+        }
 
         async function loadData() {
             try {
-                // Fetching with a timestamp to force the latest data from the sheet
                 const response = await fetch(`${apiURL}?id=${userId}&v=${new Date().getTime()}`);
                 const user = await response.json();
 
-                if (user.Status === "Available") {
-                    document.getElementById('userName').innerText = "System Ready";
-                    document.getElementById('statusLabel').innerText = "AVAILABLE";
-                    document.getElementById('statusLabel').style.color = "orange";
-                } else {
-                    document.getElementById('userName').innerText = user.Name || "Not Set";
-                    document.getElementById('bloodGroup').innerText = user.Blood_Group || "N/A";
-                    document.getElementById('callBtn').href = "tel:" + user.Emergency_Contact_1;
-                    
-                    // WhatsApp Logic
-                    const msg = encodeURIComponent("Emergency Alert: I am at your vehicle/location.");
-                    document.getElementById('notifyBtn').href = `https://wa.me/${user.Emergency_Contact_1}?text=${msg}`;
+                const nameEl = document.getElementById('userName');
+                nameEl.classList.remove('shimmer');
 
-                    // Social Links
-                    const socialDiv = document.getElementById('socialLinks');
-                    if (user.Social_Links) {
-                        user.Social_Links.split(',').forEach(link => {
-                            let icon = 'fas fa-link';
-                            if (link.includes('fb')) icon = 'fab fa-facebook';
-                            if (link.includes('ig')) icon = 'fab fa-instagram';
-                            socialDiv.innerHTML += `<a href="${link.trim()}" target="_blank"><i class="${icon}"></i></a>`;
-                        });
-                    }
+                if (user.Status !== "Active") {
+                    nameEl.innerText = "System Ready";
+                    document.getElementById('statusLabel').innerHTML = "<i class='fas fa-info-circle'></i> AVAILABLE";
+                    document.getElementById('statusLabel').style.color = "orange";
+                    return;
                 }
+
+                // Fill Core Data
+                nameEl.innerText = user.Name || "Registered User";
+                document.getElementById('bloodGroup').innerHTML = `<i class="fas fa-tint"></i> ${user.Blood_Group || 'N/A'}`;
+                document.getElementById('callBtn').href = "tel:" + user.Emergency_Contact_1;
+                
+                // WhatsApp Notify Owner
+                const msg = encodeURIComponent(`URGENT: SurakshaQR Alert for your vehicle/profile. Please check.`);
+                document.getElementById('notifyBtn').href = `https://wa.me/${user.Emergency_Contact_1}?text=${msg}`;
+
+                // Social Media Logic
+                const socialDiv = document.getElementById('socialLinks');
+                if (user.Social_Links) {
+                    user.Social_Links.split(',').forEach(link => {
+                        let icon = 'fas fa-link';
+                        const url = link.trim();
+                        if (url.includes('facebook') || url.includes('fb')) icon = 'fab fa-facebook';
+                        if (url.includes('instagram') || url.includes('ig')) icon = 'fab fa-instagram';
+                        if (url.includes('youtube') || url.includes('yt')) icon = 'fab fa-youtube';
+                        if (url.includes('linkedin')) icon = 'fab fa-linkedin';
+                        socialDiv.innerHTML += `<a href="${url}" target="_blank"><i class="${icon}"></i></a>`;
+                    });
+                }
+
+                // Blood Buddies Logic
+                const buddyList = document.getElementById('buddyList');
+                if (user.Blood_Buddies) {
+                    user.Blood_Buddies.split(',').forEach(b => {
+                        const [bName, bPhone] = b.split(':');
+                        if(bName && bPhone) {
+                            buddyList.innerHTML += `
+                                <div class="buddy-item">
+                                    <span>${bName}</span>
+                                    <a href="tel:${bPhone.trim()}" style="color:#2ed573; text-decoration:none;"><i class="fas fa-phone"></i></a>
+                                </div>`;
+                        }
+                    });
+                } else {
+                    document.getElementById('buddyBtn').style.display = 'none';
+                }
+
             } catch (e) {
                 document.getElementById('userName').innerText = "System Ready";
             }
         }
+
         if(userId) loadData();
     </script>
 </body>
