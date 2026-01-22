@@ -1,39 +1,73 @@
-<script>
-    async function initProfile() {
-        // 1. Get the ID from YOUR website URL (e.g., surakshaqr.github.io/?id=SQ100)
-        const urlParams = new URLSearchParams(window.location.search);
-        const qrId = urlParams.get('id'); 
-        
-        // 2. YOUR Google Script Exec URL
-        const scriptUrl = "https://script.google.com/macros/s/AKfycbzi9Mp6nkIZk7XhlhvaA2tPSowAhW8Ai8EBFZHrCGXKyE0kqSrGFZ67eThCBwLkW1AZ/exec"; 
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>SurakshaQR | Connection Test</title>
+    <style>
+        body { font-family: sans-serif; background: #05070a; color: white; display: flex; justify-content: center; padding: 20px; }
+        .card { background: rgba(255,255,255,0.05); border: 1px solid rgba(255,255,255,0.1); border-radius: 15px; padding: 25px; width: 100%; max-width: 400px; }
+        .status { color: #FFD700; font-weight: bold; margin-bottom: 10px; }
+        .log { background: black; padding: 10px; font-family: monospace; font-size: 12px; border-radius: 5px; color: #2ed573; overflow-x: auto; }
+        .error { color: #ff4757; }
+    </style>
+</head>
+<body>
+    <div class="card">
+        <h2>SurakshaQR Test</h2>
+        <div id="step" class="status">Step 1: Reading Browser URL...</div>
+        <div id="logger" class="log">Initializing...</div>
+    </div>
 
-        const display = document.getElementById('mainDisplay');
+    <script>
+        const logger = document.getElementById('logger');
+        const step = document.getElementById('step');
 
-        if(!qrId) {
-            display.innerHTML = '<div class="card full">Error: No ID found in URL. Please scan the QR again.</div>';
-            return;
+        function log(msg) { logger.innerHTML += `<br>> ${msg}`; }
+
+        async function runTest() {
+            // 1. Capture ID from URL
+            const urlParams = new URLSearchParams(window.location.search);
+            const qrId = urlParams.get('id');
+            
+            // YOUR ACTUAL SCRIPT URL
+            const scriptUrl = "https://script.google.com/macros/s/AKfycbzi9Mp6nkIZk7XhlhvaA2tPSowAhW8Ai8EBFZHrCGXKyE0kqSrGFZ67eThCBwLkW1AZ/exec";
+
+            if (!qrId) {
+                step.innerText = "Error: No ID Found";
+                log("<span class='error'>FAIL: Please add ?id=SQ100 to your browser URL.</span>");
+                return;
+            }
+            
+            log(`Success: Found ID [${qrId}]`);
+            step.innerText = "Step 2: Connecting to Google...";
+
+            try {
+                // THE FIX: Forcing the parameter into the URL string
+                const finalUrl = `${scriptUrl}?id=${encodeURIComponent(qrId)}`;
+                log(`Sending request to: ${finalUrl}`);
+
+                const response = await fetch(finalUrl);
+                
+                // Read as text first to handle your current "Testing" script
+                const resultText = await response.text();
+                
+                step.innerText = "Step 3: Server Responded!";
+                log(`SERVER OUTPUT: <span style="color:white; font-size:16px;">${resultText}</span>`);
+
+                if (resultText.includes("undefined")) {
+                    log("<span class='error'>WARNING: Script received the call but 'id' is still undefined inside Apps Script. Check doGet(e) spelling.</span>");
+                } else {
+                    log("CONGRATULATIONS: Connection is stable.");
+                }
+
+            } catch (err) {
+                step.innerText = "Connection Failed";
+                log(`<span class='error'>ERROR: ${err.message}</span>`);
+            }
         }
 
-        try {
-            // 3. THE FIX: Construct the URL manually to prevent 'undefined'
-            // We use encodeURIComponent to make sure special characters don't break the link
-            const finalUrl = `${scriptUrl}?id=${encodeURIComponent(qrId)}`;
-            
-            console.log("Requesting data for ID:", qrId);
-
-            // 4. Fetch the data
-            const response = await fetch(finalUrl);
-            const text = await response.text(); // First get it as text to debug
-            
-            // If you are still using the "Testing" script, this will show the message
-            // Once you put back the "Master Universal Code", change text to JSON
-            display.innerHTML = `<div class="card full">Server Says: ${text}</div>`;
-
-        } catch (err) {
-            console.error(err);
-            display.innerHTML = '<div class="card full">Connection Error. Please check your internet.</div>';
-        }
-    }
-
-    initProfile();
-</script>
+        runTest();
+    </script>
+</body>
+</html>
