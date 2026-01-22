@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>SurakshaQR | Secure Profile</title>
+    <title>SurakshaQR | Universal Safety Profile</title>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
     <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;600;800&display=swap" rel="stylesheet">
     
@@ -19,9 +19,11 @@
         
         body { 
             margin: 0; 
+            padding: 0;
             font-family: 'Plus Jakarta Sans', sans-serif; 
             background: var(--bg); 
             color: white;
+            /* High-end gradient background */
             background-image: radial-gradient(at 0% 0%, hsla(253,16%,15%,1) 0, transparent 50%), 
                               radial-gradient(at 100% 0%, hsla(339,49%,20%,1) 0, transparent 50%);
             display: flex; 
@@ -31,15 +33,13 @@
 
         .container { width: 92%; max-width: 420px; padding: 30px 0; }
 
-        /* Premium Logo Header */
-        .header { display: flex; flex-direction: column; align-items: center; margin-bottom: 30px; }
-        .logo-img { width: 100px; height: 100px; object-fit: contain; margin-bottom: 12px; filter: drop-shadow(0 0 10px rgba(255,215,0,0.2)); }
-        
-        .brand-name { font-weight: 500; font-size: 16px; letter-spacing: 4px; color: var(--gold); text-transform: uppercase; margin-bottom: 5px; }
-        .brand-name span { font-weight: 800; font-size: 28px; letter-spacing: 1px; }
-        .trust-badge { font-size: 10px; color: #2ed573; background: rgba(46, 213, 115, 0.1); padding: 5px 15px; border-radius: 30px; border: 1px solid rgba(46, 213, 115, 0.2); text-transform: uppercase; font-weight: 800; }
+        /* Branding Section */
+        .header { text-align: center; margin-bottom: 35px; }
+        .logo-img { width: 100px; height: 100px; filter: drop-shadow(0 0 15px rgba(255,215,0,0.3)); margin-bottom: 12px; }
+        .brand { font-size: 26px; font-weight: 800; color: var(--gold); letter-spacing: 1px; }
+        .brand span { font-weight: 400; opacity: 0.8; }
 
-        /* Bento Grid System */
+        /* 2026 Bento Grid Layout */
         .bento-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 14px; }
         .card { 
             background: var(--glass); 
@@ -57,26 +57,27 @@
         .val { font-size: 16px; font-weight: 700; }
         .name-val { font-size: 30px; font-weight: 800; margin: 4px 0; letter-spacing: -0.5px; }
 
-        /* Action Buttons */
+        /* Premium Buttons */
         .btn { 
             display: flex; align-items: center; justify-content: center; gap: 12px;
             padding: 20px; border-radius: 22px; font-weight: 800; text-decoration: none; 
             transition: 0.3s; margin-top: 5px; font-size: 15px; border: 1px solid transparent;
+            cursor: pointer;
         }
         .btn-call { background: linear-gradient(135deg, var(--accent-red), #ff6b81); color: white; box-shadow: 0 10px 20px rgba(255,71,87,0.2); }
-        .btn-whatsapp { background: linear-gradient(135deg, #2ed573, #7bed9f); color: #052c14; }
+        .btn-secure { background: linear-gradient(135deg, #2ed573, #7bed9f); color: #052c14; }
         .btn-buddy { background: rgba(255, 215, 0, 0.05); border: 1px solid var(--gold); color: var(--gold); }
         .btn-hosp { background: rgba(255, 255, 255, 0.05); border: 1px solid var(--border); color: white; }
 
-        /* Drawer for Blood Buddies */
+        /* Animated Expandable Drawer */
         #buddyDrawer { 
             display: none; background: rgba(255,215,0,0.03); 
             border: 1px solid var(--border); border-radius: 20px; 
-            padding: 18px; margin-top: -8px; animation: slideDown 0.4s ease;
+            padding: 18px; margin-top: -8px; animation: slideDown 0.4s ease forwards;
         }
         @keyframes slideDown { from { opacity: 0; transform: translateY(-10px); } to { opacity: 1; transform: translateY(0); } }
 
-        /* Social Pill */
+        /* Social Pill - Bento Style */
         .social-pill { 
             display: flex; justify-content: space-around; align-items: center;
             margin-top: 30px; padding: 20px; background: var(--glass); 
@@ -85,10 +86,10 @@
         .social-pill a { color: white; font-size: 24px; opacity: 0.6; transition: 0.3s; }
         .social-pill a:hover { opacity: 1; color: var(--gold); transform: translateY(-3px); }
 
-        /* Micro-animations */
+        /* Loading Animation */
         .shimmer { animation: loading 1.8s infinite; opacity: 0.4; }
         @keyframes loading { 50% { opacity: 1; } }
-        .card:active { transform: scale(0.97); }
+        .card:active { transform: scale(0.98); }
     </style>
 </head>
 <body>
@@ -100,7 +101,7 @@
 
         <div class="bento-grid" id="profileGrid">
             <div class="card full" style="text-align:center;">
-                <p class="shimmer">🔍 Fetching Secure Life-Data...</p>
+                <p class="shimmer">🔐 Initiating Secure Handshake...</p>
             </div>
         </div>
         
@@ -108,20 +109,46 @@
     </div>
 
     <script>
-        // Configuration
         const urlParams = new URLSearchParams(window.location.search);
         const qrId = urlParams.get('id');
-        // Your specific Google Web App URL
-        const apiBase = "https://script.google.com/macros/s/AKfycbwKsfV__7OMzZg5la_BGlFk3Cb-p29LE9_EAeg2Sy8P_i3DFSycjC_WNQU-8ljQTNOp/exec";
+        const apiBase = "https://script.google.com/macros/s/AKfycbxFd0rYKVpaX7sMmMCVgcCOygpxd7o2YCKl5SAxGxDbdc_s44sWyzE71xnWc7Wd49Jo/exec";
 
+        // Action: Securely Notify Owner (Hides Number)
+        async function secureNotify() {
+            const btn = event.currentTarget;
+            const originalText = btn.innerHTML;
+            btn.innerHTML = '<i class="fas fa-spinner fa-spin"></i> SENDING ALERT...';
+            
+            try {
+                // Sent to Google Apps Script which then alerts the owner privately
+                await fetch(apiBase, {
+                    method: 'POST',
+                    mode: 'no-cors',
+                    body: JSON.stringify({ action: "notify_owner", id: qrId })
+                });
+                
+                btn.style.background = "#2ed573";
+                btn.innerHTML = '<i class="fas fa-check"></i> OWNER NOTIFIED';
+                setTimeout(() => { 
+                    btn.innerHTML = originalText; 
+                    btn.style.background = ""; 
+                }, 3000);
+            } catch (e) {
+                alert("Request failed. Please try again.");
+                btn.innerHTML = originalText;
+            }
+        }
+
+        // Action: Toggle Blood Buddies Drawer
         function toggleBuddies() {
             const drawer = document.getElementById('buddyDrawer');
             drawer.style.display = drawer.style.display === 'block' ? 'none' : 'block';
         }
 
+        // Master Function: Fetch and Render UI
         async function fetchProfile() {
             if(!qrId) {
-                document.getElementById('profileGrid').innerHTML = '<div class="card full"><h1>Invalid QR Scan</h1><p>Please use a valid SurakshaQR sticker.</p></div>';
+                document.getElementById('profileGrid').innerHTML = '<div class="card full"><h3>Missing ID</h3><p>Scan a valid SurakshaQR sticker.</p></div>';
                 return;
             }
 
@@ -130,37 +157,37 @@
                 const data = await response.json();
                 const grid = document.getElementById('profileGrid');
 
-                // 1. Check if ID exists but is not registered (Registration Funnel)
+                // If QR is not registered yet
                 if (data.Status !== "Active") {
                     grid.innerHTML = `
-                        <div class="card full" style="text-align:center; padding:45px 20px;">
-                            <i class="fas fa-shield-virus" style="font-size:55px; color:var(--gold); margin-bottom:20px;"></i>
+                        <div class="card full" style="text-align:center; padding:40px 20px;">
+                            <i class="fas fa-shield-alt" style="font-size:50px; color:var(--gold); margin-bottom:15px;"></i>
                             <div class="name-val">System Ready</div>
-                            <p style="opacity:0.7; font-size:14px;">This SurakshaQR sticker is unlinked. Scan via the app to register your profile.</p>
-                            <a href="https://surakshaqr.com/download" class="btn btn-call full">DOWNLOAD APP TO ACTIVATE</a>
+                            <p style="opacity:0.6; font-size:14px;">This QR tag is unlinked. Use the SurakshaQR App to register your vehicle or profile.</p>
+                            <a href="#" class="btn btn-call full">DOWNLOAD APP</a>
                         </div>
                     `;
                     return;
                 }
 
-                // 2. Populate Active Profile
+                // Render Active Profile
                 grid.innerHTML = `
                     <div class="card full">
                         <div class="label">Primary Member</div>
-                        <div class="name-val">${data.Name || 'Verified User'}</div>
-                        <div style="color:var(--accent-red); font-weight:800; display:flex; align-items:center; gap:8px;">
-                            <i class="fas fa-tint"></i> Blood Group: ${data.Blood_Group || 'N/A'}
+                        <div class="name-val">${data.Name}</div>
+                        <div style="color:var(--accent-red); font-weight:800; font-size:14px;">
+                            <i class="fas fa-tint"></i> Blood Group: ${data.Blood_Group}
                         </div>
                     </div>
                     
-                    <div class="card" onclick="alert('Encrypted Vault: Access restricted to Owner/OTP')">
-                        <div class="label">Medical Vault</div>
-                        <div class="val" style="color:var(--gold)"><i class="fas fa-lock"></i> LOCKED</div>
+                    <div class="card" onclick="alert('Digital Vault requires Owner Authorization.')">
+                        <div class="label">Vault</div>
+                        <div class="val" style="color:var(--gold)"><i class="fas fa-lock"></i> SECURED</div>
                     </div>
 
                     <div class="card">
-                        <div class="label">ID Status</div>
-                        <div class="val" style="color:var(--accent-green)"><i class="fas fa-check-circle"></i> VERIFIED</div>
+                        <div class="label">Verification</div>
+                        <div class="val" style="color:var(--accent-green)"><i class="fas fa-check-circle"></i> ACTIVE</div>
                     </div>
 
                     <a href="tel:${data.Emergency_Contact_1}" class="btn btn-call full">
@@ -172,21 +199,21 @@
                     </a>
                     <div id="buddyDrawer" class="full">
                         <div style="display:flex; justify-content:space-between; align-items:center;">
-                            <span style="font-size:14px; opacity:0.8;">Emergency Contact 1</span>
+                            <span style="font-size:14px; opacity:0.7;">Emergency Contact</span>
                             <a href="tel:${data.Emergency_Contact_1}" style="color:var(--accent-green); text-decoration:none; font-weight:800;">CALL NOW</a>
                         </div>
                     </div>
 
-                    <a href="javascript:void(0)" onclick="secureNotify()" class="btn btn-whatsapp full">
-    <i class="fab fa-whatsapp"></i> NOTIFY OWNER (SECURE)
-</a>
+                    <a href="javascript:void(0)" onclick="secureNotify()" class="btn btn-secure full">
+                        <i class="fab fa-whatsapp"></i> NOTIFY OWNER (SECURE)
+                    </a>
                     
-                    <a href="https://www.google.com/maps/search/hospitals+near+me" target="_blank" class="btn btn-hosp full">
+                    <a href="https://www.google.com/maps/search/hospital+near+me" target="_blank" class="btn btn-hosp full">
                         <i class="fas fa-ambulance"></i> NEAREST HOSPITAL
                     </a>
                 `;
 
-                // 3. Populate Social Links Bar
+                // Render Social Icons
                 if(data.Social_Links) {
                     const socialDiv = document.getElementById('socialLinks');
                     socialDiv.style.display = 'flex';
@@ -198,22 +225,17 @@
                         else if(l.includes('instagram')) icon = 'fa-instagram';
                         else if(l.includes('youtube')) icon = 'fa-youtube';
                         else if(l.includes('linkedin')) icon = 'fa-linkedin';
-                        
                         socialDiv.innerHTML += `<a href="${link.trim()}" target="_blank"><i class="fab ${icon}"></i></a>`;
                     });
                 }
 
             } catch (error) {
-                console.error("Master Engine Error:", error);
-                document.getElementById('profileGrid').innerHTML = '<div class="card full"><p>Connection Error. Please try again.</p></div>';
+                console.error("Master Logic Error:", error);
             }
         }
 
-        // Initialize
+        // Initialize App on Page Load
         fetchProfile();
     </script>
 </body>
 </html>
-
-
-
