@@ -4,7 +4,7 @@ async function initProfile() {
     const qrId = urlParams.get('id');
     
     // !!! PASTE YOUR NEWEST EXEC URL HERE !!!
-    const scriptUrl = "https://script.google.com/macros/s/AKfycbzIIiGCEcfWFBU3018MLWsr8L7uQMltauGF5s-8RchZi8K6Zi-aRSRwDCTo6Xzu0zKK/exec"; 
+    const scriptUrl = "https://script.google.com/macros/s/AKfycbz7wEbAjEAHl3hFUTbnmxWVoSgZA-5OIMf5dywyZF2y4RRB6Dbz89pnSW3EwljUpKA/exec"; 
 
     try {
         const response = await fetch(`${scriptUrl}?id=${qrId}`);
@@ -31,3 +31,4 @@ async function initProfile() {
         console.error("Connection failed", err);
     }
 }
+
