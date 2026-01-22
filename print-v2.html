@@ -2,13 +2,13 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <title>SurakshaQR - Integrated Logo Sticker</title>
+    <title>SurakshaQR - Ultra Compact Decal</title>
     <style>
         :root { 
             --gold: #FFD700; 
             --red: #FF3131;
             --bg: #05070a; 
-            --glow: rgba(255, 215, 0, 0.6);
+            --glow: rgba(255, 215, 0, 0.7);
         }
         
         body { 
@@ -17,18 +17,17 @@
             min-height: 100vh; margin: 0; font-family: 'Arial Black', sans-serif; 
         }
         
-        /* Compact Square Card with Internal Glow */
+        /* Ultra Compact Square Card */
         .sticker-card {
-            width: 340px; 
+            width: 320px; 
             background: var(--bg);
-            padding: 20px; 
-            border-radius: 15px; 
+            padding: 10px; 
+            border-radius: 12px; 
             text-align: center;
             border: 4px solid var(--gold);
-            /* Border glow is now pulled INSIDE (inset) */
+            /* Internal Glow Only */
             box-shadow: inset 0 0 25px var(--glow);
             position: relative;
-            overflow: hidden;
         }
 
         .qr-wrapper {
@@ -41,7 +40,7 @@
             align-items: center;
         }
 
-        /* Circular Path Styling */
+        /* Circular Text Path */
         .circular-svg {
             position: absolute;
             width: 100%;
@@ -49,20 +48,19 @@
         }
 
         .circular-svg text { 
-            font-size: 11px; 
+            font-size: 11.5px; 
             font-weight: 900; 
-            letter-spacing: 1.5px;
+            letter-spacing: 2px;
             text-transform: uppercase;
         }
 
-        /* Color styling for specific words */
-        .txt-emergency { fill: var(--red); filter: drop-shadow(0 0 5px var(--red)); }
-        .txt-scan { fill: var(--red); filter: drop-shadow(0 0 5px var(--red)); }
-        .txt-me { fill: var(--gold); }
+        /* Red and Gold Word Styling */
+        .txt-red { fill: var(--red); filter: drop-shadow(0 0 3px var(--red)); }
+        .txt-gold { fill: var(--gold); filter: drop-shadow(0 0 3px var(--gold)); }
 
         .qr-white-box {
-            width: 190px;
-            height: 190px;
+            width: 185px;
+            height: 185px;
             background: white;
             padding: 10px;
             border-radius: 12px;
@@ -78,21 +76,13 @@
             display: block;
         }
 
-        /* Logo inside the circle */
-        .inner-logo {
-            width: 24px;
-            height: 24px;
-            position: absolute;
-            filter: drop-shadow(0 0 5px var(--gold));
-        }
-
         .id-footer { 
             color: var(--gold); 
-            font-size: 18px; 
-            margin-top: 15px; 
+            font-size: 16px; 
+            margin-top: 5px; 
             font-weight: 900; 
             letter-spacing: 3px;
-            text-shadow: 0 0 10px var(--gold);
+            text-shadow: 0 0 8px var(--gold);
         }
     </style>
 </head>
@@ -102,27 +92,23 @@
         <div class="qr-wrapper">
             <svg class="circular-svg" viewBox="0 0 100 100">
                 <defs>
-                    <path id="txtPath" d="M 50, 50 m -46, 0 a 46,46 0 1,1 92,0 a 46,46 0 1,1 -92,0" />
+                    <path id="txtPath" d="M 50, 50 m -47, 0 a 47,47 0 1,1 94,0 a 47,47 0 1,1 -94,0" />
                 </defs>
                 
                 <text>
-                    <textPath xlink:href="#txtPath" startOffset="5%">
-                        <tspan class="txt-emergency">EMERGENCY</tspan> <tspan class="txt-me">SCAN ME</tspan> 
-                        &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
-                        <tspan class="txt-emergency">EMERGENCY</tspan> <tspan class="txt-me">SCAN ME</tspan>
+                    <textPath xlink:href="#txtPath" startOffset="0%">
+                        <tspan class="txt-red">EMERGENCY</tspan> <tspan class="txt-gold">SCAN ME •</tspan> 
+                        <tspan class="txt-red">EMERGENCY</tspan> <tspan class="txt-gold">SCAN ME •</tspan>
                     </textPath>
                 </text>
             </svg>
 
-            <img src="logo.png.png" class="inner-logo" style="top: 48%; left: 0px;">
-            <img src="logo.png.png" class="inner-logo" style="top: 48%; right: 0px;">
-
             <div class="qr-white-box">
-                <img id="mainQr" src="" alt="QR">
+                <img id="mainQr" src="about:blank">
             </div>
         </div>
 
-        <div id="idTag" class="id-footer">ID: LOADING</div>
+        <div id="idTag" class="id-footer">ID: LOADING...</div>
     </div>
 
     <script>
@@ -131,7 +117,7 @@
             const userId = urlParams.get('id') || 'SQ100';
             const profileLink = "https://SurakshaQR.github.io/index.html?id=" + userId;
             
-            // Reliable Google Charts API
+            // Reliable High Error Correction QR for stickers
             const qrUrl = "https://chart.googleapis.com/chart?cht=qr&chs=250x250&chl=" + encodeURIComponent(profileLink) + "&choe=UTF-8&chld=H|1";
             
             document.getElementById('mainQr').src = qrUrl;
