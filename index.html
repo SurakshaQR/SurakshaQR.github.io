@@ -15,7 +15,7 @@
             --border: rgba(255, 255, 255, 0.1); --red: #ff4757; --green: #2ed573;
         }
         
-        /* [LABEL: GLOBAL STYLES] */
+        /* [LABEL: GLOBAL UI STYLES] */
         body { 
             margin: 0; padding: 0; font-family: 'Plus Jakarta Sans', sans-serif; 
             background: var(--bg); color: white;
@@ -27,7 +27,7 @@
         .container { width: 92%; max-width: 420px; padding: 30px 0; }
         .brand { text-align: center; color: var(--gold); font-weight: 800; font-size: 26px; letter-spacing: 2px; margin-bottom: 30px; }
         
-        /* [LABEL: BENTO GRID SYSTEM] */
+        /* [LABEL: BENTO GRID LOGIC] */
         .bento-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 15px; }
         .card { 
             background: var(--glass); backdrop-filter: blur(15px); -webkit-backdrop-filter: blur(15px);
@@ -35,7 +35,7 @@
         }
         .full { grid-column: span 2; }
         
-        /* [LABEL: TYPOGRAPHY & BADGES] */
+        /* [LABEL: TYPOGRAPHY] */
         .label { font-size: 10px; text-transform: uppercase; letter-spacing: 1.5px; opacity: 0.5; margin-bottom: 8px; }
         .val { font-size: 26px; font-weight: 800; }
         .blood-badge { 
@@ -43,7 +43,7 @@
             padding: 6px 15px; border-radius: 50px; font-weight: 800; font-size: 13px; margin-top: 10px;
         }
 
-        /* [LABEL: ACTION BUTTONS] */
+        /* [LABEL: BUTTON ACTIONS] */
         .btn { 
             display: flex; align-items: center; justify-content: center; gap: 12px;
             padding: 20px; border-radius: 20px; font-weight: 800; text-decoration: none; 
@@ -52,7 +52,7 @@
         .btn-call { background: linear-gradient(135deg, var(--red), #ff6b81); color: white; box-shadow: 0 10px 20px rgba(255, 71, 87, 0.3); }
         .btn-secondary { background: var(--glass); border: 1px solid var(--border); color: white; }
 
-        /* [LABEL: SOCIAL SECTION] */
+        /* [LABEL: SOCIAL LINKS] */
         .social-row { 
             display: flex; justify-content: center; gap: 25px; margin-top: 30px; 
             padding: 15px; background: var(--glass); border-radius: 50px; border: 1px solid var(--border);
@@ -60,7 +60,7 @@
         .social-row a { color: white; font-size: 22px; opacity: 0.6; transition: 0.3s; }
         .social-row a:hover { opacity: 1; color: var(--gold); transform: translateY(-3px); }
 
-        /* [LABEL: LOADERS] */
+        /* [LABEL: ANIMATIONS] */
         .loader { text-align: center; padding: 40px; }
         .fa-spin { color: var(--gold); font-size: 30px; }
     </style>
@@ -81,18 +81,18 @@
 
     <script>
         /**
-         * [LABEL: INITIALIZATION ENGINE]
-         * Fetches data from Google Sheets via Apps Script Web App
+         * [LABEL: INITIALIZATION SCRIPT]
+         * Connects UI to the Back-end Google Apps Script
          */
         async function initProfile() {
             const urlParams = new URLSearchParams(window.location.search);
             const qrId = urlParams.get('id');
             
-            // !!! REPLACE WITH YOUR DEPLOYED WEB APP URL !!!
-            const scriptUrl = "https://script.google.com/macros/s/AKfycbzj5nq3C7dRqGOFpgcpG_5rvtTrqCgUXfBJjRSRb74oAzr4tTnOUU-Vjg7MxZ2WvmDs/exec"; 
+            // !!! REPLACE WITH YOUR NEWEST GOOGLE DEPLOYMENT URL !!!
+            const scriptUrl = "https://script.google.com/macros/s/AKfycbyuIOPGg5sZE4XQVhK3C_fYFS6mxPGdvLMUapDdMLC3pSicGatgR3YDLsbbH6sAE5zK/exec"; 
 
             if(!qrId) {
-                document.getElementById('mainDisplay').innerHTML = '<div class="card full">Invalid Scan. Please scan a valid SurakshaQR tag.</div>';
+                document.getElementById('mainDisplay').innerHTML = '<div class="card full">Invalid Scan. No ID detected.</div>';
                 return;
             }
 
@@ -102,7 +102,7 @@
                 const display = document.getElementById('mainDisplay');
 
                 if (data.Status === "Active") {
-                    // [LABEL: RENDER ACTIVE PROFILE]
+                    // [LABEL: RENDER ACTIVE USER PROFILE]
                     display.innerHTML = `
                         <div class="bento-grid">
                             <div class="card full">
@@ -130,12 +130,12 @@
                             <i class="fas fa-car"></i> NOTIFY OWNER (PARKING)
                         </button>
 
-                        <a href="https://www.google.com/maps/search/hospitals+near+me" target="_blank" class="btn btn-secondary full" style="color:var(--gold); border-color:var(--gold);">
+                        <a href="https://www.google.com/maps/search/hospital+near+me" target="_blank" class="btn btn-secondary full" style="color:var(--gold); border-color:var(--gold);">
                             <i class="fas fa-hospital"></i> NEAREST HOSPITAL
                         </a>
                     `;
 
-                    // [LABEL: SOCIAL LINK PARSING]
+                    // [LABEL: PARSE SOCIAL MEDIA LINKS]
                     if(data.Social_Links && data.Social_Links.trim() !== "") {
                         const sRow = document.getElementById('socialLinks');
                         sRow.style.display = 'flex';
@@ -151,7 +151,7 @@
                         });
                     }
                 } else {
-                    // [LABEL: RENDER AVAILABLE STATE]
+                    // [LABEL: RENDER SYSTEM READY SCREEN]
                     display.innerHTML = `
                         <div class="card full" style="text-align:center; padding:50px 20px;">
                             <i class="fas fa-shield-alt" style="font-size:50px; color:var(--gold); margin-bottom:20px;"></i>
@@ -160,11 +160,10 @@
                         </div>`;
                 }
             } catch (err) {
-                document.getElementById('mainDisplay').innerHTML = '<div class="card full">Network Error. Check your connection or Script URL.</div>';
+                document.getElementById('mainDisplay').innerHTML = '<div class="card full">Network Error. Check Script URL.</div>';
             }
         }
 
-        // Execute initialization on page load
         initProfile();
     </script>
 </body>
