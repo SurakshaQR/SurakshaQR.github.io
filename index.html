@@ -11,7 +11,6 @@
         body { margin: 0; font-family: 'Plus Jakarta Sans', sans-serif; background: var(--bg); color: white; overflow-x: hidden; background-image: radial-gradient(at 0% 0%, hsla(253,16%,15%,1) 0, transparent 50%), radial-gradient(at 100% 0%, hsla(339,49%,20%,1) 0, transparent 50%); display: flex; justify-content: center; min-height: 100vh; }
         .container { width: 92%; max-width: 420px; padding: 25px 0; }
         
-        /* LOGO FIX: Removed Border & Fixed Egg Shape */
         .header { display: flex; flex-direction: column; align-items: center; margin-bottom: 30px; }
         .logo-img { width: 100px; height: 100px; object-fit: contain; margin-bottom: 12px; filter: drop-shadow(0 0 10px rgba(255,215,0,0.2)); }
         
@@ -20,7 +19,8 @@
         .trust-badge { font-size: 10px; color: #2ed573; background: rgba(46, 213, 115, 0.1); padding: 5px 15px; border-radius: 30px; border: 1px solid rgba(46, 213, 115, 0.2); text-transform: uppercase; font-weight: 800; }
 
         .bento-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; }
-        .card { background: var(--glass); backdrop-filter: blur(20px); border: 1px solid var(--border); border-radius: 28px; padding: 20px; opacity: 0; transform: translateY(30px); animation: slideIn 0.8s forwards; }
+        .card { background: var(--glass); backdrop-filter: blur(20px); border: 1px solid var(--border); border-radius: 28px; padding: 20px; opacity: 0; transform: translateY(30px); animation: slideIn 0.8s forwards; cursor: pointer; transition: 0.3s; }
+        .card:hover { border-color: var(--gold); background: rgba(255, 215, 0, 0.02); }
         @keyframes slideIn { to { opacity: 1; transform: translateY(0); } }
         .full { grid-column: span 2; }
         
@@ -29,19 +29,19 @@
         .blood-tag { display: inline-flex; align-items: center; gap: 6px; background: rgba(255, 71, 87, 0.15); color: #ff4757; padding: 6px 14px; border-radius: 12px; font-size: 13px; font-weight: 800; margin-top: 10px; }
 
         .btn { display: flex; align-items: center; justify-content: center; gap: 12px; text-decoration: none; font-weight: 800; font-size: 15px; padding: 18px; border-radius: 22px; margin-top: 10px; transition: 0.3s; border: 1px solid transparent; }
-        .btn-call { background: linear-gradient(135deg, #ff4757, #ff6b81); color: white; }
+        .btn-call { background: linear-gradient(135deg, #ff4757, #ff6b81); color: white; box-shadow: 0 10px 20px rgba(255, 71, 87, 0.2); }
         .btn-notify { background: linear-gradient(135deg, #2ed573, #7bed9f); color: #052c14; }
         .btn-hosp { background: rgba(255, 255, 255, 0.05); border: 1px solid var(--border); color: white; }
         .btn-buddy { background: rgba(255, 215, 0, 0.05); border: 1px solid var(--gold); color: var(--gold); }
 
-        /* DRAWER SYSTEM */
         #buddyDrawer { display: none; grid-column: span 2; background: rgba(255,255,255,0.02); border-radius: 22px; padding: 15px; border: 1px solid var(--border); margin-top: 5px; animation: fadeIn 0.4s ease; }
         @keyframes fadeIn { from { opacity: 0; transform: translateY(-10px); } to { opacity: 1; transform: translateY(0); } }
         .buddy-item { display: flex; justify-content: space-between; align-items: center; padding: 12px; border-bottom: 1px solid var(--border); }
         .buddy-item:last-child { border-bottom: none; }
 
         .social-pill { margin-top: 25px; background: var(--glass); border-radius: 50px; padding: 18px; display: flex; justify-content: space-around; border: 1px solid var(--border); }
-        .social-pill a { color: white; font-size: 24px; opacity: 0.6; }
+        .social-pill a { color: white; font-size: 24px; opacity: 0.6; transition: 0.3s; }
+        .social-pill a:hover { opacity: 1; color: var(--gold); }
         .shimmer { color: rgba(255,215,0,0.5); animation: loading 1.5s infinite; }
         @keyframes loading { 0%, 100% { opacity: 0.3; } 50% { opacity: 1; } }
     </style>
@@ -49,7 +49,7 @@
 <body>
     <div class="container">
         <div class="header">
-            <img src="logo.png.png" class="logo-img" alt="Logo">
+            <img src="logo.png.png" class="logo-img" alt="SurakshaQR Logo">
             <div class="brand-name">SURAKSHA<span>QR</span></div>
             <div class="trust-badge"><i class="fas fa-shield-check"></i> VERIFIED SAFETY PROFILE</div>
         </div>
@@ -58,10 +58,10 @@
             <div class="card full">
                 <div class="label">Primary Member</div>
                 <h1 id="userName" class="shimmer">Scanning...</h1>
-                <div id="bloodGroup" class="blood-tag">---</div>
+                <div id="bloodGroup" class="blood-tag"><i class="fas fa-tint"></i> ---</div>
             </div>
 
-            <div class="card">
+            <div class="card" onclick="alert('Accessing Encrypted Vault... Verification Required')">
                 <div class="label">Vault</div>
                 <div style="font-size:12px; font-weight:800; color:var(--gold)"><i class="fas fa-lock"></i> ENCRYPTED</div>
             </div>
@@ -80,7 +80,7 @@
 
             <a href="#" id="notifyBtn" class="btn btn-notify full"><i class="fab fa-whatsapp"></i> NOTIFY OWNER</a>
             
-            <a href="https://www.google.com/maps/search/hospital+near+me" target="_blank" class="btn btn-hosp full"><i class="fas fa-ambulance"></i> NEAREST HOSPITAL</a>
+            <a href="https://www.google.com/maps/search/hospitals+near+me" target="_blank" class="btn btn-hosp full"><i class="fas fa-ambulance"></i> NEAREST HOSPITAL</a>
         </div>
 
         <div class="social-pill" id="socialLinks"></div>
@@ -89,7 +89,6 @@
     <script>
         const urlParams = new URLSearchParams(window.location.search);
         const userId = urlParams.get('id');
-        // Using your latest deployment URL from Image 5
         const apiURL = "https://script.google.com/macros/s/AKfycbz4aa-zShIAbHQNNfbl8Ti_LFt_HrZulP48S5Ls3oXpOOss2rpgInL5KYzD8O37dR6W/exec";
 
         function toggleBuddies() {
@@ -106,6 +105,8 @@
 
                 if (user.Status !== "Active") {
                     nameEl.innerText = "System Ready";
+                    document.getElementById('statusLabel').innerText = "AVAILABLE";
+                    document.getElementById('statusLabel').style.color = "orange";
                     return;
                 }
 
@@ -113,32 +114,36 @@
                 document.getElementById('bloodGroup').innerHTML = `<i class="fas fa-tint"></i> ${user.Blood_Group || 'N/A'}`;
                 document.getElementById('callBtn').href = "tel:" + user.Emergency_Contact_1;
                 
-                // SOCIAL LINKS (Splitting by comma)
+                // SOCIAL LINKS
                 const socialDiv = document.getElementById('socialLinks');
                 if (user.Social_Links) {
+                    socialDiv.innerHTML = ''; 
                     user.Social_Links.split(',').forEach(link => {
                         let icon = 'fas fa-link';
                         if (link.includes('facebook')) icon = 'fab fa-facebook';
                         if (link.includes('instagram')) icon = 'fab fa-instagram';
                         if (link.includes('linkedin')) icon = 'fab fa-linkedin';
-                        socialDiv.innerHTML += `<a href="${link.trim()}" target="_blank"><i class="${icon}"></i></a>`;
+                        if (link.includes('youtube')) icon = 'fab fa-youtube';
+                        socialDiv.innerHTML += `<a href="${link.trim()}" target="_blank" rel="noopener"><i class="${icon}"></i></a>`;
                     });
                 }
 
-                // BLOOD BUDDIES LIST (Using Emergency_Contact_1 as default)
+                // BUDDY LIST
                 const buddyList = document.getElementById('buddyList');
                 if (user.Emergency_Contact_1) {
                     buddyList.innerHTML = `
                         <div class="buddy-item">
                             <span>Family/Buddy</span>
-                            <a href="tel:${user.Emergency_Contact_1}" style="color:#2ed573; text-decoration:none;"><i class="fas fa-phone-alt"></i> CALL NOW</a>
+                            <a href="tel:${user.Emergency_Contact_1}" style="color:#2ed573; text-decoration:none; font-weight:800;"><i class="fas fa-phone-alt"></i> CALL NOW</a>
                         </div>`;
                 }
 
                 const msg = encodeURIComponent(`SURAKSHAQR ALERT: Someone is trying to reach you regarding your vehicle.`);
                 document.getElementById('notifyBtn').href = `https://wa.me/${user.Emergency_Contact_1}?text=${msg}`;
 
-            } catch (e) { document.getElementById('userName').innerText = "System Ready"; }
+            } catch (e) { 
+                document.getElementById('userName').innerText = "System Ready"; 
+            }
         }
         if(userId) loadData();
     </script>
