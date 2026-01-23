@@ -3,132 +3,60 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>SurakshaQR | Emergency Profile</title>
+    <title>SurakshaQR Profile</title>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
     <style>
-        :root { --gold: #FFD700; --bg: #05070a; --glass: rgba(255, 255, 255, 0.07); --red: #ff4757; }
-        body { margin: 0; font-family: 'Inter', sans-serif; background: var(--bg); color: white; display: flex; justify-content: center; overflow-x: hidden; }
-        .container { width: 92%; max-width: 420px; padding: 30px 0; display: none; } /* Hidden until loaded */
-        
-        /* Bento Grid Style */
-        .bento-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; margin-top: 20px; }
-        .card { background: var(--glass); border: 1px solid rgba(255,255,255,0.1); border-radius: 24px; padding: 20px; backdrop-filter: blur(15px); }
+        :root { --gold: #FFD700; --bg: #05070a; --glass: rgba(255, 255, 255, 0.08); --red: #ff4757; }
+        body { margin: 0; font-family: sans-serif; background: var(--bg); color: white; display: flex; justify-content: center; }
+        .container { width: 90%; max-width: 400px; padding: 40px 0; }
+        .bento-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 15px; margin-top: 25px; }
+        .card { background: var(--glass); border: 1px solid rgba(255,255,255,0.1); border-radius: 24px; padding: 20px; backdrop-filter: blur(12px); }
         .full { grid-column: span 2; }
-        
-        /* High-End Typography */
-        .label { font-size: 10px; opacity: 0.5; text-transform: uppercase; letter-spacing: 2px; font-weight: 800; margin-bottom: 5px; }
-        .val { font-size: 20px; font-weight: 700; color: #fff; }
-        
-        /* Break-Glass Vault UI */
-        .vault-card { background: linear-gradient(145deg, rgba(255,255,255,0.1), rgba(255,255,255,0.02)); border: 1px dashed var(--gold); }
-        .otp-btn { background: none; border: 1px solid var(--gold); color: var(--gold); padding: 8px 15px; border-radius: 10px; font-size: 12px; cursor: pointer; margin-top: 10px; }
-
-        /* Social Icons */
-        .social-flex { display: flex; gap: 15px; margin-top: 10px; }
-        .social-flex a { color: white; opacity: 0.6; font-size: 18px; transition: 0.3s; }
-        .social-flex a:hover { opacity: 1; color: var(--gold); }
-
-        /* Emergency Button */
-        .btn-call { display: flex; align-items: center; justify-content: center; gap: 10px; background: var(--red); color: white; padding: 20px; border-radius: 20px; text-decoration: none; font-weight: bold; margin-top: 15px; box-shadow: 0 10px 30px rgba(255, 71, 87, 0.4); }
-
-        /* Loader */
-        #loader-screen { position: fixed; top:0; left:0; width:100%; height:100%; background: var(--bg); display: flex; flex-direction: column; align-items: center; justify-content: center; z-index: 999; }
-        .spinner { width: 40px; height: 40px; border: 3px solid rgba(255,215,0,0.1); border-top: 3px solid var(--gold); border-radius: 50%; animation: spin 1s linear infinite; }
-        @keyframes spin { 0% { transform: rotate(0deg); } 100% { transform: rotate(360deg); } }
+        .label { font-size: 10px; opacity: 0.5; text-transform: uppercase; letter-spacing: 1.5px; font-weight: 700; }
+        .val { font-size: 22px; font-weight: bold; margin-top: 5px; }
+        .btn-red { display: flex; align-items: center; justify-content: center; gap: 10px; padding: 20px; border-radius: 20px; background: var(--red); color: white; text-decoration: none; font-weight: bold; margin-top: 20px; box-shadow: 0 10px 20px rgba(255,0,0,0.2); }
     </style>
 </head>
 <body>
-
-    <div id="loader-screen">
-        <div class="spinner"></div>
-        <p style="margin-top:20px; letter-spacing:2px; font-size:12px; opacity:0.5;">INITIALIZING SECURE LINK...</p>
-    </div>
-
-    <div class="container" id="mainDisplay">
-        <div style="text-align:center; margin-bottom: 25px;">
-            <h1 style="color:var(--gold); letter-spacing: 5px; font-size: 20px; margin:0;">SURAKSHAQR</h1>
-            <p style="font-size:10px; opacity:0.4;">INSTANT LIFE-DATA ACCESS</p>
-        </div>
-
-        <div class="bento-grid" id="content-area">
-            </div>
-
-        <a id="callBtn" href="#" class="btn-call">
-            <i class="fas fa-phone-alt"></i> EMERGENCY CALL
-        </a>
-
-        <div style="text-align:center; margin-top:30px;">
-            <button class="otp-btn" onclick="alert('Notify Owner feature coming soon in App!')">
-                <i class="fas fa-car"></i> WRONGLY PARKED? NOTIFY OWNER
-            </button>
+    <div class="container" id="mainBody">
+        <div id="loading" style="text-align:center; padding-top:100px;">
+            <i class="fas fa-spinner fa-spin" style="font-size:30px; color:var(--gold);"></i>
+            <p style="margin-top:15px; opacity:0.5;">SEARCHING FOR PROFILE...</p>
         </div>
     </div>
 
     <script>
-        const SCRIPT_URL = "https://script.google.com/macros/s/AKfycbyTRtOvzRqd2PYP3C1-n2p8smQcokN51Dx8IxEnGuJgCv_pBMqZd_8qdw7QuSE75geF/exec"; 
-
-        async function loadData() {
-            const params = new URLSearchParams(window.location.search);
-            const id = params.get('id') || "NONE";
-
-            try {
-                // We add a cache-buster to prevent the 'timeout' from old cached errors
-                const response = await fetch(`${SCRIPT_URL}?id=${id}&t=${Date.now()}`);
-                const data = await response.json();
-
-                if (data.Status === "Active") {
-                    renderProfile(data);
-                } else {
-                    document.body.innerHTML = `<div style="padding:50px; text-align:center;"><h2>Tag Unlinked</h2><p>This ID (${id}) is ready for registration.</p></div>`;
-                }
-            } catch (error) {
-                console.error(error);
-                document.getElementById('loader-screen').innerHTML = `<p style="color:red;">Connection Error. Please check the Web App URL.</p>`;
+        function handleResponse(data) {
+            const main = document.getElementById('mainBody');
+            if (data.Status === "Active") {
+                main.innerHTML = `
+                    <div style="text-align:center;"><h2 style="color:var(--gold); letter-spacing:4px;">SURAKSHAQR</h2></div>
+                    <div class="bento-grid">
+                        <div class="card full"><div class="label">Primary Name</div><div class="val">${data.Name}</div></div>
+                        <div class="card"><div class="label">Blood Group</div><div class="val" style="color:var(--red)">${data.Blood_Group}</div></div>
+                        <div class="card"><div class="label">Status</div><div class="val" style="color:#2ed573; font-size:16px;">VERIFIED</div></div>
+                        <div class="card full"><div class="label">Quick Social</div>
+                            <div style="display:flex; gap:20px; margin-top:10px; font-size:20px;">
+                                ${data.Social_Links.FB ? `<a href="${data.Social_Links.FB}" style="color:white"><i class="fab fa-facebook"></i></a>` : ''}
+                                ${data.Social_Links.IG ? `<a href="${data.Social_Links.IG}" style="color:white"><i class="fab fa-instagram"></i></a>` : ''}
+                            </div>
+                        </div>
+                    </div>
+                    <a href="tel:${data.Emergency_Phone}" class="btn-red"><i class="fas fa-phone"></i> EMERGENCY CALL</a>
+                `;
+            } else {
+                main.innerHTML = `<div class="card full" style="text-align:center;"><h2>Tag Available</h2><p>ID: ${data.ID}<br>Scan with App to Activate.</p></div>`;
             }
         }
 
-        function renderProfile(data) {
-            const area = document.getElementById('content-area');
-            document.getElementById('callBtn').href = `tel:${data.Emergency_Phone}`;
-            
-            area.innerHTML = `
-                <div class="card full">
-                    <div class="label">Primary Name</div>
-                    <div class="val">${data.Name}</div>
-                </div>
+        const urlParams = new URLSearchParams(window.location.search);
+        const qrId = (urlParams.get('id') || "NONE").toUpperCase();
+        const scriptUrl = "https://script.google.com/macros/s/AKfycbyrYY5LuMYlcoJdl_ZR-_nJ7YHZAjvOXBl7QGmany3SPKL9K9fZWG96UoXE_21CsEVl/exec";
 
-                <div class="card">
-                    <div class="label">Blood Group</div>
-                    <div class="val" style="color:var(--red)">${data.Blood_Group}</div>
-                </div>
-
-                <div class="card">
-                    <div class="label">Medical Alert</div>
-                    <div class="val" style="font-size:14px; color:#2ed573;"><i class="fas fa-heartbeat"></i> No Allergies</div>
-                </div>
-
-                <div class="card full vault-card">
-                    <div class="label" style="color:var(--gold)">"Break-Glass" Vault</div>
-                    <div style="font-size:12px; opacity:0.8;">DL & Insurance (Encrypted)</div>
-                    <button class="otp-btn" onclick="prompt('Enter OTP sent to Owner')">UNLOCK WITH OTP</button>
-                </div>
-
-                <div class="card full">
-                    <div class="label">Social Status</div>
-                    <div class="social-flex">
-                        ${data.Social_Links.FB ? `<a href="${data.Social_Links.FB}"><i class="fab fa-facebook"></i></a>` : ''}
-                        ${data.Social_Links.IG ? `<a href="${data.Social_Links.IG}"><i class="fab fa-instagram"></i></a>` : ''}
-                        ${data.Social_Links.YT ? `<a href="${data.Social_Links.YT}"><i class="fab fa-youtube"></i></a>` : ''}
-                        ${data.Social_Links.LI ? `<a href="${data.Social_Links.LI}"><i class="fab fa-linkedin"></i></a>` : ''}
-                    </div>
-                </div>
-            `;
-
-            document.getElementById('loader-screen').style.display = 'none';
-            document.getElementById('mainDisplay').style.display = 'block';
-        }
-
-        window.onload = loadData;
+        // JSONP with Cache Buster (?t=...)
+        const script = document.createElement('script');
+        script.src = `${scriptUrl}?id=${qrId}&callback=handleResponse&t=${new Date().getTime()}`;
+        document.body.appendChild(script);
     </script>
 </body>
 </html>
