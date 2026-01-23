@@ -3,67 +3,113 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>SurakshaQR | Emergency Profile</title>
+    <title>SurakshaQR Profile</title>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
     <style>
         :root { --gold: #FFD700; --bg: #05070a; --glass: rgba(255, 255, 255, 0.05); --red: #ff4757; }
-        body { margin: 0; font-family: sans-serif; background: var(--bg); color: white; display: flex; justify-content: center; }
+        body { margin: 0; font-family: 'Segoe UI', sans-serif; background: var(--bg); color: white; display: flex; justify-content: center; min-height: 100vh; }
         .container { width: 90%; max-width: 400px; padding: 40px 0; }
-        .bento-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 15px; margin-top: 20px; }
-        .card { background: var(--glass); border: 1px solid rgba(255,255,255,0.1); border-radius: 20px; padding: 20px; }
+        
+        /* Bento Grid Layout */
+        .bento-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 15px; margin-top: 25px; }
+        .card { background: var(--glass); border: 1px solid rgba(255,255,255,0.1); border-radius: 24px; padding: 20px; backdrop-filter: blur(12px); transition: 0.3s; }
         .full { grid-column: span 2; }
-        .val { font-size: 22px; font-weight: bold; margin-top: 5px; }
-        .label { font-size: 11px; opacity: 0.5; text-transform: uppercase; }
-        .btn { display: block; text-align: center; padding: 18px; border-radius: 15px; text-decoration: none; font-weight: bold; margin-top: 15px; }
-        .btn-red { background: var(--red); color: white; }
+        
+        .label { font-size: 10px; opacity: 0.5; text-transform: uppercase; letter-spacing: 1.5px; font-weight: 700; }
+        .val { font-size: 22px; font-weight: bold; margin-top: 5px; color: #fff; }
+        
+        /* Social Buttons */
+        .social-box { display: flex; justify-content: space-around; margin-top: 15px; padding: 15px; background: rgba(255,255,255,0.03); border-radius: 20px; }
+        .social-box a { color: white; font-size: 20px; opacity: 0.7; transition: 0.3s; }
+        .social-box a:hover { color: var(--gold); opacity: 1; }
+
+        .btn { display: flex; align-items: center; justify-content: center; gap: 10px; padding: 20px; border-radius: 20px; text-decoration: none; font-weight: bold; margin-top: 15px; font-size: 16px; }
+        .btn-red { background: var(--red); color: white; box-shadow: 0 10px 20px rgba(255, 71, 87, 0.3); }
+        
+        #loading { text-align: center; margin-top: 100px; }
+        .loader { border: 3px solid #f3f3f3; border-top: 3px solid var(--gold); border-radius: 50%; width: 30px; height: 30px; animation: spin 1s linear infinite; margin: 0 auto 20px; }
+        @keyframes spin { 0% { transform: rotate(0deg); } 100% { transform: rotate(360deg); } }
     </style>
 </head>
 <body>
     <div class="container" id="mainDisplay">
-        <h2 style="text-align:center; color:var(--gold);">SURAKSHAQR</h2>
-        <p style="text-align:center; opacity:0.6;">Loading Secure Profile...</p>
+        <div id="loading">
+            <div class="loader"></div>
+            <p style="opacity:0.6; font-size: 14px;">SECURELY DECRYPTING PROFILE...</p>
+        </div>
     </div>
 
     <script>
-        async function loadProfile() {
+        async function fetchProfile() {
             const urlParams = new URLSearchParams(window.location.search);
             const qrId = urlParams.get('id');
-            const scriptUrl = "https://script.google.com/macros/s/AKfycbzoYLLd8rPqJge8MmOkCddfcqmNrMWGeLXTpVdtoi6CHlwfvmKWIOfzxA5pUJAAb90k/exec";
+            
+            // REPLACE WITH YOUR NEW DEPLOYMENT URL
+            const scriptUrl = "PASTE_YOUR_NEW_DEPLOY_URL_HERE";
 
-            if (!qrId) return;
+            const display = document.getElementById('mainDisplay');
+
+            if (!qrId) {
+                display.innerHTML = `<div class="card full"><h2>Error</h2><p>Please scan a valid SurakshaQR tag.</p></div>`;
+                return;
+            }
 
             try {
-                const finalUrl = `${scriptUrl}?id=${encodeURIComponent(qrId)}`;
-                const response = await fetch(finalUrl);
+                const response = await fetch(`${scriptUrl}?id=${encodeURIComponent(qrId)}`);
                 const data = await response.json();
-                const display = document.getElementById('mainDisplay');
 
                 if (data.Status === "Active") {
                     display.innerHTML = `
+                        <h2 style="text-align:center; color:var(--gold); letter-spacing: 3px; font-size: 18px;">SURAKSHAQR</h2>
+                        
                         <div class="bento-grid">
                             <div class="card full">
-                                <div class="label">Owner Name</div>
+                                <div class="label"><i class="fas fa-user-shield"></i> Profile Name</div>
                                 <div class="val">${data.Name}</div>
                             </div>
+                            
                             <div class="card">
                                 <div class="label">Blood Group</div>
                                 <div class="val" style="color:var(--red)">${data.Blood_Group}</div>
                             </div>
+
                             <div class="card">
                                 <div class="label">Status</div>
-                                <div class="val" style="color:#2ed573">Verified</div>
+                                <div class="val" style="color:#2ed573; font-size:16px;"><i class="fas fa-check-circle"></i> VERIFIED</div>
+                            </div>
+
+                            <div class="card full">
+                                <div class="label">Social Presence</div>
+                                <div class="social-box">
+                                    ${data.Social_Links.FB ? `<a href="${data.Social_Links.FB}"><i class="fab fa-facebook"></i></a>` : ''}
+                                    ${data.Social_Links.IG ? `<a href="${data.Social_Links.IG}"><i class="fab fa-instagram"></i></a>` : ''}
+                                    ${data.Social_Links.YT ? `<a href="${data.Social_Links.YT}"><i class="fab fa-youtube"></i></a>` : ''}
+                                    ${data.Social_Links.LI ? `<a href="${data.Social_Links.LI}"><i class="fab fa-linkedin"></i></a>` : ''}
+                                </div>
                             </div>
                         </div>
-                        <a href="tel:${data.Emergency_Phone}" class="btn btn-red">CALL EMERGENCY CONTACT</a>
+
+                        <a href="tel:${data.Emergency_Phone}" class="btn btn-red">
+                            <i class="fas fa-phone-alt"></i> EMERGENCY CALL
+                        </a>
+                        
+                        <div style="margin-top:20px; text-align:center; opacity:0.3; font-size:10px;">
+                            SECURE SCAN: ${data.UID}
+                        </div>
                     `;
                 } else {
-                    display.innerHTML = `<div class="card full" style="text-align:center;"><h3>System Ready</h3><p>Unlinked Tag Detected.</p></div>`;
+                    display.innerHTML = `
+                        <div class="card full" style="text-align:center; padding: 60px 20px;">
+                            <i class="fas fa-qrcode" style="font-size: 50px; color: var(--gold); margin-bottom: 20px;"></i>
+                            <h3>TAG READY</h3>
+                            <p style="opacity:0.6;">This ID [${data.ID_Received || qrId}] is available for registration.</p>
+                        </div>`;
                 }
             } catch (e) {
-                console.error(e);
+                display.innerHTML = `<div class="card"><h3>Connection Timeout</h3><p>Please check your internet and try again.</p></div>`;
             }
         }
-        loadProfile();
+        fetchProfile();
     </script>
 </body>
 </html>
