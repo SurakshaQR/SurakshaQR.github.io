@@ -7,56 +7,52 @@
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
     <style>
         :root { --gold: #FFD700; --bg: #05070a; --glass: rgba(255, 255, 255, 0.08); --red: #ff4757; }
-        body { margin: 0; font-family: sans-serif; background: var(--bg); color: white; display: flex; justify-content: center; }
-        .container { width: 90%; max-width: 400px; padding: 40px 0; }
-        .bento-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 15px; margin-top: 25px; }
-        .card { background: var(--glass); border: 1px solid rgba(255,255,255,0.1); border-radius: 24px; padding: 20px; backdrop-filter: blur(12px); }
-        .full { grid-column: span 2; }
-        .label { font-size: 10px; opacity: 0.5; text-transform: uppercase; letter-spacing: 1.5px; font-weight: 700; }
-        .val { font-size: 22px; font-weight: bold; margin-top: 5px; }
-        .btn-red { display: flex; align-items: center; justify-content: center; gap: 10px; padding: 20px; border-radius: 20px; background: var(--red); color: white; text-decoration: none; font-weight: bold; margin-top: 20px; box-shadow: 0 10px 20px rgba(255,0,0,0.2); }
+        body { margin: 0; background: var(--bg); color: white; font-family: sans-serif; display: flex; justify-content: center; }
+        .container { width: 90%; max-width: 400px; padding-top: 50px; }
+        .card { background: var(--glass); border: 1px solid rgba(255,255,255,0.1); border-radius: 24px; padding: 25px; backdrop-filter: blur(10px); text-align: center; }
+        .bento { display: grid; grid-template-columns: 1fr 1fr; gap: 15px; margin-top: 20px; }
+        .box { background: var(--glass); padding: 15px; border-radius: 20px; text-align: left; border: 1px solid rgba(255,255,255,0.05); }
+        .label { font-size: 10px; opacity: 0.5; text-transform: uppercase; letter-spacing: 1px; }
+        .val { font-size: 18px; font-weight: bold; margin-top: 5px; }
+        .btn { display: block; background: var(--red); color: white; padding: 18px; border-radius: 15px; text-decoration: none; font-weight: bold; margin-top: 20px; }
     </style>
 </head>
 <body>
-    <div class="container" id="mainBody">
-        <div id="loading" style="text-align:center; padding-top:100px;">
-            <i class="fas fa-spinner fa-spin" style="font-size:30px; color:var(--gold);"></i>
-            <p style="margin-top:15px; opacity:0.5;">SEARCHING FOR PROFILE...</p>
+    <div class="container" id="display">
+        <div class="card">
+            <i class="fas fa-shield-alt fa-spin" style="font-size:30px; color:var(--gold);"></i>
+            <p>Verifying Security ID...</p>
         </div>
     </div>
 
     <script>
         function handleResponse(data) {
-            const main = document.getElementById('mainBody');
+            const view = document.getElementById('display');
             if (data.Status === "Active") {
-                main.innerHTML = `
-                    <div style="text-align:center;"><h2 style="color:var(--gold); letter-spacing:4px;">SURAKSHAQR</h2></div>
-                    <div class="bento-grid">
-                        <div class="card full"><div class="label">Primary Name</div><div class="val">${data.Name}</div></div>
-                        <div class="card"><div class="label">Blood Group</div><div class="val" style="color:var(--red)">${data.Blood_Group}</div></div>
-                        <div class="card"><div class="label">Status</div><div class="val" style="color:#2ed573; font-size:16px;">VERIFIED</div></div>
-                        <div class="card full"><div class="label">Quick Social</div>
-                            <div style="display:flex; gap:20px; margin-top:10px; font-size:20px;">
-                                ${data.Social_Links.FB ? `<a href="${data.Social_Links.FB}" style="color:white"><i class="fab fa-facebook"></i></a>` : ''}
-                                ${data.Social_Links.IG ? `<a href="${data.Social_Links.IG}" style="color:white"><i class="fab fa-instagram"></i></a>` : ''}
-                            </div>
-                        </div>
+                view.innerHTML = `
+                    <h2 style="text-align:center; color:var(--gold); letter-spacing:3px;">SURAKSHAQR</h2>
+                    <div class="box" style="margin-bottom:15px;"><div class="label">Owner</div><div class="val">${data.Name}</div></div>
+                    <div class="bento">
+                        <div class="box"><div class="label">Blood</div><div class="val" style="color:var(--red)">${data.Blood_Group}</div></div>
+                        <div class="box"><div class="label">Status</div><div class="val" style="color:#2ed573">Verified</div></div>
                     </div>
-                    <a href="tel:${data.Emergency_Phone}" class="btn-red"><i class="fas fa-phone"></i> EMERGENCY CALL</a>
+                    <a href="tel:${data.Emergency_Phone}" class="btn">EMERGENCY CALL</a>
                 `;
             } else {
-                main.innerHTML = `<div class="card full" style="text-align:center;"><h2>Tag Available</h2><p>ID: ${data.ID}<br>Scan with App to Activate.</p></div>`;
+                view.innerHTML = `<div class="card"><h2>Tag Ready</h2><p>ID: ${data.ID || 'Unknown'}<br>Not yet activated.</p></div>`;
             }
         }
 
-        const urlParams = new URLSearchParams(window.location.search);
-        const qrId = (urlParams.get('id') || "NONE").toUpperCase();
-        const scriptUrl = "https://script.google.com/macros/s/AKfycbyrYY5LuMYlcoJdl_ZR-_nJ7YHZAjvOXBl7QGmany3SPKL9K9fZWG96UoXE_21CsEVl/exec";
+        // START AFTER 500ms DELAY
+        setTimeout(() => {
+            const urlParams = new URLSearchParams(window.location.search);
+            const qrId = (urlParams.get('id') || "NONE").toUpperCase();
+            const scriptUrl = "https://script.google.com/macros/s/AKfycbzbvQq159llc2vsEp5n9xsAyS0GaslGWQeS2IOQZlb00OIBTA3EKULBNYN94AticgAY/exec";
 
-        // JSONP with Cache Buster (?t=...)
-        const script = document.createElement('script');
-        script.src = `${scriptUrl}?id=${qrId}&callback=handleResponse&t=${new Date().getTime()}`;
-        document.body.appendChild(script);
+            const script = document.createElement('script');
+            script.src = `${scriptUrl}?id=${qrId}&callback=handleResponse&t=${Date.now()}`;
+            document.body.appendChild(script);
+        }, 500);
     </script>
 </body>
 </html>
