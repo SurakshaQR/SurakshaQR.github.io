@@ -3,139 +3,149 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>SurakshaQR | Emergency Profile</title>
+    <title>SurakshaQR - Official Safety Portal</title>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+    <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;800&display=swap" rel="stylesheet">
     <style>
-        :root { --gold: #FFD700; --bg: #05070a; --glass: rgba(255, 255, 255, 0.08); --red: #ff4757; }
-        body { margin: 0; background: var(--bg); color: white; font-family: 'Inter', sans-serif; display: flex; justify-content: center; min-height: 100vh; overflow-x: hidden; }
+        :root { --glass: rgba(255, 255, 255, 0.03); --border: rgba(255, 255, 255, 0.08); --gold: #FFD700; --accent: #ff4757; --bg: #05070a; }
+        body { margin: 0; font-family: 'Plus Jakarta Sans', sans-serif; background: var(--bg); color: white; overflow-x: hidden; background-image: radial-gradient(at 0% 0%, hsla(253,16%,15%,1) 0, transparent 50%), radial-gradient(at 100% 0%, hsla(339,49%,20%,1) 0, transparent 50%); display: flex; justify-content: center; min-height: 100vh; }
+        .container { width: 92%; max-width: 420px; padding: 25px 0; }
         
-        .container { width: 92%; max-width: 420px; padding: 30px 0; }
+        .header { display: flex; flex-direction: column; align-items: center; margin-bottom: 30px; }
+        .logo-img { width: 100px; height: 100px; object-fit: contain; margin-bottom: 12px; filter: drop-shadow(0 0 10px rgba(255,215,0,0.2)); }
         
-        /* Bento Grid Design */
-        .bento-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; margin-top: 20px; }
-        .card { background: var(--glass); border: 1px solid rgba(255,255,255,0.1); border-radius: 24px; padding: 20px; backdrop-filter: blur(15px); transition: 0.3s ease; }
+        .brand-name { font-weight: 500; font-size: 16px; letter-spacing: 4px; color: var(--gold); text-transform: uppercase; margin-bottom: 5px; }
+        .brand-name span { font-weight: 800; font-size: 28px; letter-spacing: 1px; }
+        .trust-badge { font-size: 10px; color: #2ed573; background: rgba(46, 213, 115, 0.1); padding: 5px 15px; border-radius: 30px; border: 1px solid rgba(46, 213, 115, 0.2); text-transform: uppercase; font-weight: 800; }
+
+        .bento-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; }
+        .card { background: var(--glass); backdrop-filter: blur(20px); border: 1px solid var(--border); border-radius: 28px; padding: 20px; opacity: 0; transform: translateY(30px); animation: slideIn 0.8s forwards; cursor: pointer; transition: 0.3s; }
+        .card:hover { border-color: var(--gold); background: rgba(255, 215, 0, 0.02); }
+        @keyframes slideIn { to { opacity: 1; transform: translateY(0); } }
         .full { grid-column: span 2; }
         
-        /* Typography */
-        .label { font-size: 10px; opacity: 0.5; text-transform: uppercase; letter-spacing: 2px; font-weight: 800; margin-bottom: 5px; }
-        .val { font-size: 20px; font-weight: 700; color: #fff; }
-        
-        /* Emergency Button */
-        .btn-call { display: flex; align-items: center; justify-content: center; gap: 12px; background: var(--red); color: white; padding: 20px; border-radius: 22px; text-decoration: none; font-weight: 800; margin-top: 15px; box-shadow: 0 10px 30px rgba(255, 71, 87, 0.4); font-size: 18px; }
+        .label { font-size: 10px; opacity: 0.5; font-weight: 600; text-transform: uppercase; margin-bottom: 8px; }
+        h1 { margin: 0; font-size: 26px; font-weight: 800; }
+        .blood-tag { display: inline-flex; align-items: center; gap: 6px; background: rgba(255, 71, 87, 0.15); color: #ff4757; padding: 6px 14px; border-radius: 12px; font-size: 13px; font-weight: 800; margin-top: 10px; }
 
-        /* Vault / Break-Glass Section */
-        .vault-card { border: 1px dashed var(--gold); background: rgba(255, 215, 0, 0.03); }
-        .vault-btn { background: none; border: 1px solid var(--gold); color: var(--gold); padding: 10px 20px; border-radius: 12px; font-size: 13px; font-weight: 700; cursor: pointer; margin-top: 12px; transition: 0.3s; }
-        .vault-btn:hover { background: var(--gold); color: black; }
+        .btn { display: flex; align-items: center; justify-content: center; gap: 12px; text-decoration: none; font-weight: 800; font-size: 15px; padding: 18px; border-radius: 22px; margin-top: 10px; transition: 0.3s; border: 1px solid transparent; }
+        .btn-call { background: linear-gradient(135deg, #ff4757, #ff6b81); color: white; box-shadow: 0 10px 20px rgba(255, 71, 87, 0.2); }
+        .btn-notify { background: linear-gradient(135deg, #2ed573, #7bed9f); color: #052c14; }
+        .btn-hosp { background: rgba(255, 255, 255, 0.05); border: 1px solid var(--border); color: white; }
+        .btn-buddy { background: rgba(255, 215, 0, 0.05); border: 1px solid var(--gold); color: var(--gold); }
 
-        /* Social Icons */
-        .social-links { display: flex; gap: 20px; margin-top: 10px; }
-        .social-links a { color: white; font-size: 24px; opacity: 0.7; transition: 0.3s; }
-        .social-links a:hover { opacity: 1; color: var(--gold); transform: translateY(-3px); }
+        #buddyDrawer { display: none; grid-column: span 2; background: rgba(255,255,255,0.02); border-radius: 22px; padding: 15px; border: 1px solid var(--border); margin-top: 5px; animation: fadeIn 0.4s ease; }
+        @keyframes fadeIn { from { opacity: 0; transform: translateY(-10px); } to { opacity: 1; transform: translateY(0); } }
+        .buddy-item { display: flex; justify-content: space-between; align-items: center; padding: 12px; border-bottom: 1px solid var(--border); }
+        .buddy-item:last-child { border-bottom: none; }
 
-        /* Loading Spinner */
-        #loader { text-align: center; margin-top: 100px; }
-        .spinner { width: 40px; height: 40px; border: 3px solid rgba(255, 215, 0, 0.1); border-top: 3px solid var(--gold); border-radius: 50%; animation: spin 1s linear infinite; margin: 0 auto; }
-        @keyframes spin { 0% { transform: rotate(0deg); } 100% { transform: rotate(360deg); } }
+        .social-pill { margin-top: 25px; background: var(--glass); border-radius: 50px; padding: 18px; display: flex; justify-content: space-around; border: 1px solid var(--border); }
+        .social-pill a { color: white; font-size: 24px; opacity: 0.6; transition: 0.3s; }
+        .social-pill a:hover { opacity: 1; color: var(--gold); }
+        .shimmer { color: rgba(255,215,0,0.5); animation: loading 1.5s infinite; }
+        @keyframes loading { 0%, 100% { opacity: 0.3; } 50% { opacity: 1; } }
     </style>
 </head>
 <body>
+    <div class="container">
+        <div class="header">
+            <img src="logo.png.png" class="logo-img" alt="SurakshaQR Logo">
+            <div class="brand-name">SURAKSHA<span>QR</span></div>
+            <div class="trust-badge"><i class="fas fa-shield-check"></i> VERIFIED SAFETY PROFILE</div>
+        </div>
 
-<div class="container" id="mainDisplay">
-    <div id="loader">
-        <div class="spinner"></div>
-        <p style="margin-top:20px; opacity:0.5; font-size:12px; letter-spacing:2px;">SECURE CONNECTION...</p>
+        <div class="bento-grid">
+            <div class="card full">
+                <div class="label">Primary Member</div>
+                <h1 id="userName" class="shimmer">Scanning...</h1>
+                <div id="bloodGroup" class="blood-tag"><i class="fas fa-tint"></i> ---</div>
+            </div>
+
+            <div class="card" onclick="alert('Accessing Encrypted Vault... Verification Required')">
+                <div class="label">Vault</div>
+                <div style="font-size:12px; font-weight:800; color:var(--gold)"><i class="fas fa-lock"></i> ENCRYPTED</div>
+            </div>
+
+            <div class="card">
+                <div class="label">Identity</div>
+                <div id="statusLabel" style="font-size:12px; font-weight:800; color:#2ed573">VERIFIED</div>
+            </div>
+
+            <a href="#" id="callBtn" class="btn btn-call full"><i class="fas fa-phone-alt"></i> EMERGENCY CALL</a>
+            
+            <a href="javascript:void(0)" onclick="toggleBuddies()" id="buddyBtn" class="btn btn-buddy full"><i class="fas fa-users"></i> BLOOD BUDDIES CONTACTS</a>
+            <div id="buddyDrawer">
+                <div id="buddyList"></div>
+            </div>
+
+            <a href="#" id="notifyBtn" class="btn btn-notify full"><i class="fab fa-whatsapp"></i> NOTIFY OWNER</a>
+            
+            <a href="https://www.google.com/maps/search/hospitals+near+me" target="_blank" class="btn btn-hosp full"><i class="fas fa-ambulance"></i> NEAREST HOSPITAL</a>
+        </div>
+
+        <div class="social-pill" id="socialLinks"></div>
     </div>
-</div>
 
-<script>
-    // 1. THIS FUNCTION HANDLES THE INCOMING DATA FROM APPS SCRIPT
-    function handleResponse(data) {
-        const display = document.getElementById('mainDisplay');
-        
-        if (data.Status === "Active") {
-            display.innerHTML = `
-                <div style="text-align:center; margin-bottom: 25px;">
-                    <h1 style="color:var(--gold); letter-spacing: 6px; font-size: 22px; margin:0;">SURAKSHAQR</h1>
-                    <p style="font-size:10px; opacity:0.4; letter-spacing: 1px;">INSTANT LIFE-DATA ACCESS</p>
-                </div>
-
-                <div class="bento-grid">
-                    <div class="card full">
-                        <div class="label"><i class="fas fa-user-shield"></i> Profile Holder</div>
-                        <div class="val">${data.Name}</div>
-                    </div>
-
-                    <div class="card">
-                        <div class="label">Blood Group</div>
-                        <div class="val" style="color:var(--red)">${data.Blood_Group}</div>
-                    </div>
-
-                    <div class="card">
-                        <div class="label">System Status</div>
-                        <div class="val" style="color:#2ed573; font-size:16px;"><i class="fas fa-check-circle"></i> VERIFIED</div>
-                    </div>
-
-                    <div class="card full vault-card">
-                        <div class="label" style="color:var(--gold)">"Break-Glass" Vault</div>
-                        <p style="font-size:11px; opacity:0.7; margin:5px 0;">Driving License & Insurance (Encrypted)</p>
-                        <button class="vault-btn" onclick="openVault('${data.Vault_Link}')">UNLOCK WITH OTP</button>
-                    </div>
-
-                    <div class="card full">
-                        <div class="label">Social Connections</div>
-                        <div class="social-links">
-                            ${data.FB_Link ? `<a href="${data.FB_Link}" target="_blank"><i class="fab fa-facebook"></i></a>` : ''}
-                            ${data.IG_Link ? `<a href="${data.IG_Link}" target="_blank"><i class="fab fa-instagram"></i></a>` : ''}
-                            <a href="#" style="font-size:12px; opacity:0.4; margin-left:auto;">Lang: ${data.Lang}</a>
-                        </div>
-                    </div>
-                </div>
-
-                <a href="tel:${data.Emergency_Phone}" class="btn-call">
-                    <i class="fas fa-phone-alt"></i> EMERGENCY CALL
-                </a>
-
-                <div style="text-align:center; margin-top:30px;">
-                    <button class="vault-btn" style="border-color:rgba(255,255,255,0.2); color:white; opacity:0.5;" onclick="alert('Notification sent to owner!')">
-                        <i class="fas fa-car"></i> WRONGLY PARKED?
-                    </button>
-                </div>
-            `;
-        } else {
-            display.innerHTML = `
-                <div class="card full" style="text-align:center; padding: 60px 20px;">
-                    <i class="fas fa-qrcode" style="font-size: 50px; color: var(--gold); margin-bottom: 20px;"></i>
-                    <h3>TAG AVAILABLE</h3>
-                    <p style="opacity:0.6;">ID: ${data.ID || 'Unknown'}<br>Scan with the SurakshaQR App to activate this profile.</p>
-                </div>`;
-        }
-    }
-
-    // 2. FETCH LOGIC
-    function init() {
+    <script>
         const urlParams = new URLSearchParams(window.location.search);
-        const qrId = (urlParams.get('id') || "NONE").toUpperCase();
-        
-        // REPLACE THE URL BELOW WITH YOUR NEW GOOGLE APPS SCRIPT URL
-        const scriptUrl = "https://script.google.com/macros/s/AKfycbwskze85SBPLZp-n0Zqrdrlsn32RXOOVAnGNzd-iRTIomYMAazqoWIdS8TKLari8Qw0/exec";
+        const userId = urlParams.get('id');
+        const apiURL = "https://script.google.com/macros/s/AKfycbxa_A0h3jblfviivuAILOX3G1EIWb7yTmK0adM0B67QxmDcZVaGihhnCV4leQVTSPMU/exec";
 
-        const script = document.createElement('script');
-        script.src = `${scriptUrl}?id=${qrId}&callback=handleResponse&t=${Date.now()}`;
-        document.body.appendChild(script);
-    }
-
-    function openVault(link) {
-        let otp = prompt("An alert has been sent to the owner. Enter the 4-digit OTP from the owner's phone to view documents:");
-        if(otp === "1234") { // Replace with actual OTP logic later
-            window.open(link, '_blank');
-        } else {
-            alert("Incorrect OTP. Access Denied.");
+        function toggleBuddies() {
+            const d = document.getElementById('buddyDrawer');
+            d.style.display = d.style.display === 'block' ? 'none' : 'block';
         }
-    }
 
-    window.onload = init;
-</script>
+        async function loadData() {
+            try {
+                const response = await fetch(`${apiURL}?id=${userId}&v=${new Date().getTime()}`);
+                const user = await response.json();
+                const nameEl = document.getElementById('userName');
+                nameEl.classList.remove('shimmer');
 
+                if (user.Status !== "Active") {
+                    nameEl.innerText = "System Ready";
+                    document.getElementById('statusLabel').innerText = "AVAILABLE";
+                    document.getElementById('statusLabel').style.color = "orange";
+                    return;
+                }
+
+                nameEl.innerText = user.Name || "User Registered";
+                document.getElementById('bloodGroup').innerHTML = `<i class="fas fa-tint"></i> ${user.Blood_Group || 'N/A'}`;
+                document.getElementById('callBtn').href = "tel:" + user.Emergency_Contact_1;
+                
+                // SOCIAL LINKS
+                const socialDiv = document.getElementById('socialLinks');
+                if (user.Social_Links) {
+                    socialDiv.innerHTML = ''; 
+                    user.Social_Links.split(',').forEach(link => {
+                        let icon = 'fas fa-link';
+                        if (link.includes('facebook')) icon = 'fab fa-facebook';
+                        if (link.includes('instagram')) icon = 'fab fa-instagram';
+                        if (link.includes('linkedin')) icon = 'fab fa-linkedin';
+                        if (link.includes('youtube')) icon = 'fab fa-youtube';
+                        socialDiv.innerHTML += `<a href="${link.trim()}" target="_blank" rel="noopener"><i class="${icon}"></i></a>`;
+                    });
+                }
+
+                // BUDDY LIST
+                const buddyList = document.getElementById('buddyList');
+                if (user.Emergency_Contact_1) {
+                    buddyList.innerHTML = `
+                        <div class="buddy-item">
+                            <span>Family/Buddy</span>
+                            <a href="tel:${user.Emergency_Contact_1}" style="color:#2ed573; text-decoration:none; font-weight:800;"><i class="fas fa-phone-alt"></i> CALL NOW</a>
+                        </div>`;
+                }
+
+                const msg = encodeURIComponent(`SURAKSHAQR ALERT: Someone is trying to reach you regarding your vehicle.`);
+                document.getElementById('notifyBtn').href = `https://wa.me/${user.Emergency_Contact_1}?text=${msg}`;
+
+            } catch (e) { 
+                document.getElementById('userName').innerText = "System Ready"; 
+            }
+        }
+        if(userId) loadData();
+    </script>
 </body>
 </html>
