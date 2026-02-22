@@ -181,7 +181,7 @@
 
                     // ৫. হোয়াটসঅ্যাপ নোটিফিকেশন লজিক
                     const msg = encodeURIComponent(`SURAKSHAQR ALERT: Help needed for ${user.Name}!`);
-                    document.getElementById('notifyBtn').href = `https://wa.me/${user.Emergency_Contact_1}?text=${msg}`;
+                    document.getElementById('notifyBtn').href = `https://wa.me/${user.Mobile}?text=${msg}`;
 
                 } else {
                     nameEl.innerText = "Profile Not Found";
@@ -196,6 +196,7 @@
     </script>
 </body>
 </html>
+
 
 
 
