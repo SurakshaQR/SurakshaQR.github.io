@@ -14,7 +14,7 @@
     <style>
         :root { --glass: rgba(255, 255, 255, 0.03); --border: rgba(255, 255, 255, 0.08); --gold: #FFD700; --accent: #ff4757; --bg: #05070a; }
         body { margin: 0; font-family: 'Plus Jakarta Sans', sans-serif; background: var(--bg); color: white; overflow-x: hidden; background-image: radial-gradient(at 0% 0%, hsla(253,16%,15%,1) 0, transparent 50%), radial-gradient(at 100% 0%, hsla(339,49%,20%,1) 0, transparent 50%); display: flex; justify-content: center; min-height: 100vh; }
-        .container { width: 92%; max-width: 420px; padding: 25px 0; }
+        .container { width: 100%; max-width: 420px; padding: 25px 16px; margin: 0 auto; box-sizing : border-box; }
         
         /* HEADER UX */
         .header { display: flex; flex-direction: column; align-items: center; margin-bottom: 30px; }
@@ -51,7 +51,6 @@
     </style>
 </head>
 
-    ///////
 
     <body>
     <div class="container">
@@ -94,7 +93,7 @@
         <div class="social-pill" id="socialLinks"></div>
     </div>
 
-        /////////////////
+     
 
         <script>
         const firebaseConfig = {
@@ -186,5 +185,6 @@
     </script>
 </body>
 </html>
+
 
 
