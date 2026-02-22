@@ -54,7 +54,7 @@
     <body>
     <div class="container">
         <div class="header">
-           <img src="logo.png" id="mainLogo" class="logo-img" alt="SurakshaQR Logo" 
+            <img src="logo.png" id="mainLogo" class="logo-img" alt="SurakshaQR Logo" 
                  onerror="this.src='https://raw.githubusercontent.com/sakshaqr/sakshaqr.github.io/main/logo.png';">
             <div class="brand-name">SURAKSHA<span>QR</span></div>
             <div class="trust-badge"><i class="fas fa-shield-check"></i> VERIFIED SAFETY PROFILE</div>
@@ -80,16 +80,19 @@
             <a href="#" id="callBtn" class="btn btn-call full"><i class="fas fa-phone-alt"></i> EMERGENCY CALL</a>
             
             <a href="javascript:void(0)" onclick="toggleBuddies()" id="buddyBtn" class="btn btn-buddy full"><i class="fas fa-users"></i> BLOOD BUDDIES CONTACTS</a>
+            
             <div id="buddyDrawer">
                 <div id="buddyList"></div>
             </div>
 
             <a href="#" id="notifyBtn" class="btn btn-notify full"><i class="fab fa-whatsapp"></i> NOTIFY OWNER</a>
-            <a href="https://www.google.com/maps/search/hospitals+near+me" target="_blank" class="btn btn-hosp full"><i class="fas fa-ambulance"></i> NEAREST HOSPITAL</a>
+            <a href="https://www.google.com/maps/search/nearest+hospital" target="_blank" class="btn btn-hosp full"><i class="fas fa-ambulance"></i> NEAREST HOSPITAL</a>
         </div>
 
         <div class="social-pill" id="socialLinks"></div>
     </div>
+
+        /////////////////
 
         <script>
         const firebaseConfig = {
@@ -114,7 +117,7 @@
 
         async function loadFirestoreData() {
             if (!userId) {
-                document.getElementById('userName').innerText = "System Ready";
+                document.getElementById('userName').innerText = "Invalid Scan";
                 return;
             }
 
@@ -130,17 +133,19 @@
 
                     if (user.Status !== "Active") {
                         nameEl.innerText = "System Ready";
-                        document.getElementById('statusLabel').innerText = "AVAILABLE";
+                        document.getElementById('statusLabel').innerText = "INACTIVE";
                         document.getElementById('statusLabel').style.color = "orange";
                         return;
                     }
 
-                    // Mapping Data
-                    nameEl.innerText = user.Name || "User Registered";
+                    // 1. Basic Info
+                    nameEl.innerText = user.Name || "Registered User";
                     document.getElementById('bloodGroup').innerHTML = `<i class="fas fa-tint"></i> ${user.Blood_Group || 'N/A'}`;
+                    
+                    // 2. Emergency Contact Logic (Primary)
                     document.getElementById('callBtn').href = "tel:" + user.Emergency_Contact_1;
 
-                    // Social Links Logic
+                    // 3. Social Links Logic
                     const socialDiv = document.getElementById('socialLinks');
                     if (user.Social_Links) {
                         socialDiv.innerHTML = '';
@@ -153,15 +158,16 @@
                         });
                     }
 
-                    // Blood Buddy Logic (Simple list from users_data)
+                    // 4. Blood Buddy Logic (Simple list from users_data)
+                    // আপনি চাইলে এখানে Blood_Group এর জন্য আলাদা কন্টাক্ট দেখাতে পারেন
                     if (user.Emergency_Contact_1) {
                         document.getElementById('buddyList').innerHTML = `
                             <div class="buddy-item">
-                                <span>Emergency Buddy</span>
+                                <span>Blood Buddy (Primary)</span>
                                 <a href="tel:${user.Emergency_Contact_1}" style="color:#2ed573; text-decoration:none; font-weight:800;">CALL NOW</a>
                             </div>`;
                         
-                        const msg = encodeURIComponent(`SURAKSHAQR ALERT: I need assistance regarding your profile.`);
+                        const msg = encodeURIComponent(`SURAKSHAQR ALERT: Urgent help needed!`);
                         document.getElementById('notifyBtn').href = `https://wa.me/${user.Emergency_Contact_1}?text=${msg}`;
                     }
 
@@ -170,7 +176,7 @@
                 }
             } catch (error) {
                 console.error("Firestore Error:", error);
-                document.getElementById('userName').innerText = "Offline Mode";
+                document.getElementById('userName').innerText = "System Ready";
             }
         }
 
