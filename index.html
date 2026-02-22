@@ -148,7 +148,26 @@
                     // 2. Emergency Contact Logic (Primary)
                     document.getElementById('callBtn').href = "tel:" + user.Emergency_Contact_1;
 
-                    // 3. Social Links Logic
+                 // ১. ইউজারের নাম এবং ব্লাড গ্রুপ সেট করা
+                    nameEl.innerText = user.Name || "Registered User";
+                    document.getElementById('bloodGroup').innerHTML = `<i class="fas fa-tint"></i> ${user.Blood_Group || 'N/A'}`;
+                    
+                    // ২. এমার্জেন্সি কল নম্বর সেট করা (Emergency_Contact_1)
+                    document.getElementById('callBtn').href = "tel:" + user.Emergency_Contact_1;
+
+                    // ৩. ব্লাড বাডি লজিক: ডাটাবেসের Blood_Buddy ফিল্ড থেকে নম্বর নেওয়া হচ্ছে
+                    const buddyListDiv = document.getElementById('buddyList');
+                    if (user.Blood_Buddy) {
+                        buddyListDiv.innerHTML = `
+                            <div class="buddy-item">
+                                <span>Blood Buddy</span>
+                                <a href="tel:${user.Blood_Buddy}" style="color:#2ed573; text-decoration:none; font-weight:800;">CALL NOW</a>
+                            </div>`;
+                    } else {
+                        buddyListDiv.innerHTML = '<div style="padding:10px; opacity:0.5;">No buddy found.</div>';
+                    }
+
+                    // ৪. সোশ্যাল লিঙ্ক জেনারেট করা
                     const socialDiv = document.getElementById('socialLinks');
                     if (user.Social_Links) {
                         socialDiv.innerHTML = '';
@@ -156,23 +175,13 @@
                             let icon = 'fas fa-link';
                             if (link.includes('facebook')) icon = 'fab fa-facebook';
                             if (link.includes('instagram')) icon = 'fab fa-instagram';
-                            if (link.includes('linkedin')) icon = 'fab fa-linkedin';
                             socialDiv.innerHTML += `<a href="${link.trim()}" target="_blank"><i class="${icon}"></i></a>`;
                         });
                     }
 
-                    // 4. Blood Buddy Logic (Simple list from users_data)
-                    // আপনি চাইলে এখানে Blood_Group এর জন্য আলাদা কন্টাক্ট দেখাতে পারেন
-                    if (user.Emergency_Contact_1) {
-                        document.getElementById('buddyList').innerHTML = `
-                            <div class="buddy-item">
-                                <span>Blood Buddy (Primary)</span>
-                                <a href="tel:${user.Emergency_Contact_1}" style="color:#2ed573; text-decoration:none; font-weight:800;">CALL NOW</a>
-                            </div>`;
-                        
-                        const msg = encodeURIComponent(`SURAKSHAQR ALERT: Urgent help needed!`);
-                        document.getElementById('notifyBtn').href = `https://wa.me/${user.Emergency_Contact_1}?text=${msg}`;
-                    }
+                    // ৫. হোয়াটসঅ্যাপ নোটিফিকেশন লজিক
+                    const msg = encodeURIComponent(`SURAKSHAQR ALERT: Help needed for ${user.Name}!`);
+                    document.getElementById('notifyBtn').href = `https://wa.me/${user.Emergency_Contact_1}?text=${msg}`;
 
                 } else {
                     nameEl.innerText = "Profile Not Found";
@@ -187,6 +196,7 @@
     </script>
 </body>
 </html>
+
 
 
 
