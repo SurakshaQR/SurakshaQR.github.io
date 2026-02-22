@@ -4,19 +4,26 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>SurakshaQR - Official Safety Portal</title>
+    
     <script src="https://www.gstatic.com/firebasejs/9.6.1/firebase-app-compat.js"></script>
     <script src="https://www.gstatic.com/firebasejs/9.6.1/firebase-firestore-compat.js"></script>
+    
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
     <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;800&display=swap" rel="stylesheet">
+
     <style>
         :root { --glass: rgba(255, 255, 255, 0.03); --border: rgba(255, 255, 255, 0.08); --gold: #FFD700; --accent: #ff4757; --bg: #05070a; }
         body { margin: 0; font-family: 'Plus Jakarta Sans', sans-serif; background: var(--bg); color: white; overflow-x: hidden; background-image: radial-gradient(at 0% 0%, hsla(253,16%,15%,1) 0, transparent 50%), radial-gradient(at 100% 0%, hsla(339,49%,20%,1) 0, transparent 50%); display: flex; justify-content: center; min-height: 100vh; }
         .container { width: 92%; max-width: 420px; padding: 25px 0; }
+        
+        /* LOGO FIX: Golden Glow and proper sizing */
         .header { display: flex; flex-direction: column; align-items: center; margin-bottom: 30px; }
-        .logo-img { width: 100px; height: 100px; object-fit: contain; margin-bottom: 12px; filter: drop-shadow(0 0 10px rgba(255,215,0,0.2)); }
+        .logo-img { width: 100px; height: 100px; object-fit: contain; margin-bottom: 12px; filter: drop-shadow(0 0 15px rgba(255, 215, 0, 0.4)); }
+        
         .brand-name { font-weight: 500; font-size: 16px; letter-spacing: 4px; color: var(--gold); text-transform: uppercase; margin-bottom: 5px; }
         .brand-name span { font-weight: 800; font-size: 28px; letter-spacing: 1px; }
         .trust-badge { font-size: 10px; color: #2ed573; background: rgba(46, 213, 115, 0.1); padding: 5px 15px; border-radius: 30px; border: 1px solid rgba(46, 213, 115, 0.2); text-transform: uppercase; font-weight: 800; }
+        
         .bento-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; }
         .card { background: var(--glass); backdrop-filter: blur(20px); border: 1px solid var(--border); border-radius: 28px; padding: 20px; opacity: 0; transform: translateY(30px); animation: slideIn 0.8s forwards; cursor: pointer; transition: 0.3s; }
         .card:hover { border-color: var(--gold); background: rgba(255, 215, 0, 0.02); }
@@ -25,11 +32,13 @@
         .label { font-size: 10px; opacity: 0.5; font-weight: 600; text-transform: uppercase; margin-bottom: 8px; }
         h1 { margin: 0; font-size: 26px; font-weight: 800; }
         .blood-tag { display: inline-flex; align-items: center; gap: 6px; background: rgba(255, 71, 87, 0.15); color: #ff4757; padding: 6px 14px; border-radius: 12px; font-size: 13px; font-weight: 800; margin-top: 10px; }
+        
         .btn { display: flex; align-items: center; justify-content: center; gap: 12px; text-decoration: none; font-weight: 800; font-size: 15px; padding: 18px; border-radius: 22px; margin-top: 10px; transition: 0.3s; border: 1px solid transparent; }
         .btn-call { background: linear-gradient(135deg, #ff4757, #ff6b81); color: white; box-shadow: 0 10px 20px rgba(255, 71, 87, 0.2); }
         .btn-notify { background: linear-gradient(135deg, #2ed573, #7bed9f); color: #052c14; }
         .btn-hosp { background: rgba(255, 255, 255, 0.05); border: 1px solid var(--border); color: white; }
         .btn-buddy { background: rgba(255, 215, 0, 0.05); border: 1px solid var(--gold); color: var(--gold); }
+        
         #buddyDrawer { display: none; grid-column: span 2; background: rgba(255,255,255,0.02); border-radius: 22px; padding: 15px; border: 1px solid var(--border); margin-top: 5px; animation: fadeIn 0.4s ease; }
         @keyframes fadeIn { from { opacity: 0; transform: translateY(-10px); } to { opacity: 1; transform: translateY(0); } }
         .buddy-item { display: flex; justify-content: space-between; align-items: center; padding: 12px; border-bottom: 1px solid var(--border); }
@@ -40,11 +49,13 @@
     </style>
 </head>
 
+    ///////
+
     <body>
     <div class="container">
         <div class="header">
-           <img src="logo.png" id="mainLogo" class="logo-img" alt="SurakshaQR Logo" 
-                 onerror="this.src='https://cdn-icons-png.flaticon.com/512/1161/1161388.png';">
+            <img src="logo.png" id="mainLogo" class="logo-img" alt="SurakshaQR Logo" 
+                 onerror="this.src='https://raw.githubusercontent.com/sakshaqr/sakshaqr.github.io/main/logo.png';">
             <div class="brand-name">SURAKSHA<span>QR</span></div>
             <div class="trust-badge"><i class="fas fa-shield-check"></i> VERIFIED SAFETY PROFILE</div>
         </div>
@@ -67,6 +78,7 @@
             </div>
 
             <a href="#" id="callBtn" class="btn btn-call full"><i class="fas fa-phone-alt"></i> EMERGENCY CALL</a>
+            
             <a href="javascript:void(0)" onclick="toggleBuddies()" id="buddyBtn" class="btn btn-buddy full"><i class="fas fa-users"></i> BLOOD BUDDIES CONTACTS</a>
             
             <div id="buddyDrawer">
@@ -74,14 +86,15 @@
             </div>
 
             <a href="#" id="notifyBtn" class="btn btn-notify full"><i class="fab fa-whatsapp"></i> NOTIFY OWNER</a>
-            <a href="https://www.google.com/maps/search/hospital+near+me" target="_blank" class="btn btn-hosp full"><i class="fas fa-ambulance"></i> NEAREST HOSPITAL</a>
+            <a href="https://www.google.com/maps/search/nearest+hospital" target="_blank" class="btn btn-hosp full"><i class="fas fa-ambulance"></i> NEAREST HOSPITAL</a>
         </div>
 
         <div class="social-pill" id="socialLinks"></div>
     </div>
 
-    <script>
-        // আপনার Firebase Project Settings থেকে এই ডাটাগুলো সংগ্রহ করুন
+        /////////////////
+
+        <script>
         const firebaseConfig = {
             apiKey: "AIzaSyBCkv-YOQd_RJJIE44EQ33WDH8oLoNtl5I",
             authDomain: "surakshaqr-new.firebaseapp.com",
@@ -103,16 +116,20 @@
         }
 
         async function loadFirestoreData() {
-            if (!userId) return;
+            if (!userId) {
+                document.getElementById('userName').innerText = "Invalid Scan";
+                return;
+            }
+
             try {
-                // 'users_data' কালেকশন থেকে ডাটা রিড করা হচ্ছে
                 const docRef = db.collection("users_data").doc(userId);
                 const doc = await docRef.get();
 
+                const nameEl = document.getElementById('userName');
+                nameEl.classList.remove('shimmer');
+
                 if (doc.exists) {
                     const user = doc.data();
-                    const nameEl = document.getElementById('userName');
-                    nameEl.classList.remove('shimmer');
 
                     if (user.Status !== "Active") {
                         nameEl.innerText = "System Ready";
@@ -121,11 +138,14 @@
                         return;
                     }
 
+                    // 1. Basic Info
                     nameEl.innerText = user.Name || "Registered User";
                     document.getElementById('bloodGroup').innerHTML = `<i class="fas fa-tint"></i> ${user.Blood_Group || 'N/A'}`;
+                    
+                    // 2. Emergency Contact Logic (Primary)
                     document.getElementById('callBtn').href = "tel:" + user.Emergency_Contact_1;
 
-                    // সোশ্যাল লিঙ্ক লজিক
+                    // 3. Social Links Logic
                     const socialDiv = document.getElementById('socialLinks');
                     if (user.Social_Links) {
                         socialDiv.innerHTML = '';
@@ -138,22 +158,25 @@
                         });
                     }
 
-                    // বাডি লিস্ট (Emergency Contact 1 থেকে)
+                    // 4. Blood Buddy Logic (Simple list from users_data)
+                    // আপনি চাইলে এখানে Blood_Group এর জন্য আলাদা কন্টাক্ট দেখাতে পারেন
                     if (user.Emergency_Contact_1) {
                         document.getElementById('buddyList').innerHTML = `
                             <div class="buddy-item">
-                                <span>Primary Guardian</span>
+                                <span>Blood Buddy (Primary)</span>
                                 <a href="tel:${user.Emergency_Contact_1}" style="color:#2ed573; text-decoration:none; font-weight:800;">CALL NOW</a>
                             </div>`;
-                        const msg = encodeURIComponent(`SURAKSHAQR ALERT: I need assistance regarding your vehicle/profile.`);
+                        
+                        const msg = encodeURIComponent(`SURAKSHAQR ALERT: Urgent help needed!`);
                         document.getElementById('notifyBtn').href = `https://wa.me/${user.Emergency_Contact_1}?text=${msg}`;
                     }
+
                 } else {
-                    document.getElementById('userName').innerText = "Invalid QR";
+                    nameEl.innerText = "Profile Not Found";
                 }
             } catch (error) {
                 console.error("Firestore Error:", error);
-                document.getElementById('userName').innerText = "Offline Mode";
+                document.getElementById('userName').innerText = "System Ready";
             }
         }
 
@@ -161,5 +184,3 @@
     </script>
 </body>
 </html>
-
-
