@@ -48,6 +48,311 @@
         .social-pill a { color: white; font-size: 24px; opacity: 0.6; transition: 0.3s; }
         .shimmer { color: rgba(255,215,0,0.5); animation: loading 1.5s infinite; }
         @keyframes loading { 0%, 100% { opacity: 0.3; } 50% { opacity: 1; } }
+        /* ==========================================
+   RESCUER EMERGENCY MODAL
+   ========================================== */
+
+.rescuer-modal {
+    display: none;
+
+    position: fixed;
+
+    inset: 0;
+
+    z-index: 99999;
+
+    background: rgba(0, 0, 0, 0.82);
+
+    backdrop-filter: blur(12px);
+
+    align-items: center;
+
+    justify-content: center;
+
+    padding: 20px;
+
+    box-sizing: border-box;
+}
+
+.rescuer-modal.show {
+    display: flex;
+}
+
+.rescuer-modal-card {
+
+    width: 100%;
+
+    max-width: 390px;
+
+    background:
+        linear-gradient(
+            145deg,
+            rgba(35, 20, 28, 0.98),
+            rgba(8, 10, 14, 0.98)
+        );
+
+    border: 1px solid rgba(255, 71, 87, 0.35);
+
+    border-radius: 28px;
+
+    padding: 25px;
+
+    box-sizing: border-box;
+
+    box-shadow:
+        0 25px 80px rgba(0, 0, 0, 0.7),
+        0 0 30px rgba(255, 71, 87, 0.12);
+
+    position: relative;
+
+    animation: rescuerModalIn 0.25s ease;
+}
+
+@keyframes rescuerModalIn {
+
+    from {
+        opacity: 0;
+        transform: translateY(25px) scale(0.96);
+    }
+
+    to {
+        opacity: 1;
+        transform: translateY(0) scale(1);
+    }
+
+}
+
+.rescuer-close {
+
+    position: absolute;
+
+    top: 15px;
+
+    right: 15px;
+
+    width: 36px;
+
+    height: 36px;
+
+    border-radius: 50%;
+
+    border: 1px solid rgba(255,255,255,0.1);
+
+    background: rgba(255,255,255,0.05);
+
+    color: white;
+
+    cursor: pointer;
+
+    font-size: 14px;
+}
+
+.rescuer-icon {
+
+    width: 58px;
+
+    height: 58px;
+
+    border-radius: 18px;
+
+    display: flex;
+
+    align-items: center;
+
+    justify-content: center;
+
+    background: rgba(255, 71, 87, 0.12);
+
+    border: 1px solid rgba(255, 71, 87, 0.25);
+
+    color: #ff4757;
+
+    font-size: 25px;
+
+    margin-bottom: 15px;
+}
+
+.rescuer-modal-card h2 {
+
+    margin: 0;
+
+    font-size: 23px;
+
+    font-weight: 800;
+}
+
+.rescuer-subtitle {
+
+    font-size: 12px;
+
+    line-height: 1.6;
+
+    opacity: 0.6;
+
+    margin: 8px 0 18px;
+}
+
+.rescuer-target {
+
+    padding: 14px;
+
+    border-radius: 16px;
+
+    background: rgba(255,255,255,0.04);
+
+    border: 1px solid rgba(255,255,255,0.07);
+
+    margin-bottom: 18px;
+}
+
+.rescuer-target span {
+
+    display: block;
+
+    font-size: 9px;
+
+    text-transform: uppercase;
+
+    opacity: 0.45;
+
+    margin-bottom: 5px;
+}
+
+.rescuer-target strong {
+
+    font-size: 16px;
+
+    color: var(--gold);
+}
+
+.rescuer-modal-card label:not(.rescuer-checkbox) {
+
+    display: block;
+
+    font-size: 10px;
+
+    text-transform: uppercase;
+
+    font-weight: 800;
+
+    opacity: 0.55;
+
+    margin: 14px 0 7px;
+}
+
+.rescuer-modal-card input[type="text"],
+.rescuer-modal-card input[type="tel"] {
+
+    width: 100%;
+
+    box-sizing: border-box;
+
+    padding: 14px 15px;
+
+    border-radius: 14px;
+
+    border: 1px solid rgba(255,255,255,0.1);
+
+    background: rgba(255,255,255,0.05);
+
+    color: white;
+
+    outline: none;
+
+    font-family: inherit;
+
+    font-size: 14px;
+}
+
+.rescuer-modal-card input:focus {
+
+    border-color: rgba(255, 71, 87, 0.6);
+}
+
+.rescuer-checkbox {
+
+    display: flex;
+
+    align-items: center;
+
+    gap: 10px;
+
+    margin: 18px 0;
+
+    font-size: 12px;
+
+    color: rgba(255,255,255,0.8);
+
+    cursor: pointer;
+}
+
+.rescuer-checkbox input {
+
+    width: 18px;
+
+    height: 18px;
+
+    accent-color: #2ed573;
+}
+
+.rescuer-send-btn {
+
+    width: 100%;
+
+    border: 0;
+
+    border-radius: 17px;
+
+    padding: 16px;
+
+    background:
+        linear-gradient(
+            135deg,
+            #ff4757,
+            #ff6b81
+        );
+
+    color: white;
+
+    font-family: inherit;
+
+    font-size: 13px;
+
+    font-weight: 800;
+
+    cursor: pointer;
+
+    box-shadow:
+        0 10px 25px rgba(255, 71, 87, 0.22);
+}
+
+.rescuer-send-btn:disabled {
+
+    opacity: 0.55;
+
+    cursor: not-allowed;
+}
+
+.rescuer-status {
+
+    min-height: 20px;
+
+    text-align: center;
+
+    font-size: 11px;
+
+    margin-top: 12px;
+}
+
+.rescuer-status.success {
+
+    color: #2ed573;
+}
+
+.rescuer-status.error {
+
+    color: #ff6b81;
+}
     </style>
 </head>
 
@@ -80,7 +385,15 @@
                 <div id="statusLabel" style="font-size:12px; font-weight:800; color:#2ed573">VERIFIED</div>
             </div>
 
-            <a href="#" id="callBtn" class="btn btn-call full"><i class="fas fa-phone-alt"></i> EMERGENCY CALL</a>
+           <a href="javascript:void(0)"
+   id="callBtn"
+   class="btn btn-call full"
+   onclick="openRescuerEmergency(); return false;">
+
+    <i class="fas fa-phone-alt"></i>
+    EMERGENCY CALL
+
+</a>
             
             <a href="javascript:void(0)" onclick="toggleBuddies()" id="buddyBtn" class="btn btn-buddy full"><i class="fas fa-users"></i> BLOOD BUDDIES CONTACTS</a>
             
@@ -95,7 +408,125 @@
         <div class="social-pill" id="socialLinks"></div>
     </div>
 
-     
+     <!-- ==========================================
+     RESCUER EMERGENCY MODAL
+     ========================================== -->
+
+<div id="rescuerEmergencyModal" class="rescuer-modal">
+
+    <div class="rescuer-modal-card">
+
+        <!-- Close -->
+        <button
+            type="button"
+            class="rescuer-close"
+            onclick="closeRescuerEmergency()">
+
+            <i class="fas fa-times"></i>
+
+        </button>
+
+
+        <!-- Emergency Icon -->
+        <div class="rescuer-icon">
+
+            <i class="fas fa-triangle-exclamation"></i>
+
+        </div>
+
+
+        <!-- Title -->
+        <h2>Emergency Contact</h2>
+
+        <p class="rescuer-subtitle">
+
+            You are about to notify the emergency guardians
+            of this SurakshaQR member.
+
+        </p>
+
+
+        <!-- Target User -->
+        <div class="rescuer-target">
+
+            <span>PERSON NEEDING HELP</span>
+
+            <strong id="rescuerTargetName">
+                Loading...
+            </strong>
+
+        </div>
+
+
+        <!-- Rescuer Name -->
+        <label for="rescuerName">
+
+            YOUR NAME
+
+        </label>
+
+        <input
+            type="text"
+            id="rescuerName"
+            placeholder="Enter your name"
+            autocomplete="name"
+        >
+
+
+        <!-- Rescuer Phone -->
+        <label for="rescuerPhone">
+
+            YOUR PHONE NUMBER
+
+        </label>
+
+        <input
+            type="tel"
+            id="rescuerPhone"
+            placeholder="Enter your phone number"
+            autocomplete="tel"
+            inputmode="tel"
+        >
+
+
+        <!-- Confirmation -->
+        <label class="rescuer-checkbox">
+
+            <input
+                type="checkbox"
+                id="rescuerWithPerson"
+            >
+
+            <span>
+                I am with this person
+            </span>
+
+        </label>
+
+
+        <!-- Send -->
+        <button
+            type="button"
+            id="sendRescuerAlertBtn"
+            class="rescuer-send-btn"
+            onclick="sendRescuerEmergencyAlert()">
+
+            <i class="fas fa-bell"></i>
+
+            SEND EMERGENCY ALERT
+
+        </button>
+
+
+        <!-- Status -->
+        <div
+            id="rescuerStatus"
+            class="rescuer-status">
+        </div>
+
+    </div>
+
+</div>
 
         <script>
         const firebaseConfig = {
@@ -141,19 +572,23 @@
                         return;
                     }
 
+
+
+
+                    
                     // 1. Basic Info
                     nameEl.innerText = user.Name || "Registered User";
                     document.getElementById('bloodGroup').innerHTML = `<i class="fas fa-tint"></i> ${user.Blood_Group || 'N/A'}`;
                     
                     // 2. Emergency Contact Logic (Primary)
-                    document.getElementById('callBtn').href = "tel:" + user.Emergency_Contact_1;
+                    
 
                  // ১. ইউজারের নাম এবং ব্লাড গ্রুপ সেট করা
                     nameEl.innerText = user.Name || "Registered User";
                     document.getElementById('bloodGroup').innerHTML = `<i class="fas fa-tint"></i> ${user.Blood_Group || 'N/A'}`;
                     
                     // ২. এমার্জেন্সি কল নম্বর সেট করা (Emergency_Contact_1)
-                    document.getElementById('callBtn').href = "tel:" + user.Emergency_Contact_1;
+                   
 
                     // ৩. ব্লাড বাডি লজিক: ডাটাবেসের Blood_Buddy ফিল্ড থেকে নম্বর নেওয়া হচ্ছে
                     const buddyListDiv = document.getElementById('buddyList');
@@ -193,6 +628,249 @@
         }
 
         loadFirestoreData();
+          // ==========================================
+// RESCUER EMERGENCY WEB FLOW
+// ==========================================
+
+function openRescuerEmergency() {
+
+    const modal =
+        document.getElementById(
+            "rescuerEmergencyModal"
+        );
+
+    const targetName =
+        document.getElementById(
+            "rescuerTargetName"
+        );
+
+    const currentName =
+        document.getElementById(
+            "userName"
+        ).innerText;
+
+    targetName.innerText =
+        currentName &&
+        currentName !== "Scanning Profile..." &&
+        currentName !== "System Ready"
+            ? currentName
+            : "SurakshaQR Member";
+
+    document.getElementById(
+        "rescuerStatus"
+    ).innerText = "";
+
+    modal.classList.add("show");
+}
+
+
+function closeRescuerEmergency() {
+
+    document
+        .getElementById(
+            "rescuerEmergencyModal"
+        )
+        .classList.remove("show");
+}
+
+
+function closeRescuerEmergency() {
+
+    document
+        .getElementById("rescuerEmergencyModal")
+        .classList.remove("show");
+}
+            async function sendRescuerEmergencyAlert() {
+
+    const nameInput =
+        document.getElementById("rescuerName");
+
+    const button =
+        document.getElementById(
+            "sendRescuerAlertBtn"
+        );
+
+    // Prevent duplicate emergency requests
+    if (button.disabled) {
+        return;
+    }
+
+    const phoneInput =
+        document.getElementById("rescuerPhone");
+
+    const withPerson =
+        document.getElementById("rescuerWithPerson");
+
+    const button =
+        document.getElementById("sendRescuerAlertBtn");
+
+    const status =
+        document.getElementById("rescuerStatus");
+
+    const rescuerName =
+        nameInput.value.trim();
+
+    const rescuerPhone =
+        phoneInput.value.trim();
+
+    // ------------------------------------------
+    // Validation
+    // ------------------------------------------
+
+    if (!userId) {
+
+        status.className =
+            "rescuer-status error";
+
+        status.innerText =
+            "Invalid SurakshaQR profile.";
+
+        return;
+    }
+
+    if (!rescuerName) {
+
+        status.className =
+            "rescuer-status error";
+
+        status.innerText =
+            "Please enter your name.";
+
+        nameInput.focus();
+
+        return;
+    }
+
+    if (!rescuerPhone) {
+
+        status.className =
+            "rescuer-status error";
+
+        status.innerText =
+            "Please enter your phone number.";
+
+        phoneInput.focus();
+
+        return;
+    }
+
+    if (!withPerson.checked) {
+
+        status.className =
+            "rescuer-status error";
+
+        status.innerText =
+            "Please confirm that you are with this person.";
+
+        return;
+    }
+
+    // ------------------------------------------
+    // Loading state
+    // ------------------------------------------
+
+    button.disabled = true;
+
+    button.innerHTML =
+        '<i class="fas fa-spinner fa-spin"></i> SENDING...';
+
+    status.className =
+        "rescuer-status";
+
+    status.innerText =
+        "Contacting emergency guardians...";
+
+    try {
+
+        // --------------------------------------
+        // Verify target user first
+        // --------------------------------------
+
+        const userDoc = await db
+            .collection("users_data")
+            .doc(userId)
+            .get();
+
+        if (!userDoc.exists) {
+            throw new Error(
+                "SurakshaQR profile not found."
+            );
+        }
+
+        const userData = userDoc.data();
+
+        // --------------------------------------
+        // Create emergency request
+        // --------------------------------------
+
+        const requestRef = await db
+            .collection("rescuer_emergency_requests")
+            .add({
+
+                targetUserUid: userId,
+
+                targetUserName:
+                    userData.Name || "SurakshaQR Member",
+
+                rescuerName: rescuerName,
+
+                rescuerPhone: rescuerPhone,
+
+                withPerson: true,
+
+                status: "PENDING",
+
+                createdAt:
+                    firebase.firestore.FieldValue
+                        .serverTimestamp(),
+
+                source: "QR_WEB",
+
+                userAgent:
+                    navigator.userAgent
+
+            });
+
+        console.log(
+            "🚨 Rescuer emergency request created:",
+            requestRef.id
+        );
+
+        // --------------------------------------
+        // Success
+        // --------------------------------------
+
+        status.className =
+            "rescuer-status success";
+
+        status.innerText =
+            "Emergency alert sent successfully.";
+
+        button.innerHTML =
+            '<i class="fas fa-check"></i> ALERT SENT';
+
+        // Don't close immediately.
+        // User should see confirmation.
+
+    } catch (error) {
+
+        console.error(
+            "❌ Rescuer emergency request error:",
+            error
+        );
+
+        status.className =
+            "rescuer-status error";
+
+        status.innerText =
+            "Unable to send emergency alert. Please try again.";
+
+        button.disabled = false;
+
+        button.innerHTML =
+            '<i class="fas fa-bell"></i> SEND EMERGENCY ALERT';
+    }
+}
     </script>
 </body>
 </html>
