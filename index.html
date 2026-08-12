@@ -580,15 +580,6 @@
                     nameEl.innerText = user.Name || "Registered User";
                     document.getElementById('bloodGroup').innerHTML = `<i class="fas fa-tint"></i> ${user.Blood_Group || 'N/A'}`;
                     
-                    // 2. Emergency Contact Logic (Primary)
-                    
-
-                 // ১. ইউজারের নাম এবং ব্লাড গ্রুপ সেট করা
-                    nameEl.innerText = user.Name || "Registered User";
-                    document.getElementById('bloodGroup').innerHTML = `<i class="fas fa-tint"></i> ${user.Blood_Group || 'N/A'}`;
-                    
-                    // ২. এমার্জেন্সি কল নম্বর সেট করা (Emergency_Contact_1)
-                   
 
                     // ৩. ব্লাড বাডি লজিক: ডাটাবেসের Blood_Buddy ফিল্ড থেকে নম্বর নেওয়া হচ্ছে
                     const buddyListDiv = document.getElementById('buddyList');
@@ -662,18 +653,6 @@ function openRescuerEmergency() {
 
     modal.classList.add("show");
 }
-
-
-function closeRescuerEmergency() {
-
-    document
-        .getElementById(
-            "rescuerEmergencyModal"
-        )
-        .classList.remove("show");
-}
-
-
 function closeRescuerEmergency() {
 
     document
@@ -701,8 +680,7 @@ function closeRescuerEmergency() {
     const withPerson =
         document.getElementById("rescuerWithPerson");
 
-    const button =
-        document.getElementById("sendRescuerAlertBtn");
+
 
     const status =
         document.getElementById("rescuerStatus");
