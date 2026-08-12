@@ -696,16 +696,16 @@ function closeRescuerEmergency() {
     // Validation
     // ------------------------------------------
 
-    if (!userId) {
+  if (!userId) {
 
-        status.className =
-            "r
+    status.className =
+        "rescuer-status error";
 
-        status.innerText =
-            "Invalid SurakshaQR profile.";
+    status.innerText =
+        "Invalid SurakshaQR profile.";
 
-        return;
-    }
+    return;
+}
 
     if (!rescuerName) {
 
