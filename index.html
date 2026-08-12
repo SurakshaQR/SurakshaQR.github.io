@@ -481,12 +481,13 @@
         </label>
 
         <input
-            type="tel"
-            id="rescuerPhone"
-            placeholder="Enter your phone number"
-            autocomplete="tel"
-            inputmode="tel"
-        >
+    type="tel"
+    id="rescuerPhone"
+    placeholder="10-digit mobile number"
+    autocomplete="tel"
+    inputmode="numeric"
+    maxlength="15"
+>
 
 
         <!-- Confirmation -->
@@ -698,7 +699,7 @@ function closeRescuerEmergency() {
     if (!userId) {
 
         status.className =
-            "rescuer-status error";
+            "r
 
         status.innerText =
             "Invalid SurakshaQR profile.";
@@ -719,20 +720,58 @@ function closeRescuerEmergency() {
         return;
     }
 
-    if (!rescuerPhone) {
+ if (!rescuerPhone) {
 
-        status.className =
-            "rescuer-status error";
+    status.className =
+        "rescuer-status error";
 
-        status.innerText =
-            "Please enter your phone number.";
+    status.innerText =
+        "Please enter your phone number.";
 
-        phoneInput.focus();
+    phoneInput.focus();
 
-        return;
-    }
+    return;
+}
 
-    if (!withPerson.checked) {
+// ------------------------------------------
+// STRICT PHONE VALIDATION
+// ------------------------------------------
+
+const cleanPhone =
+    rescuerPhone.replace(/[\s\-()]/g, '');
+
+let normalizedPhone = cleanPhone;
+
+// +91XXXXXXXXXX
+if (normalizedPhone.startsWith('+91')) {
+    normalizedPhone =
+        normalizedPhone.substring(3);
+}
+
+// 91XXXXXXXXXX
+else if (
+    normalizedPhone.startsWith('91') &&
+    normalizedPhone.length === 12
+) {
+    normalizedPhone =
+        normalizedPhone.substring(2);
+}
+
+// Exactly 10 digits
+if (!/^[6-9]\d{9}$/.test(normalizedPhone)) {
+
+    status.className =
+        "rescuer-status error";
+
+    status.innerText =
+        "Please enter a valid 10-digit Indian mobile number.";
+
+    phoneInput.focus();
+
+    return;
+}
+
+if (!withPerson.checked) {
 
         status.className =
             "rescuer-status error";
@@ -792,7 +831,7 @@ function closeRescuerEmergency() {
 
                 rescuerName: rescuerName,
 
-                rescuerPhone: rescuerPhone,
+rescuerPhone: normalizedPhone,
 
                 withPerson: true,
 
