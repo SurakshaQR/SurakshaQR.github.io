@@ -1468,25 +1468,6 @@ rescuerPhone: normalizedPhone,
             '<i class="fas fa-bell"></i> SEND EMERGENCY ALERT';
     }
 }
-    } catch (error) {
-
-        console.error(
-            "❌ Rescuer emergency request error:",
-            error
-        );
-
-        status.className =
-            "rescuer-status error";
-
-        status.innerText =
-            "Unable to send emergency alert. Please try again.";
-
-        button.disabled = false;
-
-        button.innerHTML =
-            '<i class="fas fa-bell"></i> SEND EMERGENCY ALERT';
-    }
-}
 
 
 // ==========================================================
@@ -1509,14 +1490,7 @@ document
     </script>
 </body>
 </html>
-            
-    </script>
-</body>
-</html>
-
-
-
-
+        
 
 
 
