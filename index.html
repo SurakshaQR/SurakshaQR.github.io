@@ -376,10 +376,17 @@
                 <div id="bloodGroup" class="blood-tag"><i class="fas fa-tint"></i> ---</div>
             </div>
 
-            <div class="card" onclick="alert('Accessing Encrypted Vault... Verification Required')">
-                <div class="label">Vault</div>
-                <div style="font-size:12px; font-weight:800; color:var(--gold)"><i class="fas fa-lock"></i> ENCRYPTED</div>
-            </div>
+            <div class="card" onclick="openVault()">
+    <div class="label">Vault</div>
+
+    <div style="font-size:12px; font-weight:800; color:var(--gold)">
+        <i class="fas fa-lock"></i> ENCRYPTED
+    </div>
+
+    <div style="font-size:9px; opacity:.45; margin-top:8px;">
+        Emergency documents
+    </div>
+</div>
 
             <div class="card">
                 <div class="label">Identity</div>
