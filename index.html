@@ -354,6 +354,222 @@
 
     color: #ff6b81;
 }
+
+        /* ==========================================================
+   SECURE VAULT WEB MODAL
+   ========================================================== */
+
+.vault-modal {
+    display: none;
+
+    position: fixed;
+    inset: 0;
+    z-index: 100000;
+
+    background: rgba(0, 0, 0, 0.86);
+    backdrop-filter: blur(14px);
+
+    align-items: center;
+    justify-content: center;
+
+    padding: 18px;
+    box-sizing: border-box;
+}
+
+.vault-modal.show {
+    display: flex;
+}
+
+.vault-modal-card {
+    width: 100%;
+    max-width: 390px;
+
+    max-height: 88vh;
+    overflow-y: auto;
+
+    background:
+        linear-gradient(
+            145deg,
+            rgba(14, 20, 27, 0.99),
+            rgba(5, 8, 12, 0.99)
+        );
+
+    border: 1px solid rgba(0, 229, 255, 0.35);
+
+    border-radius: 24px;
+
+    padding: 20px;
+
+    box-sizing: border-box;
+
+    box-shadow:
+        0 25px 80px rgba(0,0,0,0.75),
+        0 0 35px rgba(0,229,255,0.10);
+
+    position: relative;
+
+    animation: vaultModalIn 0.25s ease;
+}
+
+@keyframes vaultModalIn {
+    from {
+        opacity: 0;
+        transform: translateY(20px) scale(0.96);
+    }
+
+    to {
+        opacity: 1;
+        transform: translateY(0) scale(1);
+    }
+}
+
+.vault-close {
+    position: absolute;
+
+    top: 14px;
+    right: 14px;
+
+    width: 34px;
+    height: 34px;
+
+    border-radius: 50%;
+
+    border: 1px solid rgba(255,255,255,0.10);
+
+    background: rgba(255,255,255,0.05);
+
+    color: white;
+
+    cursor: pointer;
+}
+
+.vault-header {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+
+    margin-bottom: 18px;
+}
+
+.vault-header-icon {
+    width: 45px;
+    height: 45px;
+
+    border-radius: 14px;
+
+    display: flex;
+    align-items: center;
+    justify-content: center;
+
+    background: rgba(0,229,255,0.08);
+
+    border: 1px solid rgba(0,229,255,0.25);
+
+    color: #00e5ff;
+
+    font-size: 18px;
+}
+
+.vault-header h2 {
+    margin: 0;
+
+    font-size: 19px;
+    font-weight: 800;
+}
+
+.vault-header p {
+    margin: 4px 0 0;
+
+    font-size: 10px;
+
+    opacity: 0.5;
+}
+
+.vault-document {
+    border-radius: 18px;
+
+    padding: 15px;
+
+    margin-bottom: 12px;
+
+    background: rgba(255,255,255,0.025);
+
+    border: 1px solid rgba(255,255,255,0.08);
+}
+
+.vault-document-title {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+
+    margin-bottom: 12px;
+}
+
+.vault-document-title strong {
+    font-size: 14px;
+}
+
+.vault-visible {
+    font-size: 9px;
+
+    color: #2ed573;
+
+    background: rgba(46,213,115,0.10);
+
+    border: 1px solid rgba(46,213,115,0.20);
+
+    padding: 4px 8px;
+
+    border-radius: 20px;
+}
+
+.vault-document img {
+    width: 100%;
+
+    max-height: 420px;
+
+    object-fit: contain;
+
+    border-radius: 12px;
+
+    background: #000;
+
+    display: block;
+}
+
+.vault-empty {
+    text-align: center;
+
+    padding: 30px 15px;
+
+    color: rgba(255,255,255,0.55);
+
+    font-size: 12px;
+
+    line-height: 1.6;
+}
+
+.vault-loading {
+    text-align: center;
+
+    padding: 35px 15px;
+
+    color: #00e5ff;
+
+    font-size: 12px;
+}
+
+.vault-error {
+    text-align: center;
+
+    padding: 25px 15px;
+
+    color: #ff6b81;
+
+    font-size: 12px;
+
+    line-height: 1.6;
+}
     </style>
 </head>
 
@@ -416,6 +632,60 @@
         <div class="social-pill" id="socialLinks"></div>
     </div>
 
+        <!-- ==========================================
+     SECURE VAULT MODAL
+     ========================================== -->
+
+<div id="vaultModal" class="vault-modal">
+
+    <div class="vault-modal-card">
+
+        <button
+            type="button"
+            class="vault-close"
+            onclick="closeVault()">
+
+            <i class="fas fa-times"></i>
+
+        </button>
+
+        <div class="vault-header">
+
+            <div class="vault-header-icon">
+
+                <i class="fas fa-shield-halved"></i>
+
+            </div>
+
+            <div>
+
+                <h2>Emergency Vault</h2>
+
+                <p>
+                    Documents shared by the member
+                </p>
+
+            </div>
+
+        </div>
+
+        <div id="vaultContent">
+
+            <div class="vault-loading">
+
+                <i class="fas fa-spinner fa-spin"></i>
+
+                <br><br>
+
+                Verifying vault access...
+
+            </div>
+
+        </div>
+
+    </div>
+
+</div>
      <!-- ==========================================
      RESCUER EMERGENCY MODAL
      ========================================== -->
@@ -542,7 +812,7 @@
             apiKey: "AIzaSyBCkv-YOQd_RJJIE44EQ33WDH8oLoNtl5I",
             authDomain: "surakshaqr-new.firebaseapp.com",
             projectId: "surakshaqr-new",
-            storageBucket: "surakshaqr-new.appspot.com",
+            storageBucket: "surakshaqr-new.firebasestorage.app",
             messagingSenderId: "878160333805",
             appId: "1:878160333805:android:cc614faa39c4bc8413f5e4"
         };
@@ -630,6 +900,306 @@ const storage = firebase.storage();
         }
 
         loadFirestoreData();
+            // ==========================================================
+// SECURE VAULT WEB FLOW
+// ==========================================================
+
+function openVault() {
+
+    const modal =
+        document.getElementById('vaultModal');
+
+    const content =
+        document.getElementById('vaultContent');
+
+    modal.classList.add('show');
+
+    content.innerHTML = `
+        <div class="vault-loading">
+            <i class="fas fa-spinner fa-spin"></i>
+            <br><br>
+            Verifying vault access...
+        </div>
+    `;
+
+    loadVaultDocuments();
+}
+
+
+// ==========================================================
+// CLOSE VAULT
+// ==========================================================
+
+function closeVault() {
+
+    document
+        .getElementById('vaultModal')
+        .classList.remove('show');
+}
+
+
+// ==========================================================
+// LOAD VAULT DOCUMENTS
+// ==========================================================
+
+async function loadVaultDocuments() {
+
+    const content =
+        document.getElementById('vaultContent');
+
+    if (!userId) {
+
+        content.innerHTML = `
+            <div class="vault-error">
+                Invalid SurakshaQR profile.
+            </div>
+        `;
+
+        return;
+    }
+
+    try {
+
+        // ------------------------------------------------------
+        // IMPORTANT
+        //
+        // Only these two documents are allowed in Emergency QR.
+        // Insurance and Pollution Paper are intentionally ignored.
+        // ------------------------------------------------------
+
+        const allowedDocuments = [
+            {
+                folder: 'driving_licence',
+                title: 'Driving Licence',
+                icon: 'fa-id-card'
+            },
+            {
+                folder: 'mediclaim',
+                title: 'Mediclaim',
+                icon: 'fa-file-medical'
+            }
+        ];
+
+        const visibleDocuments = [];
+
+        // ------------------------------------------------------
+        // Check each allowed document
+        // ------------------------------------------------------
+
+        for (const document of allowedDocuments) {
+
+            try {
+
+                const metadataRef =
+                    storage
+                        .ref()
+                        .child(
+                            `vault_documents/${userId}/${document.folder}/metadata.json`
+                        );
+
+                const metadataUrl =
+                    await metadataRef.getDownloadURL();
+
+                const response =
+                    await fetch(metadataUrl);
+
+                if (!response.ok) {
+                    continue;
+                }
+
+                const metadata =
+                    await response.json();
+
+                console.log(
+                    '[VAULT] Metadata:',
+                    document.folder,
+                    metadata
+                );
+
+                // ------------------------------------------------
+                // QR VISIBILITY CHECK
+                // ------------------------------------------------
+
+                if (
+                    metadata.visible_on_qr !== true
+                ) {
+
+                    console.log(
+                        `[VAULT] ${document.title} is OFF`
+                    );
+
+                    continue;
+                }
+
+                // ------------------------------------------------
+                // Get actual document image
+                // ------------------------------------------------
+
+                const imageRef =
+                    storage
+                        .ref()
+                        .child(
+                            `vault_documents/${userId}/${document.folder}/document.jpg`
+                        );
+
+                const imageUrl =
+                    await imageRef.getDownloadURL();
+
+                visibleDocuments.push({
+                    title: document.title,
+                    icon: document.icon,
+                    imageUrl: imageUrl,
+                    expiryDate:
+                        metadata.expiry_date || null
+                });
+
+                console.log(
+                    `[VAULT] ${document.title} is ON`
+                );
+
+            } catch (documentError) {
+
+                console.log(
+                    `[VAULT] ${document.folder} unavailable:`,
+                    documentError
+                );
+
+            }
+        }
+
+        // ------------------------------------------------------
+        // Nothing shared
+        // ------------------------------------------------------
+
+        if (visibleDocuments.length === 0) {
+
+            content.innerHTML = `
+                <div class="vault-empty">
+
+                    <i
+                        class="fas fa-eye-slash"
+                        style="
+                            font-size:28px;
+                            opacity:.35;
+                            margin-bottom:12px;
+                        ">
+                    </i>
+
+                    <br>
+
+                    No emergency documents have been
+                    shared by this member.
+
+                </div>
+            `;
+
+            return;
+        }
+
+        // ------------------------------------------------------
+        // Render shared documents
+        // ------------------------------------------------------
+
+        content.innerHTML =
+            visibleDocuments
+                .map(document => {
+
+                    let expiryText = '';
+
+                    if (document.expiryDate) {
+
+                        const date =
+                            new Date(
+                                document.expiryDate
+                            );
+
+                        if (
+                            !isNaN(
+                                date.getTime()
+                            )
+                        ) {
+
+                            expiryText =
+                                `
+                                <div style="
+                                    margin-top:8px;
+                                    font-size:10px;
+                                    opacity:.55;
+                                ">
+                                    Expiry:
+                                    ${date.toLocaleDateString(
+                                        'en-GB'
+                                    )}
+                                </div>
+                                `;
+                        }
+                    }
+
+                    return `
+                        <div class="vault-document">
+
+                            <div class="vault-document-title">
+
+                                <strong>
+                                    <i
+                                        class="fas ${document.icon}"
+                                        style="
+                                            color:#00e5ff;
+                                            margin-right:7px;
+                                        ">
+                                    </i>
+
+                                    ${document.title}
+                                </strong>
+
+                                <span class="vault-visible">
+                                    <i class="fas fa-eye"></i>
+                                    SHARED
+                                </span>
+
+                            </div>
+
+                            <img
+                                src="${document.imageUrl}"
+                                alt="${document.title}"
+                                loading="lazy"
+                            >
+
+                            ${expiryText}
+
+                        </div>
+                    `;
+
+                })
+                .join('');
+
+    } catch (error) {
+
+        console.error(
+            '[VAULT] Vault loading error:',
+            error
+        );
+
+        content.innerHTML = `
+            <div class="vault-error">
+
+                <i
+                    class="fas fa-triangle-exclamation"
+                    style="font-size:24px;">
+                </i>
+
+                <br><br>
+
+                Unable to access the emergency vault.
+
+                <br><br>
+
+                Please try again.
+
+            </div>
+        `;
+    }
+}
           // ==========================================
 // RESCUER EMERGENCY WEB FLOW
 // ==========================================
@@ -898,6 +1468,48 @@ rescuerPhone: normalizedPhone,
             '<i class="fas fa-bell"></i> SEND EMERGENCY ALERT';
     }
 }
+    } catch (error) {
+
+        console.error(
+            "❌ Rescuer emergency request error:",
+            error
+        );
+
+        status.className =
+            "rescuer-status error";
+
+        status.innerText =
+            "Unable to send emergency alert. Please try again.";
+
+        button.disabled = false;
+
+        button.innerHTML =
+            '<i class="fas fa-bell"></i> SEND EMERGENCY ALERT';
+    }
+}
+
+
+// ==========================================================
+// VAULT MODAL — CLOSE WHEN CLICKING OUTSIDE THE CARD
+// ==========================================================
+
+document
+    .getElementById('vaultModal')
+    .addEventListener('click', function (event) {
+
+        // Only close when the dark background itself is clicked.
+        // Clicking inside the Vault card will NOT close it.
+
+        if (event.target === this) {
+            closeVault();
+        }
+
+    });
+
+    </script>
+</body>
+</html>
+            
     </script>
 </body>
 </html>
