@@ -823,81 +823,319 @@ const db = firebase.firestore();
 const storage = firebase.storage();
 
         const urlParams = new URLSearchParams(window.location.search);
-        const userId = urlParams.get('id');
+
+// Support the existing ?id= format
+// and also ?uid= / ?userId= just in case.
+const userId =
+    urlParams.get('id') ||
+    urlParams.get('uid') ||
+    urlParams.get('userId');
+
+console.log('================================');
+console.log('[PROFILE] URL:', window.location.href);
+console.log('[PROFILE] userId:', userId);
+console.log('================================');
 
         function toggleBuddies() {
             const d = document.getElementById('buddyDrawer');
             d.style.display = d.style.display === 'block' ? 'none' : 'block';
         }
 
-        async function loadFirestoreData() {
-            if (!userId) {
-                document.getElementById('userName').innerText = "Invalid Scan";
-                return;
-            }
-
-            try {
-                const docRef = db.collection("users_data").doc(userId);
-                const doc = await docRef.get();
-
-                const nameEl = document.getElementById('userName');
-                nameEl.classList.remove('shimmer');
-
-                if (doc.exists) {
-                    const user = doc.data();
-
-                    if (user.Status !== "Active") {
-                        nameEl.innerText = "System Ready";
-                        document.getElementById('statusLabel').innerText = "INACTIVE";
-                        document.getElementById('statusLabel').style.color = "orange";
-                        return;
-                    }
 
 
 
 
-                    
-                    // 1. Basic Info
-                    nameEl.innerText = user.Name || "Registered User";
-                    document.getElementById('bloodGroup').innerHTML = `<i class="fas fa-tint"></i> ${user.Blood_Group || 'N/A'}`;
-                    
+async function loadFirestoreData() {
 
-                    // ৩. ব্লাড বাডি লজিক: ডাটাবেসের Blood_Buddy ফিল্ড থেকে নম্বর নেওয়া হচ্ছে
-                    const buddyListDiv = document.getElementById('buddyList');
-                    if (user.Blood_Buddy) {
-                        buddyListDiv.innerHTML = `
-                            <div class="buddy-item">
-                                <span>Blood Buddy</span>
-                                <a href="tel:${user.Blood_Buddy}" style="color:#2ed573; text-decoration:none; font-weight:800;">CALL NOW</a>
-                            </div>`;
-                    } else {
-                        buddyListDiv.innerHTML = '<div style="padding:10px; opacity:0.5;">No buddy found.</div>';
-                    }
+    const nameEl =
+        document.getElementById('userName');
 
-                    // ৪. সোশ্যাল লিঙ্ক জেনারেট করা
-                    const socialDiv = document.getElementById('socialLinks');
-                    if (user.Social_Links) {
-                        socialDiv.innerHTML = '';
-                        user.Social_Links.split(',').forEach(link => {
-                            let icon = 'fas fa-link';
-                            if (link.includes('facebook')) icon = 'fab fa-facebook';
-                            if (link.includes('instagram')) icon = 'fab fa-instagram';
-                            socialDiv.innerHTML += `<a href="${link.trim()}" target="_blank"><i class="${icon}"></i></a>`;
-                        });
-                    }
+    const statusEl =
+        document.getElementById('statusLabel');
 
-                    // ৫. হোয়াটসঅ্যাপ নোটিফিকেশন লজিক
-                    const msg = encodeURIComponent(`SURAKSHAQR ALERT: Your vehicle needs attention. Please check immediately_ ${user.Name}!`);
-                    document.getElementById('notifyBtn').href = `https://wa.me/${user.Mobile}?text=${msg}`;
+    console.log('================================');
+    console.log('[PROFILE] Loading profile...');
+    console.log('[PROFILE] URL:', window.location.href);
+    console.log('[PROFILE] userId:', userId);
+    console.log('================================');
 
-                } else {
-                    nameEl.innerText = "Profile Not Found";
-                }
-            } catch (error) {
-                console.error("Firestore Error:", error);
-                document.getElementById('userName').innerText = "System Ready";
-            }
+    // ==========================================================
+    // 1. CHECK USER ID
+    // ==========================================================
+
+    if (!userId) {
+
+        console.error(
+            '[PROFILE] ❌ No user ID found in URL.'
+        );
+
+        nameEl.classList.remove('shimmer');
+
+        nameEl.innerText =
+            'Invalid Scan';
+
+        statusEl.innerText =
+            'NO USER ID';
+
+        statusEl.style.color =
+            '#ff4757';
+
+        return;
+    }
+
+    try {
+
+        // ======================================================
+        // 2. FIRESTORE PROFILE
+        // ======================================================
+
+        console.log(
+            '[PROFILE] Searching:',
+            `users_data/${userId}`
+        );
+
+        const docRef =
+            db
+                .collection('users_data')
+                .doc(userId);
+
+        const doc =
+            await docRef.get();
+
+        nameEl.classList.remove('shimmer');
+
+        console.log(
+            '[PROFILE] Firestore document exists:',
+            doc.exists
+        );
+
+        // ======================================================
+        // 3. PROFILE NOT FOUND
+        // ======================================================
+
+        if (!doc.exists) {
+
+            console.error(
+                '[PROFILE] ❌ Profile not found:',
+                `users_data/${userId}`
+            );
+
+            nameEl.innerText =
+                'Profile Not Found';
+
+            statusEl.innerText =
+                'NOT FOUND';
+
+            statusEl.style.color =
+                '#ff4757';
+
+            return;
         }
+
+        // ======================================================
+        // 4. USER DATA
+        // ======================================================
+
+        const user =
+            doc.data();
+
+        console.log(
+            '[PROFILE] ✅ User data received:',
+            user
+        );
+
+        // ======================================================
+        // 5. ACCOUNT STATUS
+        // ======================================================
+
+        if (user.Status !== 'Active') {
+
+            console.warn(
+                '[PROFILE] ⚠️ User is not Active:',
+                user.Status
+            );
+
+            nameEl.innerText =
+                'System Ready';
+
+            statusEl.innerText =
+                'INACTIVE';
+
+            statusEl.style.color =
+                'orange';
+
+            return;
+        }
+
+        // ======================================================
+        // 6. BASIC PROFILE
+        // ======================================================
+
+        nameEl.innerText =
+            user.Name ||
+            'Registered User';
+
+        document
+            .getElementById('bloodGroup')
+            .innerHTML =
+                `<i class="fas fa-tint"></i> ${
+                    user.Blood_Group || 'N/A'
+                }`;
+
+        // ======================================================
+        // 7. BLOOD BUDDY
+        // ======================================================
+
+        const buddyListDiv =
+            document.getElementById(
+                'buddyList'
+            );
+
+        if (user.Blood_Buddy) {
+
+            buddyListDiv.innerHTML = `
+                <div class="buddy-item">
+
+                    <span>
+                        Blood Buddy
+                    </span>
+
+                    <a
+                        href="tel:${user.Blood_Buddy}"
+                        style="
+                            color:#2ed573;
+                            text-decoration:none;
+                            font-weight:800;
+                        "
+                    >
+                        CALL NOW
+                    </a>
+
+                </div>
+            `;
+
+        } else {
+
+            buddyListDiv.innerHTML =
+                '<div style="padding:10px; opacity:0.5;">No buddy found.</div>';
+        }
+
+        // ======================================================
+        // 8. SOCIAL LINKS
+        // ======================================================
+
+        const socialDiv =
+            document.getElementById(
+                'socialLinks'
+            );
+
+        if (user.Social_Links) {
+
+            socialDiv.innerHTML = '';
+
+            user.Social_Links
+                .split(',')
+                .forEach(link => {
+
+                    const cleanLink =
+                        link.trim();
+
+                    let icon =
+                        'fas fa-link';
+
+                    if (
+                        cleanLink.includes(
+                            'facebook'
+                        )
+                    ) {
+                        icon =
+                            'fab fa-facebook';
+                    }
+
+                    if (
+                        cleanLink.includes(
+                            'instagram'
+                        )
+                    ) {
+                        icon =
+                            'fab fa-instagram';
+                    }
+
+                    socialDiv.innerHTML += `
+                        <a
+                            href="${cleanLink}"
+                            target="_blank"
+                            rel="noopener noreferrer"
+                        >
+                            <i
+                                class="${icon}"
+                            ></i>
+                        </a>
+                    `;
+                });
+        }
+
+        // ======================================================
+        // 9. WHATSAPP
+        // ======================================================
+
+        if (user.Mobile) {
+
+            const msg =
+                encodeURIComponent(
+                    `SURAKSHAQR ALERT: Your vehicle needs attention. Please check immediately_ ${user.Name}!`
+                );
+
+            document
+                .getElementById('notifyBtn')
+                .href =
+                    `https://wa.me/${user.Mobile}?text=${msg}`;
+        }
+
+        // ======================================================
+        // SUCCESS
+        // ======================================================
+
+        console.log(
+            '[PROFILE] ✅ Profile loaded successfully:',
+            user.Name
+        );
+
+        console.log(
+            '[PROFILE] UID:',
+            userId
+        );
+
+        console.log(
+            '================================'
+        );
+
+    } catch (error) {
+
+        console.error(
+            '[PROFILE] ❌ Firestore error:',
+            error
+        );
+
+        console.error(
+            '[PROFILE] UID used:',
+            userId
+        );
+
+        nameEl.classList.remove('shimmer');
+
+        nameEl.innerText =
+            'Profile Error';
+
+        statusEl.innerText =
+            'FIREBASE ERROR';
+
+        statusEl.style.color =
+            '#ff4757';
+    }
+}
+
+loadFirestoreData();
 
         loadFirestoreData();
             // ==========================================================
