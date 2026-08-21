@@ -1257,40 +1257,49 @@ async function loadVaultDocuments() {
                     metadataPath
                 );
 
-                const metadataRef =
-                    storage
-                        .ref()
-                        .child(metadataPath);
 
-                console.log(
-    '[VAULT] 📄 Reading metadata directly from Firebase Storage:',
+const metadataRef =
+    storage
+        .ref()
+        .child(metadataPath);
+
+console.log(
+    '[VAULT] 📄 Getting metadata URL:',
     document.folder
 );
 
-const metadataBytes =
-    await metadataRef.getBytes(
-        1024 * 1024
+const metadataUrl =
+    await metadataRef.getDownloadURL();
+
+console.log(
+    '[VAULT] ✅ Metadata URL received:',
+    document.folder
+);
+
+const response =
+    await fetch(
+        metadataUrl,
+        {
+            method: 'GET',
+            cache: 'no-store'
+        }
     );
 
-const metadataText =
-    new TextDecoder().decode(
-        metadataBytes
+if (!response.ok) {
+
+    throw new Error(
+        `Metadata HTTP error: ${response.status}`
     );
+}
 
 const metadata =
-    JSON.parse(metadataText);
+    await response.json();
 
 console.log(
     '[VAULT] ✅ Metadata read successfully:',
     document.folder,
     metadata
 );
-                console.log(
-                    '[VAULT] 📦 Metadata:',
-                    document.folder,
-                    metadata
-                );
-
                 // ==================================================
                 // QR VISIBILITY
                 // ==================================================
