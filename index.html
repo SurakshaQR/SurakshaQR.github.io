@@ -1262,39 +1262,29 @@ async function loadVaultDocuments() {
                         .ref()
                         .child(metadataPath);
 
-                // ------------------------------------------------
-                // GET METADATA URL
-                // ------------------------------------------------
-
-                const metadataUrl =
-                    await metadataRef.getDownloadURL();
-
                 console.log(
-                    '[VAULT] ✅ Metadata URL received:',
-                    document.folder
-                );
+    '[VAULT] 📄 Reading metadata directly from Firebase Storage:',
+    document.folder
+);
 
-                // ------------------------------------------------
-                // READ METADATA
-                // ------------------------------------------------
+const metadataBytes =
+    await metadataRef.getBytes(
+        1024 * 1024
+    );
 
-                const response =
-                    await fetch(metadataUrl);
+const metadataText =
+    new TextDecoder().decode(
+        metadataBytes
+    );
 
-                if (!response.ok) {
+const metadata =
+    JSON.parse(metadataText);
 
-                    console.warn(
-                        '[VAULT] ⚠️ Metadata HTTP error:',
-                        document.folder,
-                        response.status
-                    );
-
-                    continue;
-                }
-
-                const metadata =
-                    await response.json();
-
+console.log(
+    '[VAULT] ✅ Metadata read successfully:',
+    document.folder,
+    metadata
+);
                 console.log(
                     '[VAULT] 📦 Metadata:',
                     document.folder,
