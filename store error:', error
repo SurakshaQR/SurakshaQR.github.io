@@ -234,176 +234,48 @@
         <!-- ==========================================
      SECURE VAULT MODAL
      ========================================== -->
-
 <div id="vaultModal" class="vault-modal">
-
     <div class="vault-modal-card">
-
-        <button
-            type="button"
-            class="vault-close"
-            onclick="closeVault()">
-
-            <i class="fas fa-times"></i>
-
-        </button>
-
+        <button type="button" class="vault-close" onclick="closeVault()"><i class="fas fa-times"></i></button>
         <div class="vault-header">
-
-            <div class="vault-header-icon">
-
-                <i class="fas fa-shield-halved"></i>
-
-            </div>
-
-            <div>
-
-                <h2>Emergency Vault</h2>
-
-                <p>
-                    Documents shared by the member
-                </p>
-
-            </div>
-
+            <div class="vault-header-icon"><i class="fas fa-shield-halved"></i></div>
+            <div><h2>Emergency Vault</h2><p>Documents shared by the member</p></div>
         </div>
-
         <div id="vaultContent">
-
-            <div class="vault-loading">
-
-                <i class="fas fa-spinner fa-spin"></i>
-
-                <br><br>
-
-                Verifying vault access...
-
-            </div>
-
+            <div class="vault-loading"><i class="fas fa-spinner fa-spin"></i><br><br>Verifying vault access...</div>
         </div>
-
     </div>
-
 </div>
-     <!-- ==========================================
-     RESCUER EMERGENCY MODAL
-     ========================================== -->
 
 <div id="rescuerEmergencyModal" class="rescuer-modal">
-
     <div class="rescuer-modal-card">
-
-        <!-- Close -->
-        <button
-            type="button"
-            class="rescuer-close"
-            onclick="closeRescuerEmergency()">
-
-            <i class="fas fa-times"></i>
-
-        </button>
-
-
-        <!-- Emergency Icon -->
-        <div class="rescuer-icon">
-
-            <i class="fas fa-triangle-exclamation"></i>
-
-        </div>
-
-
-        <!-- Title -->
+        <button type="button" class="rescuer-close" onclick="closeRescuerEmergency()"><i class="fas fa-times"></i></button>
+        <div class="rescuer-icon"><i class="fas fa-triangle-exclamation"></i></div>
         <h2>Emergency Contact</h2>
+        <p class="rescuer-subtitle">You are about to notify the emergency guardians of this SurakshaQR member.</p>
 
-        <p class="rescuer-subtitle">
-
-            You are about to notify the emergency guardians
-            of this SurakshaQR member.
-
-        </p>
-
-
-        <!-- Target User -->
         <div class="rescuer-target">
-
             <span>PERSON NEEDING HELP</span>
-
-            <strong id="rescuerTargetName">
-                Loading...
-            </strong>
-
+            <strong id="rescuerTargetName">Loading...</strong>
         </div>
 
+        <label for="rescuerName">YOUR NAME</label>
+        <input type="text" id="rescuerName" placeholder="Enter your name" autocomplete="name">
 
-        <!-- Rescuer Name -->
-        <label for="rescuerName">
+        <label for="rescuerPhone">YOUR PHONE NUMBER</label>
+        <input type="tel" id="rescuerPhone" placeholder="10-digit mobile number" autocomplete="tel" inputmode="numeric" maxlength="15">
 
-            YOUR NAME
-
-        </label>
-
-        <input
-            type="text"
-            id="rescuerName"
-            placeholder="Enter your name"
-            autocomplete="name"
-        >
-
-
-        <!-- Rescuer Phone -->
-        <label for="rescuerPhone">
-
-            YOUR PHONE NUMBER
-
-        </label>
-
-        <input
-    type="tel"
-    id="rescuerPhone"
-    placeholder="10-digit mobile number"
-    autocomplete="tel"
-    inputmode="numeric"
-    maxlength="15"
->
-
-
-        <!-- Confirmation -->
         <label class="rescuer-checkbox">
-
-            <input
-                type="checkbox"
-                id="rescuerWithPerson"
-            >
-
-            <span>
-                I am with this person
-            </span>
-
+            <input type="checkbox" id="rescuerWithPerson">
+            <span>I am with this person</span>
         </label>
 
-
-        <!-- Send -->
-        <button
-            type="button"
-            id="sendRescuerAlertBtn"
-            class="rescuer-send-btn"
-            onclick="sendRescuerEmergencyAlert()">
-
-            <i class="fas fa-bell"></i>
-
-            SEND EMERGENCY ALERT
-
+        <button type="button" id="sendRescuerAlertBtn" class="rescuer-send-btn" onclick="sendRescuerEmergencyAlert()">
+            <i class="fas fa-bell"></i> SEND EMERGENCY ALERT
         </button>
 
-
-        <!-- Status -->
-        <div
-            id="rescuerStatus"
-            class="rescuer-status">
-        </div>
-
+        <div id="rescuerStatus" class="rescuer-status"></div>
     </div>
-
 </div>
 
         <script>
@@ -546,26 +418,13 @@ async function loadFirestoreData() {
         // ======================================================
         // 5. ACCOUNT STATUS
         // ======================================================
-
-        if (user.Status !== 'Active') {
-
-            console.warn(
-                '[PROFILE] ⚠️ User is not Active:',
-                user.Status
-            );
-
-            nameEl.innerText =
-                'System Ready';
-
-            statusEl.innerText =
-                'INACTIVE';
-
-            statusEl.style.color =
-                'orange';
-
-            return;
-        }
-
+if (user.Status !== 'Active') {
+    console.warn('[PROFILE] ⚠️ User is not Active:', user.Status);
+    nameEl.innerText = 'System Ready';
+    statusEl.innerText = 'INACTIVE';
+    statusEl.style.color = 'orange';
+    return;
+}
         // ======================================================
         // 6. BASIC PROFILE
         // ======================================================
@@ -585,40 +444,13 @@ async function loadFirestoreData() {
         // 7. BLOOD BUDDY
         // ======================================================
 
-        const buddyListDiv =
-            document.getElementById(
-                'buddyList'
-            );
+       const buddyListDiv = document.getElementById('buddyList');
 
-        if (user.Blood_Buddy) {
-
-            buddyListDiv.innerHTML = `
-                <div class="buddy-item">
-
-                    <span>
-                        Blood Buddy
-                    </span>
-
-                    <a
-                        href="tel:${user.Blood_Buddy}"
-                        style="
-                            color:#2ed573;
-                            text-decoration:none;
-                            font-weight:800;
-                        "
-                    >
-                        CALL NOW
-                    </a>
-
-                </div>
-            `;
-
-        } else {
-
-            buddyListDiv.innerHTML =
-                '<div style="padding:10px; opacity:0.5;">No buddy found.</div>';
-        }
-
+if (user.Blood_Buddy) {
+    buddyListDiv.innerHTML = `<div class="buddy-item"><span>Blood Buddy</span><a href="tel:${user.Blood_Buddy}" style="color:#2ed573;text-decoration:none;font-weight:800;">CALL NOW</a></div>`;
+} else {
+    buddyListDiv.innerHTML = '<div style="padding:10px;opacity:0.5;">No buddy found.</div>';
+}
         // ======================================================
         // 8. SOCIAL LINKS
         // ======================================================
@@ -848,165 +680,61 @@ async function loadVaultDocuments() {
                 // METADATA PATH
                 // ------------------------------------------------
 
-                const metadataPath =
-                    `vault_documents/${userId}/${document.folder}/metadata.json`;
+             const metadataPath = `vault_documents/${userId}/${document.folder}/metadata.json`;
+console.log('[VAULT] 📄 Metadata path:', metadataPath);
 
-                console.log(
-                    '[VAULT] 📄 Metadata path:',
-                    metadataPath
-                );
+const metadataRef = storage.ref().child(metadataPath);
+console.log('[VAULT] 📄 Getting metadata URL:', document.folder);
 
+const metadataUrl = await metadataRef.getDownloadURL();
+console.log('[VAULT] ✅ Metadata URL received:', document.folder);
 
-const metadataRef =
-    storage
-        .ref()
-        .child(metadataPath);
+const response = await fetch(metadataUrl, { method: 'GET', cache: 'no-store' });
+if (!response.ok) throw new Error(`Metadata HTTP error: ${response.status}`);
 
-console.log(
-    '[VAULT] 📄 Getting metadata URL:',
-    document.folder
-);
+const metadata = await response.json();
+console.log('[VAULT] ✅ Metadata read successfully:', document.folder, metadata);
 
-const metadataUrl =
-    await metadataRef.getDownloadURL();
+// QR VISIBILITY
+const visibleOnQr = metadata.visible_on_qr === true;
+console.log('[VAULT] 👁 visible_on_qr:', document.folder, visibleOnQr);
 
-console.log(
-    '[VAULT] ✅ Metadata URL received:',
-    document.folder
-);
-
-const response =
-    await fetch(
-        metadataUrl,
-        {
-            method: 'GET',
-            cache: 'no-store'
-        }
-    );
-
-if (!response.ok) {
-
-    throw new Error(
-        `Metadata HTTP error: ${response.status}`
-    );
+if (!visibleOnQr) {
+    console.log('[VAULT] 🚫 Document OFF:', document.title);
+    continue;
 }
-
-const metadata =
-    await response.json();
-
-console.log(
-    '[VAULT] ✅ Metadata read successfully:',
-    document.folder,
-    metadata
-);
-                // ==================================================
-                // QR VISIBILITY
-                // ==================================================
-
-                const visibleOnQr =
-                    metadata.visible_on_qr === true;
-
-                console.log(
-                    '[VAULT] 👁 visible_on_qr:',
-                    document.folder,
-                    visibleOnQr
-                );
-
-                // --------------------------------------------------
-                // DOCUMENT IS OFF
-                // --------------------------------------------------
-
-                if (!visibleOnQr) {
-
-                    console.log(
-                        '[VAULT] 🚫 Document OFF:',
-                        document.title
-                    );
-
-                    continue;
-                }
-
                 // ==================================================
                 // GET DOCUMENT IMAGE
                 // ==================================================
+const imagePath = `vault_documents/${userId}/${document.folder}/document.jpg`;
+console.log('[VAULT] 🖼 Image path:', imagePath);
 
-                const imagePath =
-                    `vault_documents/${userId}/${document.folder}/document.jpg`;
+const imageRef = storage.ref().child(imagePath);
+let imageUrl;
 
-                console.log(
-                    '[VAULT] 🖼 Image path:',
-                    imagePath
-                );
+try {
+    imageUrl = await imageRef.getDownloadURL();
+    console.log('[VAULT] ✅ Image URL received:', document.folder);
+} catch (imageError) {
+    console.error('[VAULT] ❌ Image URL error:', document.folder, imageError);
+    continue;
+}
 
-                const imageRef =
-                    storage
-                        .ref()
-                        .child(imagePath);
+// ADD TO VISIBLE DOCUMENT LIST
+visibleDocuments.push({
+    title: document.title,
+    icon: document.icon,
+    imageUrl: imageUrl,
+    expiryDate: metadata.expiry_date || null
+});
 
-                let imageUrl;
+console.log('[VAULT] ✅ Document available:', document.title);
 
-                try {
-
-                    imageUrl =
-                        await imageRef.getDownloadURL();
-
-                    console.log(
-                        '[VAULT] ✅ Image URL received:',
-                        document.folder
-                    );
-
-                } catch (imageError) {
-
-                    console.error(
-                        '[VAULT] ❌ Image URL error:',
-                        document.folder,
-                        imageError
-                    );
-
-                    continue;
-                }
-
-                // ==================================================
-                // ADD TO VISIBLE DOCUMENT LIST
-                // ==================================================
-
-                visibleDocuments.push({
-
-                    title:
-                        document.title,
-
-                    icon:
-                        document.icon,
-
-                    imageUrl:
-                        imageUrl,
-
-                    expiryDate:
-                        metadata.expiry_date ||
-                        null
-
-                });
-
-                console.log(
-                    '[VAULT] ✅ Document available:',
-                    document.title
-                );
-
-            } catch (documentError) {
-
-                console.error(
-                    '[VAULT] ❌ Document unavailable:',
-                    document.folder,
-                    documentError
-                );
-
-                // One document failing should not stop
-                // the other document from loading.
-
-                continue;
-            }
-        }
-
+} catch (documentError) {
+    console.error('[VAULT] ❌ Document unavailable:', document.folder, documentError);
+    continue;
+}
+}
         // ======================================================
         // NOTHING SHARED
         // ======================================================
@@ -1043,232 +771,90 @@ console.log(
         // ======================================================
         // RENDER SHARED DOCUMENTS
         // ======================================================
+console.log('[VAULT] ✅ Total visible documents:', visibleDocuments.length);
 
-        console.log(
-            '[VAULT] ✅ Total visible documents:',
-            visibleDocuments.length
-        );
+content.innerHTML = visibleDocuments.map(document => {
+    let expiryText = '';
 
-        content.innerHTML =
-            visibleDocuments
-                .map(document => {
-
-                    let expiryText = '';
-
-                    if (document.expiryDate) {
-
-                        const date =
-                            new Date(
-                                document.expiryDate
-                            );
-
-                        if (
-                            !isNaN(
-                                date.getTime()
-                            )
-                        ) {
-
-                            expiryText = `
-                                <div style="
-                                    margin-top:8px;
-                                    font-size:10px;
-                                    opacity:.55;
-                                ">
-                                    Expiry:
-                                    ${date.toLocaleDateString(
-                                        'en-GB'
-                                    )}
-                                </div>
-                            `;
-                        }
-                    }
-
-                    return `
-                        <div class="vault-document">
-
-                            <div class="vault-document-title">
-
-                                <strong>
-
-                                    <i
-                                        class="fas ${document.icon}"
-                                        style="
-                                            color:#00e5ff;
-                                            margin-right:7px;
-                                        ">
-                                    </i>
-
-                                    ${document.title}
-
-                                </strong>
-
-                                <span class="vault-visible">
-
-                                    <i class="fas fa-eye"></i>
-
-                                    SHARED
-
-                                </span>
-
-                            </div>
-
-                            <img
-                                src="${document.imageUrl}"
-                                alt="${document.title}"
-                                loading="lazy"
-                            >
-
-                            ${expiryText}
-
-                        </div>
-                    `;
-
-                })
-                .join('');
-
-        console.log(
-            '[VAULT] 🎉 Vault rendered successfully.'
-        );
-
-    } catch (error) {
-
-        console.error(
-            '[VAULT] ❌ Vault loading error:',
-            error
-        );
-
-        content.innerHTML = `
-            <div class="vault-error">
-
-                <i
-                    class="fas fa-triangle-exclamation"
-                    style="font-size:24px;">
-                </i>
-
-                <br><br>
-
-                Unable to access the emergency vault.
-
-                <br><br>
-
-                Please try again.
-
-            </div>
-        `;
+    if (document.expiryDate) {
+        const date = new Date(document.expiryDate);
+        if (!isNaN(date.getTime())) {
+            expiryText = `<div style="margin-top:8px;font-size:10px;opacity:.55;">Expiry: ${date.toLocaleDateString('en-GB')}</div>`;
+        }
     }
+
+    return `<div class="vault-document">
+        <div class="vault-document-title">
+            <strong><i class="fas ${document.icon}" style="color:#00e5ff;margin-right:7px;"></i>${document.title}</strong>
+            <span class="vault-visible"><i class="fas fa-eye"></i> SHARED</span>
+        </div>
+        <img src="${document.imageUrl}" alt="${document.title}" loading="lazy">
+        ${expiryText}
+    </div>`;
+}).join('');
+
+console.log('[VAULT] 🎉 Vault rendered successfully.');
+
+} catch (error) {
+    console.error('[VAULT] ❌ Vault loading error:', error);
+    content.innerHTML = `<div class="vault-error">
+        <i class="fas fa-triangle-exclamation" style="font-size:24px;"></i><br><br>
+        Unable to access the emergency vault.<br><br>
+        Please try again.
+    </div>`;
+}
 }
           // ==========================================
 // RESCUER EMERGENCY WEB FLOW
 // ==========================================
-
 function openRescuerEmergency() {
+    const modal = document.getElementById("rescuerEmergencyModal");
+    const targetName = document.getElementById("rescuerTargetName");
+    const currentName = document.getElementById("userName").innerText;
 
-    const modal =
-        document.getElementById(
-            "rescuerEmergencyModal"
-        );
+    targetName.innerText = currentName && currentName !== "Scanning Profile..." && currentName !== "System Ready"
+        ? currentName
+        : "SurakshaQR Member";
 
-    const targetName =
-        document.getElementById(
-            "rescuerTargetName"
-        );
-
-    const currentName =
-        document.getElementById(
-            "userName"
-        ).innerText;
-
-    targetName.innerText =
-        currentName &&
-        currentName !== "Scanning Profile..." &&
-        currentName !== "System Ready"
-            ? currentName
-            : "SurakshaQR Member";
-
-    document.getElementById(
-        "rescuerStatus"
-    ).innerText = "";
-
+    document.getElementById("rescuerStatus").innerText = "";
     modal.classList.add("show");
 }
+
 function closeRescuerEmergency() {
-
-    document
-        .getElementById("rescuerEmergencyModal")
-        .classList.remove("show");
+    document.getElementById("rescuerEmergencyModal").classList.remove("show");
 }
-            async function sendRescuerEmergencyAlert() {
 
-    const nameInput =
-        document.getElementById("rescuerName");
+async function sendRescuerEmergencyAlert() {
+    const nameInput = document.getElementById("rescuerName");
+    const button = document.getElementById("sendRescuerAlertBtn");
+    if (button.disabled) return;
 
-    const button =
-        document.getElementById(
-            "sendRescuerAlertBtn"
-        );
+    const phoneInput = document.getElementById("rescuerPhone");
+    const withPerson = document.getElementById("rescuerWithPerson");
+    const status = document.getElementById("rescuerStatus");
+    const rescuerName = nameInput.value.trim();
+    const rescuerPhone = phoneInput.value.trim();
 
-    // Prevent duplicate emergency requests
-    if (button.disabled) {
+    // Validation
+    if (!userId) {
+        status.className = "rescuer-status error";
+        status.innerText = "Invalid SurakshaQR profile.";
         return;
     }
-
-    const phoneInput =
-        document.getElementById("rescuerPhone");
-
-    const withPerson =
-        document.getElementById("rescuerWithPerson");
-
-
-
-    const status =
-        document.getElementById("rescuerStatus");
-
-    const rescuerName =
-        nameInput.value.trim();
-
-    const rescuerPhone =
-        phoneInput.value.trim();
-
-    // ------------------------------------------
-    // Validation
-    // ------------------------------------------
-
-  if (!userId) {
-
-    status.className =
-        "rescuer-status error";
-
-    status.innerText =
-        "Invalid SurakshaQR profile.";
-
-    return;
-}
 
     if (!rescuerName) {
-
-        status.className =
-            "rescuer-status error";
-
-        status.innerText =
-            "Please enter your name.";
-
+        status.className = "rescuer-status error";
+        status.innerText = "Please enter your name.";
         nameInput.focus();
-
         return;
     }
 
- if (!rescuerPhone) {
-
-    status.className =
-        "rescuer-status error";
-
-    status.innerText =
-        "Please enter your phone number.";
-
-    phoneInput.focus();
-
-    return;
-}
+    if (!rescuerPhone) {
+        status.className = "rescuer-status error";
+        status.innerText = "Please enter your phone number.";
+        phoneInput.focus();
+        return;
+    }
 
 // ------------------------------------------
 // STRICT PHONE VALIDATION
@@ -1293,156 +879,70 @@ else if (
     normalizedPhone =
         normalizedPhone.substring(2);
 }
-
 // Exactly 10 digits
 if (!/^[6-9]\d{9}$/.test(normalizedPhone)) {
-
-    status.className =
-        "rescuer-status error";
-
-    status.innerText =
-        "Please enter a valid 10-digit Indian mobile number.";
-
+    status.className = "rescuer-status error";
+    status.innerText = "Please enter a valid 10-digit Indian mobile number.";
     phoneInput.focus();
-
     return;
 }
 
 if (!withPerson.checked) {
-
-        status.className =
-            "rescuer-status error";
-
-        status.innerText =
-            "Please confirm that you are with this person.";
-
-        return;
-    }
-
-    // ------------------------------------------
-    // Loading state
-    // ------------------------------------------
-
-    button.disabled = true;
-
-    button.innerHTML =
-        '<i class="fas fa-spinner fa-spin"></i> SENDING...';
-
-    status.className =
-        "rescuer-status";
-
-    status.innerText =
-        "Contacting emergency guardians...";
-
-    try {
-
-        // --------------------------------------
-        // Verify target user first
-        // --------------------------------------
-
-        const userDoc = await db
-            .collection("users_data")
-            .doc(userId)
-            .get();
-
-        if (!userDoc.exists) {
-            throw new Error(
-                "SurakshaQR profile not found."
-            );
-        }
-
-        const userData = userDoc.data();
-
-        // --------------------------------------
-        // Create emergency request
-        // --------------------------------------
-
-        const requestRef = await db
-            .collection("rescuer_emergency_requests")
-            .add({
-
-                targetUserUid: userId,
-
-                targetUserName:
-                    userData.Name || "SurakshaQR Member",
-
-                rescuerName: rescuerName,
-
-rescuerPhone: normalizedPhone,
-
-                withPerson: true,
-
-                status: "PENDING",
-
-                createdAt:
-                    firebase.firestore.FieldValue
-                        .serverTimestamp(),
-
-                source: "QR_WEB",
-
-                userAgent:
-                    navigator.userAgent
-
-            });
-
-        console.log(
-            "🚨 Rescuer emergency request created:",
-            requestRef.id
-        );
-
-        // --------------------------------------
-        // Success
-        // --------------------------------------
-
-        status.className =
-            "rescuer-status success";
-
-        status.innerText =
-            "Emergency alert sent successfully.";
-
-        button.innerHTML =
-            '<i class="fas fa-check"></i> ALERT SENT';
-
-        // Don't close immediately.
-        // User should see confirmation.
-
-    } catch (error) {
-
-        console.error(
-            "❌ Rescuer emergency request error:",
-            error
-        );
-
-        status.className =
-            "rescuer-status error";
-
-        status.innerText =
-            "Unable to send emergency alert. Please try again.";
-
-        button.disabled = false;
-
-        button.innerHTML =
-            '<i class="fas fa-bell"></i> SEND EMERGENCY ALERT';
-    }
+    status.className = "rescuer-status error";
+    status.innerText = "Please confirm that you are with this person.";
+    return;
 }
 
+// Loading state
+button.disabled = true;
+button.innerHTML = '<i class="fas fa-spinner fa-spin"></i> SENDING...';
+status.className = "rescuer-status";
+status.innerText = "Contacting emergency guardians...";
 
-// ==========================================================
-// VAULT MODAL — CLOSE WHEN CLICKING OUTSIDE THE CARD
-// ==========================================================
+try {
+    // Verify target user first
+    const userDoc = await db.collection("users_data").doc(userId).get();
 
-document
-    .getElementById('vaultModal')
-    .addEventListener('click', function (event) {
+    if (!userDoc.exists) {
+        throw new Error("SurakshaQR profile not found.");
+    }
 
-        // Only close when the dark background itself is clicked.
-        // Clicking inside the Vault card will NOT close it.
+    const userData = userDoc.data();
 
-        if (event.target === this) {
-            closeVault();
-        }
-
+    // Create emergency request
+    const requestRef = await db.collection("rescuer_emergency_requests").add({
+        targetUserUid: userId,
+        targetUserName: userData.Name || "SurakshaQR Member",
+        rescuerName: rescuerName,
+        rescuerPhone: normalizedPhone,
+        withPerson: true,
+        status: "PENDING",
+        createdAt: firebase.firestore.FieldValue.serverTimestamp(),
+        source: "QR_WEB",
+        userAgent: navigator.userAgent
     });
+
+    console.log("🚨 Rescuer emergency request created:", requestRef.id);
+
+    // Success
+    status.className = "rescuer-status success";
+    status.innerText = "Emergency alert sent successfully.";
+    button.innerHTML = '<i class="fas fa-check"></i> ALERT SENT';
+
+} catch (error) {
+    console.error("❌ Rescuer emergency request error:", error);
+
+    status.className = "rescuer-status error";
+    status.innerText = "Unable to send emergency alert. Please try again.";
+
+    button.disabled = false;
+    button.innerHTML = '<i class="fas fa-bell"></i> SEND EMERGENCY ALERT';
+}
+
+// VAULT MODAL — CLOSE WHEN CLICKING OUTSIDE THE CARD
+document.getElementById('vaultModal').addEventListener('click', function (event) {
+    if (event.target === this) closeVault();
+});
 
     </script>
 </body>
