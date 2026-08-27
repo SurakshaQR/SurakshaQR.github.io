@@ -1,0 +1,1862 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>SurakshaQR - Official Safety Portal</title>
+    
+    <script src="https://www.gstatic.com/firebasejs/9.6.1/firebase-app-compat.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/9.6.1/firebase-firestore-compat.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/9.6.1/firebase-storage-compat.js"></script>
+    
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+    <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;800&display=swap" rel="stylesheet">
+
+    <style>
+        :root { --glass: rgba(255, 255, 255, 0.03); --border: rgba(255, 255, 255, 0.08); --gold: #FFD700; --accent: #ff4757; --bg: #05070a; }
+        body { margin: 0; font-family: 'Plus Jakarta Sans', sans-serif; background: var(--bg); color: white; overflow-x: hidden; background-image: radial-gradient(at 0% 0%, hsla(253,16%,15%,1) 0, transparent 50%), radial-gradient(at 100% 0%, hsla(339,49%,20%,1) 0, transparent 50%); display: flex; justify-content: center; min-height: 100vh; }
+        .container { width: 100%; max-width: 420px; padding: 25px 16px; margin: 0 auto; box-sizing : border-box; }
+        
+        /* HEADER UX */
+        .header { display: flex; flex-direction: column; align-items: center; margin-bottom: 30px; }
+        .logo-img { width: 100px; height: 100px; object-fit: contain; margin-bottom: 12px; filter: drop-shadow(0 0 10px rgba(255,215,0,0.2)); }
+        .brand-name { font-weight: 500; font-size: 16px; letter-spacing: 4px; color: var(--gold); text-transform: uppercase; margin-bottom: 5px; }
+        .brand-name span { font-weight: 800; font-size: 28px; letter-spacing: 1px; }
+        .trust-badge { font-size: 10px; color: #2ed573; background: rgba(46, 213, 115, 0.1); padding: 5px 15px; border-radius: 30px; border: 1px solid rgba(46, 213, 115, 0.2); text-transform: uppercase; font-weight: 800; }
+
+        /* BENTO BOX GRID UX */
+        .bento-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; }
+        .card { background: var(--glass); backdrop-filter: blur(20px); border: 1px solid var(--border); border-radius: 28px; padding: 20px; opacity: 0; transform: translateY(30px); animation: slideIn 0.8s forwards; cursor: pointer; transition: 0.3s; }
+        .card:hover { border-color: var(--gold); background: rgba(255, 215, 0, 0.02); }
+        @keyframes slideIn { to { opacity: 1; transform: translateY(0); } }
+        
+        .full { grid-column: span 2; }
+        .label { font-size: 10px; opacity: 0.5; font-weight: 600; text-transform: uppercase; margin-bottom: 8px; }
+        h1 { margin: 0; font-size: 26px; font-weight: 800; }
+        .blood-tag { display: inline-flex; align-items: center; gap: 6px; background: rgba(255, 71, 87, 0.15); color: #ff4757; padding: 6px 14px; border-radius: 12px; font-size: 13px; font-weight: 800; margin-top: 10px; }
+
+        /* BUTTONS UX */
+        .btn { display: flex; align-items: center; justify-content: center; gap: 12px; text-decoration: none; font-weight: 800; font-size: 15px; padding: 18px; border-radius: 22px; margin-top: 10px; transition: 0.3s; border: 1px solid transparent; }
+        .btn-call { background: linear-gradient(135deg, #ff4757, #ff6b81); color: white; box-shadow: 0 10px 20px rgba(255, 71, 87, 0.2); }
+        .btn-notify { background: linear-gradient(135deg, #2ed573, #7bed9f); color: #052c14; }
+        .btn-hosp { background: rgba(255, 255, 255, 0.05); border: 1px solid var(--border); color: white; }
+        .btn-buddy { background: rgba(255, 215, 0, 0.05); border: 1px solid var(--gold); color: var(--gold); }
+
+        #buddyDrawer { display: none; grid-column: span 2; background: rgba(255,255,255,0.02); border-radius: 22px; padding: 15px; border: 1px solid var(--border); margin-top: 5px; animation: fadeIn 0.4s ease; }
+        @keyframes fadeIn { from { opacity: 0; transform: translateY(-10px); } to { opacity: 1; transform: translateY(0); } }
+        .buddy-item { display: flex; justify-content: space-between; align-items: center; padding: 12px; border-bottom: 1px solid var(--border); }
+        .social-pill { margin-top: 25px; background: var(--glass); border-radius: 50px; padding: 18px; display: flex; justify-content: space-around; border: 1px solid var(--border); }
+        .social-pill a { color: white; font-size: 24px; opacity: 0.6; transition: 0.3s; }
+        .shimmer { color: rgba(255,215,0,0.5); animation: loading 1.5s infinite; }
+        @keyframes loading { 0%, 100% { opacity: 0.3; } 50% { opacity: 1; } }
+        /* ==========================================
+   RESCUER EMERGENCY MODAL
+   ========================================== */
+
+.rescuer-modal {
+    display: none;
+
+    position: fixed;
+
+    inset: 0;
+
+    z-index: 99999;
+
+    background: rgba(0, 0, 0, 0.82);
+
+    backdrop-filter: blur(12px);
+
+    align-items: center;
+
+    justify-content: center;
+
+    padding: 20px;
+
+    box-sizing: border-box;
+}
+
+.rescuer-modal.show {
+    display: flex;
+}
+
+.rescuer-modal-card {
+
+    width: 100%;
+
+    max-width: 390px;
+
+    background:
+        linear-gradient(
+            145deg,
+            rgba(35, 20, 28, 0.98),
+            rgba(8, 10, 14, 0.98)
+        );
+
+    border: 1px solid rgba(255, 71, 87, 0.35);
+
+    border-radius: 28px;
+
+    padding: 25px;
+
+    box-sizing: border-box;
+
+    box-shadow:
+        0 25px 80px rgba(0, 0, 0, 0.7),
+        0 0 30px rgba(255, 71, 87, 0.12);
+
+    position: relative;
+
+    animation: rescuerModalIn 0.25s ease;
+}
+
+@keyframes rescuerModalIn {
+
+    from {
+        opacity: 0;
+        transform: translateY(25px) scale(0.96);
+    }
+
+    to {
+        opacity: 1;
+        transform: translateY(0) scale(1);
+    }
+
+}
+
+.rescuer-close {
+
+    position: absolute;
+
+    top: 15px;
+
+    right: 15px;
+
+    width: 36px;
+
+    height: 36px;
+
+    border-radius: 50%;
+
+    border: 1px solid rgba(255,255,255,0.1);
+
+    background: rgba(255,255,255,0.05);
+
+    color: white;
+
+    cursor: pointer;
+
+    font-size: 14px;
+}
+
+.rescuer-icon {
+
+    width: 58px;
+
+    height: 58px;
+
+    border-radius: 18px;
+
+    display: flex;
+
+    align-items: center;
+
+    justify-content: center;
+
+    background: rgba(255, 71, 87, 0.12);
+
+    border: 1px solid rgba(255, 71, 87, 0.25);
+
+    color: #ff4757;
+
+    font-size: 25px;
+
+    margin-bottom: 15px;
+}
+
+.rescuer-modal-card h2 {
+
+    margin: 0;
+
+    font-size: 23px;
+
+    font-weight: 800;
+}
+
+.rescuer-subtitle {
+
+    font-size: 12px;
+
+    line-height: 1.6;
+
+    opacity: 0.6;
+
+    margin: 8px 0 18px;
+}
+
+.rescuer-target {
+
+    padding: 14px;
+
+    border-radius: 16px;
+
+    background: rgba(255,255,255,0.04);
+
+    border: 1px solid rgba(255,255,255,0.07);
+
+    margin-bottom: 18px;
+}
+
+.rescuer-target span {
+
+    display: block;
+
+    font-size: 9px;
+
+    text-transform: uppercase;
+
+    opacity: 0.45;
+
+    margin-bottom: 5px;
+}
+
+.rescuer-target strong {
+
+    font-size: 16px;
+
+    color: var(--gold);
+}
+
+.rescuer-modal-card label:not(.rescuer-checkbox) {
+
+    display: block;
+
+    font-size: 10px;
+
+    text-transform: uppercase;
+
+    font-weight: 800;
+
+    opacity: 0.55;
+
+    margin: 14px 0 7px;
+}
+
+.rescuer-modal-card input[type="text"],
+.rescuer-modal-card input[type="tel"] {
+
+    width: 100%;
+
+    box-sizing: border-box;
+
+    padding: 14px 15px;
+
+    border-radius: 14px;
+
+    border: 1px solid rgba(255,255,255,0.1);
+
+    background: rgba(255,255,255,0.05);
+
+    color: white;
+
+    outline: none;
+
+    font-family: inherit;
+
+    font-size: 14px;
+}
+
+.rescuer-modal-card input:focus {
+
+    border-color: rgba(255, 71, 87, 0.6);
+}
+
+.rescuer-checkbox {
+
+    display: flex;
+
+    align-items: center;
+
+    gap: 10px;
+
+    margin: 18px 0;
+
+    font-size: 12px;
+
+    color: rgba(255,255,255,0.8);
+
+    cursor: pointer;
+}
+
+.rescuer-checkbox input {
+
+    width: 18px;
+
+    height: 18px;
+
+    accent-color: #2ed573;
+}
+
+.rescuer-send-btn {
+
+    width: 100%;
+
+    border: 0;
+
+    border-radius: 17px;
+
+    padding: 16px;
+
+    background:
+        linear-gradient(
+            135deg,
+            #ff4757,
+            #ff6b81
+        );
+
+    color: white;
+
+    font-family: inherit;
+
+    font-size: 13px;
+
+    font-weight: 800;
+
+    cursor: pointer;
+
+    box-shadow:
+        0 10px 25px rgba(255, 71, 87, 0.22);
+}
+
+.rescuer-send-btn:disabled {
+
+    opacity: 0.55;
+
+    cursor: not-allowed;
+}
+
+.rescuer-status {
+
+    min-height: 20px;
+
+    text-align: center;
+
+    font-size: 11px;
+
+    margin-top: 12px;
+}
+
+.rescuer-status.success {
+
+    color: #2ed573;
+}
+
+.rescuer-status.error {
+
+    color: #ff6b81;
+}
+
+        /* ==========================================================
+   SECURE VAULT WEB MODAL
+   ========================================================== */
+
+.vault-modal {
+    display: none;
+
+    position: fixed;
+    inset: 0;
+    z-index: 100000;
+
+    background: rgba(0, 0, 0, 0.86);
+    backdrop-filter: blur(14px);
+
+    align-items: center;
+    justify-content: center;
+
+    padding: 18px;
+    box-sizing: border-box;
+}
+
+.vault-modal.show {
+    display: flex;
+}
+
+.vault-modal-card {
+    width: 100%;
+    max-width: 390px;
+
+    max-height: 88vh;
+    overflow-y: auto;
+
+    background:
+        linear-gradient(
+            145deg,
+            rgba(14, 20, 27, 0.99),
+            rgba(5, 8, 12, 0.99)
+        );
+
+    border: 1px solid rgba(0, 229, 255, 0.35);
+
+    border-radius: 24px;
+
+    padding: 20px;
+
+    box-sizing: border-box;
+
+    box-shadow:
+        0 25px 80px rgba(0,0,0,0.75),
+        0 0 35px rgba(0,229,255,0.10);
+
+    position: relative;
+
+    animation: vaultModalIn 0.25s ease;
+}
+
+@keyframes vaultModalIn {
+    from {
+        opacity: 0;
+        transform: translateY(20px) scale(0.96);
+    }
+
+    to {
+        opacity: 1;
+        transform: translateY(0) scale(1);
+    }
+}
+
+.vault-close {
+    position: absolute;
+
+    top: 14px;
+    right: 14px;
+
+    width: 34px;
+    height: 34px;
+
+    border-radius: 50%;
+
+    border: 1px solid rgba(255,255,255,0.10);
+
+    background: rgba(255,255,255,0.05);
+
+    color: white;
+
+    cursor: pointer;
+}
+
+.vault-header {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+
+    margin-bottom: 18px;
+}
+
+.vault-header-icon {
+    width: 45px;
+    height: 45px;
+
+    border-radius: 14px;
+
+    display: flex;
+    align-items: center;
+    justify-content: center;
+
+    background: rgba(0,229,255,0.08);
+
+    border: 1px solid rgba(0,229,255,0.25);
+
+    color: #00e5ff;
+
+    font-size: 18px;
+}
+
+.vault-header h2 {
+    margin: 0;
+
+    font-size: 19px;
+    font-weight: 800;
+}
+
+.vault-header p {
+    margin: 4px 0 0;
+
+    font-size: 10px;
+
+    opacity: 0.5;
+}
+
+.vault-document {
+    border-radius: 18px;
+
+    padding: 15px;
+
+    margin-bottom: 12px;
+
+    background: rgba(255,255,255,0.025);
+
+    border: 1px solid rgba(255,255,255,0.08);
+}
+
+.vault-document-title {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+
+    margin-bottom: 12px;
+}
+
+.vault-document-title strong {
+    font-size: 14px;
+}
+
+.vault-visible {
+    font-size: 9px;
+
+    color: #2ed573;
+
+    background: rgba(46,213,115,0.10);
+
+    border: 1px solid rgba(46,213,115,0.20);
+
+    padding: 4px 8px;
+
+    border-radius: 20px;
+}
+
+.vault-document img {
+    width: 100%;
+
+    max-height: 420px;
+
+    object-fit: contain;
+
+    border-radius: 12px;
+
+    background: #000;
+
+    display: block;
+}
+
+.vault-empty {
+    text-align: center;
+
+    padding: 30px 15px;
+
+    color: rgba(255,255,255,0.55);
+
+    font-size: 12px;
+
+    line-height: 1.6;
+}
+
+.vault-loading {
+    text-align: center;
+
+    padding: 35px 15px;
+
+    color: #00e5ff;
+
+    font-size: 12px;
+}
+
+.vault-error {
+    text-align: center;
+
+    padding: 25px 15px;
+
+    color: #ff6b81;
+
+    font-size: 12px;
+
+    line-height: 1.6;
+}
+    </style>
+</head>
+
+
+    <body>
+    <div class="container">
+        <div class="header">
+            <img src="https://raw.githubusercontent.com/SurakshaQR/SurakshaQR.github.io/main/logo.png.png" 
+                 id="mainLogo" class="logo-img" alt="SurakshaQR Logo">
+
+                
+            <div class="brand-name">SURAKSHA<span>QR</span></div>
+            <div class="trust-badge"><i class="fas fa-shield-check"></i> VERIFIED SAFETY PROFILE</div>
+        </div>
+
+        <div class="bento-grid">
+            <div class="card full">
+                <div class="label">Primary Member</div>
+                <h1 id="userName" class="shimmer">Scanning Profile...</h1>
+                <div id="bloodGroup" class="blood-tag"><i class="fas fa-tint"></i> ---</div>
+            </div>
+
+            <div class="card" onclick="openVault()">
+    <div class="label">Vault</div>
+
+    <div style="font-size:12px; font-weight:800; color:var(--gold)">
+        <i class="fas fa-lock"></i> ENCRYPTED
+    </div>
+
+    <div style="font-size:9px; opacity:.45; margin-top:8px;">
+        Emergency documents
+    </div>
+</div>
+
+            <div class="card">
+                <div class="label">Identity</div>
+                <div id="statusLabel" style="font-size:12px; font-weight:800; color:#2ed573">VERIFIED</div>
+            </div>
+
+           <a href="javascript:void(0)"
+   id="callBtn"
+   class="btn btn-call full"
+   onclick="openRescuerEmergency(); return false;">
+
+    <i class="fas fa-phone-alt"></i>
+    EMERGENCY CALL
+
+</a>
+            
+            <a href="javascript:void(0)" onclick="toggleBuddies()" id="buddyBtn" class="btn btn-buddy full"><i class="fas fa-users"></i> BLOOD BUDDIES CONTACTS</a>
+            
+            <div id="buddyDrawer">
+                <div id="buddyList"></div>
+            </div>
+
+            <a href="#" id="notifyBtn" class="btn btn-notify full"><i class="fab fa-whatsapp"></i> PARKING ALERT</a>
+            <a href="https://www.google.com/maps/search/nearest+hospital" target="_blank" class="btn btn-hosp full"><i class="fas fa-ambulance"></i> NEAREST HOSPITAL</a>
+        </div>
+
+        <div class="social-pill" id="socialLinks"></div>
+    </div>
+
+        <!-- ==========================================
+     SECURE VAULT MODAL
+     ========================================== -->
+
+<div id="vaultModal" class="vault-modal">
+
+    <div class="vault-modal-card">
+
+        <button
+            type="button"
+            class="vault-close"
+            onclick="closeVault()">
+
+            <i class="fas fa-times"></i>
+
+        </button>
+
+        <div class="vault-header">
+
+            <div class="vault-header-icon">
+
+                <i class="fas fa-shield-halved"></i>
+
+            </div>
+
+            <div>
+
+                <h2>Emergency Vault</h2>
+
+                <p>
+                    Documents shared by the member
+                </p>
+
+            </div>
+
+        </div>
+
+        <div id="vaultContent">
+
+            <div class="vault-loading">
+
+                <i class="fas fa-spinner fa-spin"></i>
+
+                <br><br>
+
+                Verifying vault access...
+
+            </div>
+
+        </div>
+
+    </div>
+
+</div>
+     <!-- ==========================================
+     RESCUER EMERGENCY MODAL
+     ========================================== -->
+
+<div id="rescuerEmergencyModal" class="rescuer-modal">
+
+    <div class="rescuer-modal-card">
+
+        <!-- Close -->
+        <button
+            type="button"
+            class="rescuer-close"
+            onclick="closeRescuerEmergency()">
+
+            <i class="fas fa-times"></i>
+
+        </button>
+
+
+        <!-- Emergency Icon -->
+        <div class="rescuer-icon">
+
+            <i class="fas fa-triangle-exclamation"></i>
+
+        </div>
+
+
+        <!-- Title -->
+        <h2>Emergency Contact</h2>
+
+        <p class="rescuer-subtitle">
+
+            You are about to notify the emergency guardians
+            of this SurakshaQR member.
+
+        </p>
+
+
+        <!-- Target User -->
+        <div class="rescuer-target">
+
+            <span>PERSON NEEDING HELP</span>
+
+            <strong id="rescuerTargetName">
+                Loading...
+            </strong>
+
+        </div>
+
+
+        <!-- Rescuer Name -->
+        <label for="rescuerName">
+
+            YOUR NAME
+
+        </label>
+
+        <input
+            type="text"
+            id="rescuerName"
+            placeholder="Enter your name"
+            autocomplete="name"
+        >
+
+
+        <!-- Rescuer Phone -->
+        <label for="rescuerPhone">
+
+            YOUR PHONE NUMBER
+
+        </label>
+
+        <input
+    type="tel"
+    id="rescuerPhone"
+    placeholder="10-digit mobile number"
+    autocomplete="tel"
+    inputmode="numeric"
+    maxlength="15"
+>
+
+
+        <!-- Confirmation -->
+        <label class="rescuer-checkbox">
+
+            <input
+                type="checkbox"
+                id="rescuerWithPerson"
+            >
+
+            <span>
+                I am with this person
+            </span>
+
+        </label>
+
+
+        <!-- Send -->
+        <button
+            type="button"
+            id="sendRescuerAlertBtn"
+            class="rescuer-send-btn"
+            onclick="sendRescuerEmergencyAlert()">
+
+            <i class="fas fa-bell"></i>
+
+            SEND EMERGENCY ALERT
+
+        </button>
+
+
+        <!-- Status -->
+        <div
+            id="rescuerStatus"
+            class="rescuer-status">
+        </div>
+
+    </div>
+
+</div>
+
+        <script>
+        const firebaseConfig = {
+            apiKey: "AIzaSyBCkv-YOQd_RJJIE44EQ33WDH8oLoNtl5I",
+            authDomain: "surakshaqr-new.firebaseapp.com",
+            projectId: "surakshaqr-new",
+            storageBucket: "surakshaqr-new.firebasestorage.app",
+            messagingSenderId: "878160333805",
+            appId: "1:878160333805:android:cc614faa39c4bc8413f5e4"
+        };
+
+        firebase.initializeApp(firebaseConfig);
+
+const db = firebase.firestore();
+const storage = firebase.storage();
+
+        const urlParams = new URLSearchParams(window.location.search);
+
+// Support the existing ?id= format
+// and also ?uid= / ?userId= just in case.
+const userId =
+    urlParams.get('id') ||
+    urlParams.get('uid') ||
+    urlParams.get('userId');
+
+console.log('================================');
+console.log('[PROFILE] URL:', window.location.href);
+console.log('[PROFILE] userId:', userId);
+console.log('================================');
+
+        function toggleBuddies() {
+            const d = document.getElementById('buddyDrawer');
+            d.style.display = d.style.display === 'block' ? 'none' : 'block';
+        }
+
+
+
+
+
+async function loadFirestoreData() {
+
+    const nameEl =
+        document.getElementById('userName');
+
+    const statusEl =
+        document.getElementById('statusLabel');
+
+    console.log('================================');
+    console.log('[PROFILE] Loading profile...');
+    console.log('[PROFILE] URL:', window.location.href);
+    console.log('[PROFILE] userId:', userId);
+    console.log('================================');
+
+    // ==========================================================
+    // 1. CHECK USER ID
+    // ==========================================================
+
+    if (!userId) {
+
+        console.error(
+            '[PROFILE] ❌ No user ID found in URL.'
+        );
+
+        nameEl.classList.remove('shimmer');
+
+        nameEl.innerText =
+            'Invalid Scan';
+
+        statusEl.innerText =
+            'NO USER ID';
+
+        statusEl.style.color =
+            '#ff4757';
+
+        return;
+    }
+
+    try {
+
+        // ======================================================
+        // 2. FIRESTORE PROFILE
+        // ======================================================
+
+        console.log(
+            '[PROFILE] Searching:',
+            `users_data/${userId}`
+        );
+
+        const docRef =
+            db
+                .collection('users_data')
+                .doc(userId);
+
+        const doc =
+            await docRef.get();
+
+        nameEl.classList.remove('shimmer');
+
+        console.log(
+            '[PROFILE] Firestore document exists:',
+            doc.exists
+        );
+
+        // ======================================================
+        // 3. PROFILE NOT FOUND
+        // ======================================================
+
+        if (!doc.exists) {
+
+            console.error(
+                '[PROFILE] ❌ Profile not found:',
+                `users_data/${userId}`
+            );
+
+            nameEl.innerText =
+                'Profile Not Found';
+
+            statusEl.innerText =
+                'NOT FOUND';
+
+            statusEl.style.color =
+                '#ff4757';
+
+            return;
+        }
+
+        // ======================================================
+        // 4. USER DATA
+        // ======================================================
+
+        const user =
+            doc.data();
+
+        console.log(
+            '[PROFILE] ✅ User data received:',
+            user
+        );
+
+        // ======================================================
+        // 5. ACCOUNT STATUS
+        // ======================================================
+
+        if (user.Status !== 'Active') {
+
+            console.warn(
+                '[PROFILE] ⚠️ User is not Active:',
+                user.Status
+            );
+
+            nameEl.innerText =
+                'System Ready';
+
+            statusEl.innerText =
+                'INACTIVE';
+
+            statusEl.style.color =
+                'orange';
+
+            return;
+        }
+
+        // ======================================================
+        // 6. BASIC PROFILE
+        // ======================================================
+
+        nameEl.innerText =
+            user.Name ||
+            'Registered User';
+
+        document
+            .getElementById('bloodGroup')
+            .innerHTML =
+                `<i class="fas fa-tint"></i> ${
+                    user.Blood_Group || 'N/A'
+                }`;
+
+        // ======================================================
+        // 7. BLOOD BUDDY
+        // ======================================================
+
+        const buddyListDiv =
+            document.getElementById(
+                'buddyList'
+            );
+
+        if (user.Blood_Buddy) {
+
+            buddyListDiv.innerHTML = `
+                <div class="buddy-item">
+
+                    <span>
+                        Blood Buddy
+                    </span>
+
+                    <a
+                        href="tel:${user.Blood_Buddy}"
+                        style="
+                            color:#2ed573;
+                            text-decoration:none;
+                            font-weight:800;
+                        "
+                    >
+                        CALL NOW
+                    </a>
+
+                </div>
+            `;
+
+        } else {
+
+            buddyListDiv.innerHTML =
+                '<div style="padding:10px; opacity:0.5;">No buddy found.</div>';
+        }
+
+        // ======================================================
+        // 8. SOCIAL LINKS
+        // ======================================================
+
+        const socialDiv =
+            document.getElementById(
+                'socialLinks'
+            );
+
+        if (user.Social_Links) {
+
+            socialDiv.innerHTML = '';
+
+            user.Social_Links
+                .split(',')
+                .forEach(link => {
+
+                    const cleanLink =
+                        link.trim();
+
+                    let icon =
+                        'fas fa-link';
+
+                    if (
+                        cleanLink.includes(
+                            'facebook'
+                        )
+                    ) {
+                        icon =
+                            'fab fa-facebook';
+                    }
+
+                    if (
+                        cleanLink.includes(
+                            'instagram'
+                        )
+                    ) {
+                        icon =
+                            'fab fa-instagram';
+                    }
+
+                    socialDiv.innerHTML += `
+                        <a
+                            href="${cleanLink}"
+                            target="_blank"
+                            rel="noopener noreferrer"
+                        >
+                            <i
+                                class="${icon}"
+                            ></i>
+                        </a>
+                    `;
+                });
+        }
+
+        // ======================================================
+        // 9. WHATSAPP
+        // ======================================================
+
+        if (user.Mobile) {
+
+            const msg =
+                encodeURIComponent(
+                    `SURAKSHAQR ALERT: Your vehicle needs attention. Please check immediately_ ${user.Name}!`
+                );
+
+            document
+                .getElementById('notifyBtn')
+                .href =
+                    `https://wa.me/${user.Mobile}?text=${msg}`;
+        }
+
+        // ======================================================
+        // SUCCESS
+        // ======================================================
+
+        console.log(
+            '[PROFILE] ✅ Profile loaded successfully:',
+            user.Name
+        );
+
+        console.log(
+            '[PROFILE] UID:',
+            userId
+        );
+
+        console.log(
+            '================================'
+        );
+
+    } catch (error) {
+
+        console.error(
+            '[PROFILE] ❌ Firestore error:',
+            error
+        );
+
+        console.error(
+            '[PROFILE] UID used:',
+            userId
+        );
+
+        nameEl.classList.remove('shimmer');
+
+        nameEl.innerText =
+            'Profile Error';
+
+        statusEl.innerText =
+            'FIREBASE ERROR';
+
+        statusEl.style.color =
+            '#ff4757';
+    }
+}
+
+loadFirestoreData();
+
+            // ==========================================================
+// SECURE VAULT WEB FLOW
+// ==========================================================
+
+function openVault() {
+
+    const modal =
+        document.getElementById('vaultModal');
+
+    const content =
+        document.getElementById('vaultContent');
+
+    modal.classList.add('show');
+
+    content.innerHTML = `
+        <div class="vault-loading">
+            <i class="fas fa-spinner fa-spin"></i>
+            <br><br>
+            Verifying vault access...
+        </div>
+    `;
+
+    loadVaultDocuments();
+}
+
+
+// ==========================================================
+// CLOSE VAULT
+// ==========================================================
+
+function closeVault() {
+
+    document
+        .getElementById('vaultModal')
+        .classList.remove('show');
+}
+
+
+// ==========================================================
+// LOAD VAULT DOCUMENTS
+// ==========================================================
+
+async function loadVaultDocuments() {
+
+    const content =
+        document.getElementById('vaultContent');
+
+    // ======================================================
+    // CHECK USER ID
+    // ======================================================
+
+    if (!userId) {
+
+        console.error(
+            '[VAULT] ❌ No userId available.'
+        );
+
+        content.innerHTML = `
+            <div class="vault-error">
+                Invalid SurakshaQR profile.
+            </div>
+        `;
+
+        return;
+    }
+
+    console.log(
+        '[VAULT] 🔐 Loading vault for UID:',
+        userId
+    );
+
+    try {
+
+        // ======================================================
+        // ONLY THESE TWO DOCUMENTS CAN BE SHARED
+        // ======================================================
+
+        const allowedDocuments = [
+
+            {
+                folder: 'driving_licence',
+                title: 'Driving Licence',
+                icon: 'fa-id-card'
+            },
+
+            {
+                folder: 'mediclaim',
+                title: 'Mediclaim',
+                icon: 'fa-file-medical'
+            }
+
+        ];
+
+        const visibleDocuments = [];
+
+        // ======================================================
+        // CHECK EACH DOCUMENT
+        // ======================================================
+
+        for (const document of allowedDocuments) {
+
+            console.log(
+                '[VAULT] 🔎 Checking:',
+                document.folder
+            );
+
+            try {
+
+                // ------------------------------------------------
+                // METADATA PATH
+                // ------------------------------------------------
+
+                const metadataPath =
+                    `vault_documents/${userId}/${document.folder}/metadata.json`;
+
+                console.log(
+                    '[VAULT] 📄 Metadata path:',
+                    metadataPath
+                );
+
+
+const metadataRef =
+    storage
+        .ref()
+        .child(metadataPath);
+
+console.log(
+    '[VAULT] 📄 Getting metadata URL:',
+    document.folder
+);
+
+const metadataUrl =
+    await metadataRef.getDownloadURL();
+
+console.log(
+    '[VAULT] ✅ Metadata URL received:',
+    document.folder
+);
+
+const response =
+    await fetch(
+        metadataUrl,
+        {
+            method: 'GET',
+            cache: 'no-store'
+        }
+    );
+
+if (!response.ok) {
+
+    throw new Error(
+        `Metadata HTTP error: ${response.status}`
+    );
+}
+
+const metadata =
+    await response.json();
+
+console.log(
+    '[VAULT] ✅ Metadata read successfully:',
+    document.folder,
+    metadata
+);
+                // ==================================================
+                // QR VISIBILITY
+                // ==================================================
+
+                const visibleOnQr =
+                    metadata.visible_on_qr === true;
+
+                console.log(
+                    '[VAULT] 👁 visible_on_qr:',
+                    document.folder,
+                    visibleOnQr
+                );
+
+                // --------------------------------------------------
+                // DOCUMENT IS OFF
+                // --------------------------------------------------
+
+                if (!visibleOnQr) {
+
+                    console.log(
+                        '[VAULT] 🚫 Document OFF:',
+                        document.title
+                    );
+
+                    continue;
+                }
+
+                // ==================================================
+                // GET DOCUMENT IMAGE
+                // ==================================================
+
+                const imagePath =
+                    `vault_documents/${userId}/${document.folder}/document.jpg`;
+
+                console.log(
+                    '[VAULT] 🖼 Image path:',
+                    imagePath
+                );
+
+                const imageRef =
+                    storage
+                        .ref()
+                        .child(imagePath);
+
+                let imageUrl;
+
+                try {
+
+                    imageUrl =
+                        await imageRef.getDownloadURL();
+
+                    console.log(
+                        '[VAULT] ✅ Image URL received:',
+                        document.folder
+                    );
+
+                } catch (imageError) {
+
+                    console.error(
+                        '[VAULT] ❌ Image URL error:',
+                        document.folder,
+                        imageError
+                    );
+
+                    continue;
+                }
+
+                // ==================================================
+                // ADD TO VISIBLE DOCUMENT LIST
+                // ==================================================
+
+                visibleDocuments.push({
+
+                    title:
+                        document.title,
+
+                    icon:
+                        document.icon,
+
+                    imageUrl:
+                        imageUrl,
+
+                    expiryDate:
+                        metadata.expiry_date ||
+                        null
+
+                });
+
+                console.log(
+                    '[VAULT] ✅ Document available:',
+                    document.title
+                );
+
+            } catch (documentError) {
+
+                console.error(
+                    '[VAULT] ❌ Document unavailable:',
+                    document.folder,
+                    documentError
+                );
+
+                // One document failing should not stop
+                // the other document from loading.
+
+                continue;
+            }
+        }
+
+        // ======================================================
+        // NOTHING SHARED
+        // ======================================================
+
+        if (visibleDocuments.length === 0) {
+
+            console.warn(
+                '[VAULT] ⚠️ No QR-visible documents found.'
+            );
+
+            content.innerHTML = `
+                <div class="vault-empty">
+
+                    <i
+                        class="fas fa-eye-slash"
+                        style="
+                            font-size:28px;
+                            opacity:.35;
+                            margin-bottom:12px;
+                        ">
+                    </i>
+
+                    <br>
+
+                    No emergency documents have been
+                    shared by this member.
+
+                </div>
+            `;
+
+            return;
+        }
+
+        // ======================================================
+        // RENDER SHARED DOCUMENTS
+        // ======================================================
+
+        console.log(
+            '[VAULT] ✅ Total visible documents:',
+            visibleDocuments.length
+        );
+
+        content.innerHTML =
+            visibleDocuments
+                .map(document => {
+
+                    let expiryText = '';
+
+                    if (document.expiryDate) {
+
+                        const date =
+                            new Date(
+                                document.expiryDate
+                            );
+
+                        if (
+                            !isNaN(
+                                date.getTime()
+                            )
+                        ) {
+
+                            expiryText = `
+                                <div style="
+                                    margin-top:8px;
+                                    font-size:10px;
+                                    opacity:.55;
+                                ">
+                                    Expiry:
+                                    ${date.toLocaleDateString(
+                                        'en-GB'
+                                    )}
+                                </div>
+                            `;
+                        }
+                    }
+
+                    return `
+                        <div class="vault-document">
+
+                            <div class="vault-document-title">
+
+                                <strong>
+
+                                    <i
+                                        class="fas ${document.icon}"
+                                        style="
+                                            color:#00e5ff;
+                                            margin-right:7px;
+                                        ">
+                                    </i>
+
+                                    ${document.title}
+
+                                </strong>
+
+                                <span class="vault-visible">
+
+                                    <i class="fas fa-eye"></i>
+
+                                    SHARED
+
+                                </span>
+
+                            </div>
+
+                            <img
+                                src="${document.imageUrl}"
+                                alt="${document.title}"
+                                loading="lazy"
+                            >
+
+                            ${expiryText}
+
+                        </div>
+                    `;
+
+                })
+                .join('');
+
+        console.log(
+            '[VAULT] 🎉 Vault rendered successfully.'
+        );
+
+    } catch (error) {
+
+        console.error(
+            '[VAULT] ❌ Vault loading error:',
+            error
+        );
+
+        content.innerHTML = `
+            <div class="vault-error">
+
+                <i
+                    class="fas fa-triangle-exclamation"
+                    style="font-size:24px;">
+                </i>
+
+                <br><br>
+
+                Unable to access the emergency vault.
+
+                <br><br>
+
+                Please try again.
+
+            </div>
+        `;
+    }
+}
+          // ==========================================
+// RESCUER EMERGENCY WEB FLOW
+// ==========================================
+
+function openRescuerEmergency() {
+
+    const modal =
+        document.getElementById(
+            "rescuerEmergencyModal"
+        );
+
+    const targetName =
+        document.getElementById(
+            "rescuerTargetName"
+        );
+
+    const currentName =
+        document.getElementById(
+            "userName"
+        ).innerText;
+
+    targetName.innerText =
+        currentName &&
+        currentName !== "Scanning Profile..." &&
+        currentName !== "System Ready"
+            ? currentName
+            : "SurakshaQR Member";
+
+    document.getElementById(
+        "rescuerStatus"
+    ).innerText = "";
+
+    modal.classList.add("show");
+}
+function closeRescuerEmergency() {
+
+    document
+        .getElementById("rescuerEmergencyModal")
+        .classList.remove("show");
+}
+            async function sendRescuerEmergencyAlert() {
+
+    const nameInput =
+        document.getElementById("rescuerName");
+
+    const button =
+        document.getElementById(
+            "sendRescuerAlertBtn"
+        );
+
+    // Prevent duplicate emergency requests
+    if (button.disabled) {
+        return;
+    }
+
+    const phoneInput =
+        document.getElementById("rescuerPhone");
+
+    const withPerson =
+        document.getElementById("rescuerWithPerson");
+
+
+
+    const status =
+        document.getElementById("rescuerStatus");
+
+    const rescuerName =
+        nameInput.value.trim();
+
+    const rescuerPhone =
+        phoneInput.value.trim();
+
+    // ------------------------------------------
+    // Validation
+    // ------------------------------------------
+
+  if (!userId) {
+
+    status.className =
+        "rescuer-status error";
+
+    status.innerText =
+        "Invalid SurakshaQR profile.";
+
+    return;
+}
+
+    if (!rescuerName) {
+
+        status.className =
+            "rescuer-status error";
+
+        status.innerText =
+            "Please enter your name.";
+
+        nameInput.focus();
+
+        return;
+    }
+
+ if (!rescuerPhone) {
+
+    status.className =
+        "rescuer-status error";
+
+    status.innerText =
+        "Please enter your phone number.";
+
+    phoneInput.focus();
+
+    return;
+}
+
+// ------------------------------------------
+// STRICT PHONE VALIDATION
+// ------------------------------------------
+
+const cleanPhone =
+    rescuerPhone.replace(/[\s\-()]/g, '');
+
+let normalizedPhone = cleanPhone;
+
+// +91XXXXXXXXXX
+if (normalizedPhone.startsWith('+91')) {
+    normalizedPhone =
+        normalizedPhone.substring(3);
+}
+
+// 91XXXXXXXXXX
+else if (
+    normalizedPhone.startsWith('91') &&
+    normalizedPhone.length === 12
+) {
+    normalizedPhone =
+        normalizedPhone.substring(2);
+}
+
+// Exactly 10 digits
+if (!/^[6-9]\d{9}$/.test(normalizedPhone)) {
+
+    status.className =
+        "rescuer-status error";
+
+    status.innerText =
+        "Please enter a valid 10-digit Indian mobile number.";
+
+    phoneInput.focus();
+
+    return;
+}
+
+if (!withPerson.checked) {
+
+        status.className =
+            "rescuer-status error";
+
+        status.innerText =
+            "Please confirm that you are with this person.";
+
+        return;
+    }
+
+    // ------------------------------------------
+    // Loading state
+    // ------------------------------------------
+
+    button.disabled = true;
+
+    button.innerHTML =
+        '<i class="fas fa-spinner fa-spin"></i> SENDING...';
+
+    status.className =
+        "rescuer-status";
+
+    status.innerText =
+        "Contacting emergency guardians...";
+
+    try {
+
+        // --------------------------------------
+        // Verify target user first
+        // --------------------------------------
+
+        const userDoc = await db
+            .collection("users_data")
+            .doc(userId)
+            .get();
+
+        if (!userDoc.exists) {
+            throw new Error(
+                "SurakshaQR profile not found."
+            );
+        }
+
+        const userData = userDoc.data();
+
+        // --------------------------------------
+        // Create emergency request
+        // --------------------------------------
+
+        const requestRef = await db
+            .collection("rescuer_emergency_requests")
+            .add({
+
+                targetUserUid: userId,
+
+                targetUserName:
+                    userData.Name || "SurakshaQR Member",
+
+                rescuerName: rescuerName,
+
+rescuerPhone: normalizedPhone,
+
+                withPerson: true,
+
+                status: "PENDING",
+
+                createdAt:
+                    firebase.firestore.FieldValue
+                        .serverTimestamp(),
+
+                source: "QR_WEB",
+
+                userAgent:
+                    navigator.userAgent
+
+            });
+
+        console.log(
+            "🚨 Rescuer emergency request created:",
+            requestRef.id
+        );
+
+        // --------------------------------------
+        // Success
+        // --------------------------------------
+
+        status.className =
+            "rescuer-status success";
+
+        status.innerText =
+            "Emergency alert sent successfully.";
+
+        button.innerHTML =
+            '<i class="fas fa-check"></i> ALERT SENT';
+
+        // Don't close immediately.
+        // User should see confirmation.
+
+    } catch (error) {
+
+        console.error(
+            "❌ Rescuer emergency request error:",
+            error
+        );
+
+        status.className =
+            "rescuer-status error";
+
+        status.innerText =
+            "Unable to send emergency alert. Please try again.";
+
+        button.disabled = false;
+
+        button.innerHTML =
+            '<i class="fas fa-bell"></i> SEND EMERGENCY ALERT';
+    }
+}
+
+
+// ==========================================================
+// VAULT MODAL — CLOSE WHEN CLICKING OUTSIDE THE CARD
+// ==========================================================
+
+document
+    .getElementById('vaultModal')
+    .addEventListener('click', function (event) {
+
+        // Only close when the dark background itself is clicked.
+        // Clicking inside the Vault card will NOT close it.
+
+        if (event.target === this) {
+            closeVault();
+        }
+
+    });
+
+    </script>
+</body>
+</html>
+        
+
+
+
+
+
+
+
+
+
+
+
