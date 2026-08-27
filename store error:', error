@@ -54,122 +54,523 @@
    ========================================== */
 
 .rescuer-modal {
-    display:none; position:fixed; inset:0; z-index:99999;
-    background:rgba(0,0,0,.82); backdrop-filter:blur(12px);
-    align-items:center; justify-content:center; padding:8px; box-sizing:border-box;
+    display: none;
+
+    position: fixed;
+
+    inset: 0;
+
+    z-index: 99999;
+
+    background: rgba(0, 0, 0, 0.82);
+
+    backdrop-filter: blur(12px);
+
+    align-items: center;
+
+    justify-content: center;
+
+    padding: 20px;
+
+    box-sizing: border-box;
 }
 
-.rescuer-modal.show { display:flex; }
+.rescuer-modal.show {
+    display: flex;
+}
 
 .rescuer-modal-card {
-    width:100%; max-width:310px;
-    background:linear-gradient(145deg,rgba(35,20,28,.98),rgba(8,10,14,.98));
-    border:1px solid rgba(255,71,87,.35); border-radius:16px;
-    padding:12px; box-sizing:border-box; position:relative;
-    box-shadow:0 25px 80px rgba(0,0,0,.7),0 0 30px rgba(255,71,87,.12);
-    animation:rescuerModalIn .25s ease;
+
+    width: 100%;
+
+    max-width: 390px;
+
+    background:
+        linear-gradient(
+            145deg,
+            rgba(35, 20, 28, 0.98),
+            rgba(8, 10, 14, 0.98)
+        );
+
+    border: 1px solid rgba(255, 71, 87, 0.35);
+
+    border-radius: 28px;
+
+    padding: 25px;
+
+    box-sizing: border-box;
+
+    box-shadow:
+        0 25px 80px rgba(0, 0, 0, 0.7),
+        0 0 30px rgba(255, 71, 87, 0.12);
+
+    position: relative;
+
+    animation: rescuerModalIn 0.25s ease;
 }
 
 @keyframes rescuerModalIn {
-    from { opacity:0; transform:translateY(20px) scale(.97); }
-    to { opacity:1; transform:translateY(0) scale(1); }
+
+    from {
+        opacity: 0;
+        transform: translateY(25px) scale(0.96);
+    }
+
+    to {
+        opacity: 1;
+        transform: translateY(0) scale(1);
+    }
+
 }
 
 .rescuer-close {
-    position:absolute; top:7px; right:7px; width:26px; height:26px;
-    border-radius:50%; border:1px solid rgba(255,255,255,.1);
-    background:rgba(255,255,255,.05); color:white; cursor:pointer; font-size:11px;
+
+    position: absolute;
+
+    top: 15px;
+
+    right: 15px;
+
+    width: 36px;
+
+    height: 36px;
+
+    border-radius: 50%;
+
+    border: 1px solid rgba(255,255,255,0.1);
+
+    background: rgba(255,255,255,0.05);
+
+    color: white;
+
+    cursor: pointer;
+
+    font-size: 14px;
 }
 
 .rescuer-icon {
-    width:38px; height:38px; border-radius:11px;
-    display:flex; align-items:center; justify-content:center;
-    background:rgba(255,71,87,.12); border:1px solid rgba(255,71,87,.25);
-    color:#ff4757; font-size:17px; margin-bottom:7px;
+
+    width: 58px;
+
+    height: 58px;
+
+    border-radius: 18px;
+
+    display: flex;
+
+    align-items: center;
+
+    justify-content: center;
+
+    background: rgba(255, 71, 87, 0.12);
+
+    border: 1px solid rgba(255, 71, 87, 0.25);
+
+    color: #ff4757;
+
+    font-size: 25px;
+
+    margin-bottom: 15px;
 }
 
-.rescuer-modal-card h2 { margin:0; font-size:17px; font-weight:800; }
+.rescuer-modal-card h2 {
+
+    margin: 0;
+
+    font-size: 23px;
+
+    font-weight: 800;
+}
 
 .rescuer-subtitle {
-    font-size:10px; line-height:1.35; opacity:.6; margin:4px 0 9px;
+
+    font-size: 12px;
+
+    line-height: 1.6;
+
+    opacity: 0.6;
+
+    margin: 8px 0 18px;
 }
 
 .rescuer-target {
-    padding:7px 9px; border-radius:9px;
-    background:rgba(255,255,255,.04); border:1px solid rgba(255,255,255,.07);
-    margin-bottom:9px;
+
+    padding: 14px;
+
+    border-radius: 16px;
+
+    background: rgba(255,255,255,0.04);
+
+    border: 1px solid rgba(255,255,255,0.07);
+
+    margin-bottom: 18px;
 }
 
 .rescuer-target span {
-    display:block; font-size:7px; text-transform:uppercase;
-    opacity:.45; margin-bottom:2px;
+
+    display: block;
+
+    font-size: 9px;
+
+    text-transform: uppercase;
+
+    opacity: 0.45;
+
+    margin-bottom: 5px;
 }
 
-.rescuer-target strong { font-size:12px; color:var(--gold); }
+.rescuer-target strong {
+
+    font-size: 16px;
+
+    color: var(--gold);
+}
 
 .rescuer-modal-card label:not(.rescuer-checkbox) {
-    display:block; font-size:8px; text-transform:uppercase;
-    font-weight:800; opacity:.55; margin:7px 0 3px;
+
+    display: block;
+
+    font-size: 10px;
+
+    text-transform: uppercase;
+
+    font-weight: 800;
+
+    opacity: 0.55;
+
+    margin: 14px 0 7px;
 }
 
 .rescuer-modal-card input[type="text"],
 .rescuer-modal-card input[type="tel"] {
-    width:100%; box-sizing:border-box; padding:8px 9px;
-    border-radius:9px; border:1px solid rgba(255,255,255,.1);
-    background:rgba(255,255,255,.05); color:white;
-    outline:none; font-family:inherit; font-size:12px;
+
+    width: 100%;
+
+    box-sizing: border-box;
+
+    padding: 14px 15px;
+
+    border-radius: 14px;
+
+    border: 1px solid rgba(255,255,255,0.1);
+
+    background: rgba(255,255,255,0.05);
+
+    color: white;
+
+    outline: none;
+
+    font-family: inherit;
+
+    font-size: 14px;
 }
 
 .rescuer-modal-card input:focus {
-    border-color:rgba(255,71,87,.6);
+
+    border-color: rgba(255, 71, 87, 0.6);
 }
 
 .rescuer-checkbox {
-    display:flex; align-items:center; gap:5px;
-    margin:8px 0; font-size:9px;
-    color:rgba(255,255,255,.8); cursor:pointer;
+
+    display: flex;
+
+    align-items: center;
+
+    gap: 10px;
+
+    margin: 18px 0;
+
+    font-size: 12px;
+
+    color: rgba(255,255,255,0.8);
+
+    cursor: pointer;
 }
 
 .rescuer-checkbox input {
-    width:14px; height:14px; accent-color:#2ed573;
+
+    width: 18px;
+
+    height: 18px;
+
+    accent-color: #2ed573;
 }
 
 .rescuer-send-btn {
-    width:100%; border:0; border-radius:10px; padding:9px;
-    background:linear-gradient(135deg,#ff4757,#ff6b81);
-    color:white; font-family:inherit; font-size:11px; font-weight:800;
-    cursor:pointer;
-    box-shadow:0 8px 20px rgba(255,71,87,.22);
+
+    width: 100%;
+
+    border: 0;
+
+    border-radius: 17px;
+
+    padding: 16px;
+
+    background:
+        linear-gradient(
+            135deg,
+            #ff4757,
+            #ff6b81
+        );
+
+    color: white;
+
+    font-family: inherit;
+
+    font-size: 13px;
+
+    font-weight: 800;
+
+    cursor: pointer;
+
+    box-shadow:
+        0 10px 25px rgba(255, 71, 87, 0.22);
 }
 
-.rescuer-send-btn:disabled { opacity:.55; cursor:not-allowed; }
+.rescuer-send-btn:disabled {
+
+    opacity: 0.55;
+
+    cursor: not-allowed;
+}
 
 .rescuer-status {
-    min-height:14px; text-align:center; font-size:9px; margin-top:6px;
+
+    min-height: 20px;
+
+    text-align: center;
+
+    font-size: 11px;
+
+    margin-top: 12px;
 }
 
-.rescuer-status.success { color:#2ed573; }
-.rescuer-status.error { color:#ff6b81; }
+.rescuer-status.success {
+
+    color: #2ed573;
+}
+
+.rescuer-status.error {
+
+    color: #ff6b81;
+}
+
         /* ==========================================================
    SECURE VAULT WEB MODAL
    ========================================================== */
-.vault-modal{display:none;position:fixed;inset:0;z-index:100000;background:rgba(0,0,0,.86);backdrop-filter:blur(14px);align-items:center;justify-content:center;padding:10px;box-sizing:border-box}
-.vault-modal.show{display:flex}
-.vault-modal-card{width:100%;max-width:360px;max-height:88vh;overflow-y:auto;background:linear-gradient(145deg,rgba(14,20,27,.99),rgba(5,8,12,.99));border:1px solid rgba(0,229,255,.35);border-radius:20px;padding:14px;box-sizing:border-box;box-shadow:0 20px 60px rgba(0,0,0,.75),0 0 30px rgba(0,229,255,.1);position:relative;animation:vaultModalIn .25s ease}
-@keyframes vaultModalIn{from{opacity:0;transform:translateY(20px) scale(.96)}to{opacity:1;transform:translateY(0) scale(1)}}
-.vault-close{position:absolute;top:9px;right:9px;width:30px;height:30px;border-radius:50%;border:1px solid rgba(255,255,255,.1);background:rgba(255,255,255,.05);color:white;cursor:pointer}
-.vault-header{display:flex;align-items:center;gap:8px;margin-bottom:12px}
-.vault-header-icon{width:38px;height:38px;border-radius:11px;display:flex;align-items:center;justify-content:center;background:rgba(0,229,255,.08);border:1px solid rgba(0,229,255,.25);color:#00e5ff;font-size:16px}
-.vault-header h2{margin:0;font-size:17px;font-weight:800}
-.vault-header p{margin:2px 0 0;font-size:9px;opacity:.5}
-.vault-document{border-radius:14px;padding:10px;margin-bottom:8px;background:rgba(255,255,255,.025);border:1px solid rgba(255,255,255,.08)}
-.vault-document-title{display:flex;align-items:center;justify-content:space-between;margin-bottom:8px}
-.vault-document-title strong{font-size:13px}
-.vault-visible{font-size:8px;color:#2ed573;background:rgba(46,213,115,.1);border:1px solid rgba(46,213,115,.2);padding:3px 6px;border-radius:20px}
-.vault-document img{width:100%;max-height:300px;object-fit:contain;border-radius:9px;background:#000;display:block}
-.vault-empty{text-align:center;padding:20px 10px;color:rgba(255,255,255,.55);font-size:11px;line-height:1.5}
-.vault-loading{text-align:center;padding:25px 10px;color:#00e5ff;font-size:11px}
-.vault-error{text-align:center;padding:20px 10px;color:#ff6b81;font-size:11px;line-height:1.5}    </style>
+
+.vault-modal {
+    display: none;
+
+    position: fixed;
+    inset: 0;
+    z-index: 100000;
+
+    background: rgba(0, 0, 0, 0.86);
+    backdrop-filter: blur(14px);
+
+    align-items: center;
+    justify-content: center;
+
+    padding: 18px;
+    box-sizing: border-box;
+}
+
+.vault-modal.show {
+    display: flex;
+}
+
+.vault-modal-card {
+    width: 100%;
+    max-width: 390px;
+
+    max-height: 88vh;
+    overflow-y: auto;
+
+    background:
+        linear-gradient(
+            145deg,
+            rgba(14, 20, 27, 0.99),
+            rgba(5, 8, 12, 0.99)
+        );
+
+    border: 1px solid rgba(0, 229, 255, 0.35);
+
+    border-radius: 24px;
+
+    padding: 20px;
+
+    box-sizing: border-box;
+
+    box-shadow:
+        0 25px 80px rgba(0,0,0,0.75),
+        0 0 35px rgba(0,229,255,0.10);
+
+    position: relative;
+
+    animation: vaultModalIn 0.25s ease;
+}
+
+@keyframes vaultModalIn {
+    from {
+        opacity: 0;
+        transform: translateY(20px) scale(0.96);
+    }
+
+    to {
+        opacity: 1;
+        transform: translateY(0) scale(1);
+    }
+}
+
+.vault-close {
+    position: absolute;
+
+    top: 14px;
+    right: 14px;
+
+    width: 34px;
+    height: 34px;
+
+    border-radius: 50%;
+
+    border: 1px solid rgba(255,255,255,0.10);
+
+    background: rgba(255,255,255,0.05);
+
+    color: white;
+
+    cursor: pointer;
+}
+
+.vault-header {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+
+    margin-bottom: 18px;
+}
+
+.vault-header-icon {
+    width: 45px;
+    height: 45px;
+
+    border-radius: 14px;
+
+    display: flex;
+    align-items: center;
+    justify-content: center;
+
+    background: rgba(0,229,255,0.08);
+
+    border: 1px solid rgba(0,229,255,0.25);
+
+    color: #00e5ff;
+
+    font-size: 18px;
+}
+
+.vault-header h2 {
+    margin: 0;
+
+    font-size: 19px;
+    font-weight: 800;
+}
+
+.vault-header p {
+    margin: 4px 0 0;
+
+    font-size: 10px;
+
+    opacity: 0.5;
+}
+
+.vault-document {
+    border-radius: 18px;
+
+    padding: 15px;
+
+    margin-bottom: 12px;
+
+    background: rgba(255,255,255,0.025);
+
+    border: 1px solid rgba(255,255,255,0.08);
+}
+
+.vault-document-title {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+
+    margin-bottom: 12px;
+}
+
+.vault-document-title strong {
+    font-size: 14px;
+}
+
+.vault-visible {
+    font-size: 9px;
+
+    color: #2ed573;
+
+    background: rgba(46,213,115,0.10);
+
+    border: 1px solid rgba(46,213,115,0.20);
+
+    padding: 4px 8px;
+
+    border-radius: 20px;
+}
+
+.vault-document img {
+    width: 100%;
+
+    max-height: 420px;
+
+    object-fit: contain;
+
+    border-radius: 12px;
+
+    background: #000;
+
+    display: block;
+}
+
+.vault-empty {
+    text-align: center;
+
+    padding: 30px 15px;
+
+    color: rgba(255,255,255,0.55);
+
+    font-size: 12px;
+
+    line-height: 1.6;
+}
+
+.vault-loading {
+    text-align: center;
+
+    padding: 35px 15px;
+
+    color: #00e5ff;
+
+    font-size: 12px;
+}
+
+.vault-error {
+    text-align: center;
+
+    padding: 25px 15px;
+
+    color: #ff6b81;
+
+    font-size: 12px;
+
+    line-height: 1.6;
+}
+    </style>
 </head>
 
 
@@ -234,48 +635,176 @@
         <!-- ==========================================
      SECURE VAULT MODAL
      ========================================== -->
+
 <div id="vaultModal" class="vault-modal">
+
     <div class="vault-modal-card">
-        <button type="button" class="vault-close" onclick="closeVault()"><i class="fas fa-times"></i></button>
-        <div class="vault-header">
-            <div class="vault-header-icon"><i class="fas fa-shield-halved"></i></div>
-            <div><h2>Emergency Vault</h2><p>Documents shared by the member</p></div>
-        </div>
-        <div id="vaultContent">
-            <div class="vault-loading"><i class="fas fa-spinner fa-spin"></i><br><br>Verifying vault access...</div>
-        </div>
-    </div>
-</div>
 
-<div id="rescuerEmergencyModal" class="rescuer-modal">
-    <div class="rescuer-modal-card">
-        <button type="button" class="rescuer-close" onclick="closeRescuerEmergency()"><i class="fas fa-times"></i></button>
-        <div class="rescuer-icon"><i class="fas fa-triangle-exclamation"></i></div>
-        <h2>Emergency Contact</h2>
-        <p class="rescuer-subtitle">You are about to notify the emergency guardians of this SurakshaQR member.</p>
+        <button
+            type="button"
+            class="vault-close"
+            onclick="closeVault()">
 
-        <div class="rescuer-target">
-            <span>PERSON NEEDING HELP</span>
-            <strong id="rescuerTargetName">Loading...</strong>
-        </div>
+            <i class="fas fa-times"></i>
 
-        <label for="rescuerName">YOUR NAME</label>
-        <input type="text" id="rescuerName" placeholder="Enter your name" autocomplete="name">
-
-        <label for="rescuerPhone">YOUR PHONE NUMBER</label>
-        <input type="tel" id="rescuerPhone" placeholder="10-digit mobile number" autocomplete="tel" inputmode="numeric" maxlength="15">
-
-        <label class="rescuer-checkbox">
-            <input type="checkbox" id="rescuerWithPerson">
-            <span>I am with this person</span>
-        </label>
-
-        <button type="button" id="sendRescuerAlertBtn" class="rescuer-send-btn" onclick="sendRescuerEmergencyAlert()">
-            <i class="fas fa-bell"></i> SEND EMERGENCY ALERT
         </button>
 
-        <div id="rescuerStatus" class="rescuer-status"></div>
+        <div class="vault-header">
+
+            <div class="vault-header-icon">
+
+                <i class="fas fa-shield-halved"></i>
+
+            </div>
+
+            <div>
+
+                <h2>Emergency Vault</h2>
+
+                <p>
+                    Documents shared by the member
+                </p>
+
+            </div>
+
+        </div>
+
+        <div id="vaultContent">
+
+            <div class="vault-loading">
+
+                <i class="fas fa-spinner fa-spin"></i>
+
+                <br><br>
+
+                Verifying vault access...
+
+            </div>
+
+        </div>
+
     </div>
+
+</div>
+     <!-- ==========================================
+     RESCUER EMERGENCY MODAL
+     ========================================== -->
+
+<div id="rescuerEmergencyModal" class="rescuer-modal">
+
+    <div class="rescuer-modal-card">
+
+        <!-- Close -->
+        <button
+            type="button"
+            class="rescuer-close"
+            onclick="closeRescuerEmergency()">
+
+            <i class="fas fa-times"></i>
+
+        </button>
+
+
+        <!-- Emergency Icon -->
+        <div class="rescuer-icon">
+
+            <i class="fas fa-triangle-exclamation"></i>
+
+        </div>
+
+
+        <!-- Title -->
+        <h2>Emergency Contact</h2>
+
+        <p class="rescuer-subtitle">
+
+            You are about to notify the emergency guardians
+            of this SurakshaQR member.
+
+        </p>
+
+
+        <!-- Target User -->
+        <div class="rescuer-target">
+
+            <span>PERSON NEEDING HELP</span>
+
+            <strong id="rescuerTargetName">
+                Loading...
+            </strong>
+
+        </div>
+
+
+        <!-- Rescuer Name -->
+        <label for="rescuerName">
+
+            YOUR NAME
+
+        </label>
+
+        <input
+            type="text"
+            id="rescuerName"
+            placeholder="Enter your name"
+            autocomplete="name"
+        >
+
+
+        <!-- Rescuer Phone -->
+        <label for="rescuerPhone">
+
+            YOUR PHONE NUMBER
+
+        </label>
+
+        <input
+    type="tel"
+    id="rescuerPhone"
+    placeholder="10-digit mobile number"
+    autocomplete="tel"
+    inputmode="numeric"
+    maxlength="15"
+>
+
+
+        <!-- Confirmation -->
+        <label class="rescuer-checkbox">
+
+            <input
+                type="checkbox"
+                id="rescuerWithPerson"
+            >
+
+            <span>
+                I am with this person
+            </span>
+
+        </label>
+
+
+        <!-- Send -->
+        <button
+            type="button"
+            id="sendRescuerAlertBtn"
+            class="rescuer-send-btn"
+            onclick="sendRescuerEmergencyAlert()">
+
+            <i class="fas fa-bell"></i>
+
+            SEND EMERGENCY ALERT
+
+        </button>
+
+
+        <!-- Status -->
+        <div
+            id="rescuerStatus"
+            class="rescuer-status">
+        </div>
+
+    </div>
+
 </div>
 
         <script>
@@ -333,45 +862,111 @@ async function loadFirestoreData() {
     // ==========================================================
     // 1. CHECK USER ID
     // ==========================================================
-if (!userId) {
-    console.error('[PROFILE] ❌ No user ID found in URL.');
-    nameEl.classList.remove('shimmer');
-    nameEl.innerText = 'Invalid Scan';
-    statusEl.innerText = 'NO USER ID';
-    statusEl.style.color = '#ff4757';
-    return;
-}
 
-try {
-    console.log('[PROFILE] Searching:', `users_data/${userId}`);
+    if (!userId) {
 
-    const docRef = db.collection('users_data').doc(userId);
-    const doc = await docRef.get();
+        console.error(
+            '[PROFILE] ❌ No user ID found in URL.'
+        );
 
-    nameEl.classList.remove('shimmer');
-    console.log('[PROFILE] Firestore document exists:', doc.exists);
+        nameEl.classList.remove('shimmer');
 
-    if (!doc.exists) {
-        console.error('[PROFILE] ❌ Profile not found:', `users_data/${userId}`);
-        nameEl.innerText = 'Profile Not Found';
-        statusEl.innerText = 'NOT FOUND';
-        statusEl.style.color = '#ff4757';
+        nameEl.innerText =
+            'Invalid Scan';
+
+        statusEl.innerText =
+            'NO USER ID';
+
+        statusEl.style.color =
+            '#ff4757';
+
         return;
     }
 
-    const user = doc.data();
-    console.log('[PROFILE] ✅ User data received:', user);
+    try {
+
+        // ======================================================
+        // 2. FIRESTORE PROFILE
+        // ======================================================
+
+        console.log(
+            '[PROFILE] Searching:',
+            `users_data/${userId}`
+        );
+
+        const docRef =
+            db
+                .collection('users_data')
+                .doc(userId);
+
+        const doc =
+            await docRef.get();
+
+        nameEl.classList.remove('shimmer');
+
+        console.log(
+            '[PROFILE] Firestore document exists:',
+            doc.exists
+        );
+
+        // ======================================================
+        // 3. PROFILE NOT FOUND
+        // ======================================================
+
+        if (!doc.exists) {
+
+            console.error(
+                '[PROFILE] ❌ Profile not found:',
+                `users_data/${userId}`
+            );
+
+            nameEl.innerText =
+                'Profile Not Found';
+
+            statusEl.innerText =
+                'NOT FOUND';
+
+            statusEl.style.color =
+                '#ff4757';
+
+            return;
+        }
+
+        // ======================================================
+        // 4. USER DATA
+        // ======================================================
+
+        const user =
+            doc.data();
+
+        console.log(
+            '[PROFILE] ✅ User data received:',
+            user
+        );
 
         // ======================================================
         // 5. ACCOUNT STATUS
         // ======================================================
-if (user.Status !== 'Active') {
-    console.warn('[PROFILE] ⚠️ User is not Active:', user.Status);
-    nameEl.innerText = 'System Ready';
-    statusEl.innerText = 'INACTIVE';
-    statusEl.style.color = 'orange';
-    return;
-}
+
+        if (user.Status !== 'Active') {
+
+            console.warn(
+                '[PROFILE] ⚠️ User is not Active:',
+                user.Status
+            );
+
+            nameEl.innerText =
+                'System Ready';
+
+            statusEl.innerText =
+                'INACTIVE';
+
+            statusEl.style.color =
+                'orange';
+
+            return;
+        }
+
         // ======================================================
         // 6. BASIC PROFILE
         // ======================================================
@@ -391,13 +986,40 @@ if (user.Status !== 'Active') {
         // 7. BLOOD BUDDY
         // ======================================================
 
-       const buddyListDiv = document.getElementById('buddyList');
+        const buddyListDiv =
+            document.getElementById(
+                'buddyList'
+            );
 
-if (user.Blood_Buddy) {
-    buddyListDiv.innerHTML = `<div class="buddy-item"><span>Blood Buddy</span><a href="tel:${user.Blood_Buddy}" style="color:#2ed573;text-decoration:none;font-weight:800;">CALL NOW</a></div>`;
-} else {
-    buddyListDiv.innerHTML = '<div style="padding:10px;opacity:0.5;">No buddy found.</div>';
-}
+        if (user.Blood_Buddy) {
+
+            buddyListDiv.innerHTML = `
+                <div class="buddy-item">
+
+                    <span>
+                        Blood Buddy
+                    </span>
+
+                    <a
+                        href="tel:${user.Blood_Buddy}"
+                        style="
+                            color:#2ed573;
+                            text-decoration:none;
+                            font-weight:800;
+                        "
+                    >
+                        CALL NOW
+                    </a>
+
+                </div>
+            `;
+
+        } else {
+
+            buddyListDiv.innerHTML =
+                '<div style="padding:10px; opacity:0.5;">No buddy found.</div>';
+        }
+
         // ======================================================
         // 8. SOCIAL LINKS
         // ======================================================
@@ -627,61 +1249,165 @@ async function loadVaultDocuments() {
                 // METADATA PATH
                 // ------------------------------------------------
 
-             const metadataPath = `vault_documents/${userId}/${document.folder}/metadata.json`;
-console.log('[VAULT] 📄 Metadata path:', metadataPath);
+                const metadataPath =
+                    `vault_documents/${userId}/${document.folder}/metadata.json`;
 
-const metadataRef = storage.ref().child(metadataPath);
-console.log('[VAULT] 📄 Getting metadata URL:', document.folder);
+                console.log(
+                    '[VAULT] 📄 Metadata path:',
+                    metadataPath
+                );
 
-const metadataUrl = await metadataRef.getDownloadURL();
-console.log('[VAULT] ✅ Metadata URL received:', document.folder);
 
-const response = await fetch(metadataUrl, { method: 'GET', cache: 'no-store' });
-if (!response.ok) throw new Error(`Metadata HTTP error: ${response.status}`);
+const metadataRef =
+    storage
+        .ref()
+        .child(metadataPath);
 
-const metadata = await response.json();
-console.log('[VAULT] ✅ Metadata read successfully:', document.folder, metadata);
+console.log(
+    '[VAULT] 📄 Getting metadata URL:',
+    document.folder
+);
 
-// QR VISIBILITY
-const visibleOnQr = metadata.visible_on_qr === true;
-console.log('[VAULT] 👁 visible_on_qr:', document.folder, visibleOnQr);
+const metadataUrl =
+    await metadataRef.getDownloadURL();
 
-if (!visibleOnQr) {
-    console.log('[VAULT] 🚫 Document OFF:', document.title);
-    continue;
+console.log(
+    '[VAULT] ✅ Metadata URL received:',
+    document.folder
+);
+
+const response =
+    await fetch(
+        metadataUrl,
+        {
+            method: 'GET',
+            cache: 'no-store'
+        }
+    );
+
+if (!response.ok) {
+
+    throw new Error(
+        `Metadata HTTP error: ${response.status}`
+    );
 }
+
+const metadata =
+    await response.json();
+
+console.log(
+    '[VAULT] ✅ Metadata read successfully:',
+    document.folder,
+    metadata
+);
+                // ==================================================
+                // QR VISIBILITY
+                // ==================================================
+
+                const visibleOnQr =
+                    metadata.visible_on_qr === true;
+
+                console.log(
+                    '[VAULT] 👁 visible_on_qr:',
+                    document.folder,
+                    visibleOnQr
+                );
+
+                // --------------------------------------------------
+                // DOCUMENT IS OFF
+                // --------------------------------------------------
+
+                if (!visibleOnQr) {
+
+                    console.log(
+                        '[VAULT] 🚫 Document OFF:',
+                        document.title
+                    );
+
+                    continue;
+                }
+
                 // ==================================================
                 // GET DOCUMENT IMAGE
                 // ==================================================
-const imagePath = `vault_documents/${userId}/${document.folder}/document.jpg`;
-console.log('[VAULT] 🖼 Image path:', imagePath);
 
-const imageRef = storage.ref().child(imagePath);
-let imageUrl;
+                const imagePath =
+                    `vault_documents/${userId}/${document.folder}/document.jpg`;
 
-try {
-    imageUrl = await imageRef.getDownloadURL();
-    console.log('[VAULT] ✅ Image URL received:', document.folder);
-} catch (imageError) {
-    console.error('[VAULT] ❌ Image URL error:', document.folder, imageError);
-    continue;
-}
+                console.log(
+                    '[VAULT] 🖼 Image path:',
+                    imagePath
+                );
 
-// ADD TO VISIBLE DOCUMENT LIST
-visibleDocuments.push({
-    title: document.title,
-    icon: document.icon,
-    imageUrl: imageUrl,
-    expiryDate: metadata.expiry_date || null
-});
+                const imageRef =
+                    storage
+                        .ref()
+                        .child(imagePath);
 
-console.log('[VAULT] ✅ Document available:', document.title);
+                let imageUrl;
 
-} catch (documentError) {
-    console.error('[VAULT] ❌ Document unavailable:', document.folder, documentError);
-    continue;
-}
-}
+                try {
+
+                    imageUrl =
+                        await imageRef.getDownloadURL();
+
+                    console.log(
+                        '[VAULT] ✅ Image URL received:',
+                        document.folder
+                    );
+
+                } catch (imageError) {
+
+                    console.error(
+                        '[VAULT] ❌ Image URL error:',
+                        document.folder,
+                        imageError
+                    );
+
+                    continue;
+                }
+
+                // ==================================================
+                // ADD TO VISIBLE DOCUMENT LIST
+                // ==================================================
+
+                visibleDocuments.push({
+
+                    title:
+                        document.title,
+
+                    icon:
+                        document.icon,
+
+                    imageUrl:
+                        imageUrl,
+
+                    expiryDate:
+                        metadata.expiry_date ||
+                        null
+
+                });
+
+                console.log(
+                    '[VAULT] ✅ Document available:',
+                    document.title
+                );
+
+            } catch (documentError) {
+
+                console.error(
+                    '[VAULT] ❌ Document unavailable:',
+                    document.folder,
+                    documentError
+                );
+
+                // One document failing should not stop
+                // the other document from loading.
+
+                continue;
+            }
+        }
+
         // ======================================================
         // NOTHING SHARED
         // ======================================================
@@ -718,90 +1444,232 @@ console.log('[VAULT] ✅ Document available:', document.title);
         // ======================================================
         // RENDER SHARED DOCUMENTS
         // ======================================================
-console.log('[VAULT] ✅ Total visible documents:', visibleDocuments.length);
 
-content.innerHTML = visibleDocuments.map(document => {
-    let expiryText = '';
+        console.log(
+            '[VAULT] ✅ Total visible documents:',
+            visibleDocuments.length
+        );
 
-    if (document.expiryDate) {
-        const date = new Date(document.expiryDate);
-        if (!isNaN(date.getTime())) {
-            expiryText = `<div style="margin-top:8px;font-size:10px;opacity:.55;">Expiry: ${date.toLocaleDateString('en-GB')}</div>`;
-        }
+        content.innerHTML =
+            visibleDocuments
+                .map(document => {
+
+                    let expiryText = '';
+
+                    if (document.expiryDate) {
+
+                        const date =
+                            new Date(
+                                document.expiryDate
+                            );
+
+                        if (
+                            !isNaN(
+                                date.getTime()
+                            )
+                        ) {
+
+                            expiryText = `
+                                <div style="
+                                    margin-top:8px;
+                                    font-size:10px;
+                                    opacity:.55;
+                                ">
+                                    Expiry:
+                                    ${date.toLocaleDateString(
+                                        'en-GB'
+                                    )}
+                                </div>
+                            `;
+                        }
+                    }
+
+                    return `
+                        <div class="vault-document">
+
+                            <div class="vault-document-title">
+
+                                <strong>
+
+                                    <i
+                                        class="fas ${document.icon}"
+                                        style="
+                                            color:#00e5ff;
+                                            margin-right:7px;
+                                        ">
+                                    </i>
+
+                                    ${document.title}
+
+                                </strong>
+
+                                <span class="vault-visible">
+
+                                    <i class="fas fa-eye"></i>
+
+                                    SHARED
+
+                                </span>
+
+                            </div>
+
+                            <img
+                                src="${document.imageUrl}"
+                                alt="${document.title}"
+                                loading="lazy"
+                            >
+
+                            ${expiryText}
+
+                        </div>
+                    `;
+
+                })
+                .join('');
+
+        console.log(
+            '[VAULT] 🎉 Vault rendered successfully.'
+        );
+
+    } catch (error) {
+
+        console.error(
+            '[VAULT] ❌ Vault loading error:',
+            error
+        );
+
+        content.innerHTML = `
+            <div class="vault-error">
+
+                <i
+                    class="fas fa-triangle-exclamation"
+                    style="font-size:24px;">
+                </i>
+
+                <br><br>
+
+                Unable to access the emergency vault.
+
+                <br><br>
+
+                Please try again.
+
+            </div>
+        `;
     }
-
-    return `<div class="vault-document">
-        <div class="vault-document-title">
-            <strong><i class="fas ${document.icon}" style="color:#00e5ff;margin-right:7px;"></i>${document.title}</strong>
-            <span class="vault-visible"><i class="fas fa-eye"></i> SHARED</span>
-        </div>
-        <img src="${document.imageUrl}" alt="${document.title}" loading="lazy">
-        ${expiryText}
-    </div>`;
-}).join('');
-
-console.log('[VAULT] 🎉 Vault rendered successfully.');
-
-} catch (error) {
-    console.error('[VAULT] ❌ Vault loading error:', error);
-    content.innerHTML = `<div class="vault-error">
-        <i class="fas fa-triangle-exclamation" style="font-size:24px;"></i><br><br>
-        Unable to access the emergency vault.<br><br>
-        Please try again.
-    </div>`;
-}
 }
           // ==========================================
 // RESCUER EMERGENCY WEB FLOW
 // ==========================================
+
 function openRescuerEmergency() {
-    const modal = document.getElementById("rescuerEmergencyModal");
-    const targetName = document.getElementById("rescuerTargetName");
-    const currentName = document.getElementById("userName").innerText;
 
-    targetName.innerText = currentName && currentName !== "Scanning Profile..." && currentName !== "System Ready"
-        ? currentName
-        : "SurakshaQR Member";
+    const modal =
+        document.getElementById(
+            "rescuerEmergencyModal"
+        );
 
-    document.getElementById("rescuerStatus").innerText = "";
+    const targetName =
+        document.getElementById(
+            "rescuerTargetName"
+        );
+
+    const currentName =
+        document.getElementById(
+            "userName"
+        ).innerText;
+
+    targetName.innerText =
+        currentName &&
+        currentName !== "Scanning Profile..." &&
+        currentName !== "System Ready"
+            ? currentName
+            : "SurakshaQR Member";
+
+    document.getElementById(
+        "rescuerStatus"
+    ).innerText = "";
+
     modal.classList.add("show");
 }
-
 function closeRescuerEmergency() {
-    document.getElementById("rescuerEmergencyModal").classList.remove("show");
+
+    document
+        .getElementById("rescuerEmergencyModal")
+        .classList.remove("show");
+}
+            async function sendRescuerEmergencyAlert() {
+
+    const nameInput =
+        document.getElementById("rescuerName");
+
+    const button =
+        document.getElementById(
+            "sendRescuerAlertBtn"
+        );
+
+    // Prevent duplicate emergency requests
+    if (button.disabled) {
+        return;
+    }
+
+    const phoneInput =
+        document.getElementById("rescuerPhone");
+
+    const withPerson =
+        document.getElementById("rescuerWithPerson");
+
+
+
+    const status =
+        document.getElementById("rescuerStatus");
+
+    const rescuerName =
+        nameInput.value.trim();
+
+    const rescuerPhone =
+        phoneInput.value.trim();
+
+    // ------------------------------------------
+    // Validation
+    // ------------------------------------------
+
+  if (!userId) {
+
+    status.className =
+        "rescuer-status error";
+
+    status.innerText =
+        "Invalid SurakshaQR profile.";
+
+    return;
 }
 
-async function sendRescuerEmergencyAlert() {
-    const nameInput = document.getElementById("rescuerName");
-    const button = document.getElementById("sendRescuerAlertBtn");
-    if (button.disabled) return;
-
-    const phoneInput = document.getElementById("rescuerPhone");
-    const withPerson = document.getElementById("rescuerWithPerson");
-    const status = document.getElementById("rescuerStatus");
-    const rescuerName = nameInput.value.trim();
-    const rescuerPhone = phoneInput.value.trim();
-
-    // Validation
-    if (!userId) {
-        status.className = "rescuer-status error";
-        status.innerText = "Invalid SurakshaQR profile.";
-        return;
-    }
-
     if (!rescuerName) {
-        status.className = "rescuer-status error";
-        status.innerText = "Please enter your name.";
+
+        status.className =
+            "rescuer-status error";
+
+        status.innerText =
+            "Please enter your name.";
+
         nameInput.focus();
+
         return;
     }
 
-    if (!rescuerPhone) {
-        status.className = "rescuer-status error";
-        status.innerText = "Please enter your phone number.";
-        phoneInput.focus();
-        return;
-    }
+ if (!rescuerPhone) {
+
+    status.className =
+        "rescuer-status error";
+
+    status.innerText =
+        "Please enter your phone number.";
+
+    phoneInput.focus();
+
+    return;
+}
 
 // ------------------------------------------
 // STRICT PHONE VALIDATION
@@ -826,70 +1694,156 @@ else if (
     normalizedPhone =
         normalizedPhone.substring(2);
 }
+
 // Exactly 10 digits
 if (!/^[6-9]\d{9}$/.test(normalizedPhone)) {
-    status.className = "rescuer-status error";
-    status.innerText = "Please enter a valid 10-digit Indian mobile number.";
+
+    status.className =
+        "rescuer-status error";
+
+    status.innerText =
+        "Please enter a valid 10-digit Indian mobile number.";
+
     phoneInput.focus();
+
     return;
 }
 
 if (!withPerson.checked) {
-    status.className = "rescuer-status error";
-    status.innerText = "Please confirm that you are with this person.";
-    return;
-}
 
-// Loading state
-button.disabled = true;
-button.innerHTML = '<i class="fas fa-spinner fa-spin"></i> SENDING...';
-status.className = "rescuer-status";
-status.innerText = "Contacting emergency guardians...";
+        status.className =
+            "rescuer-status error";
 
-try {
-    // Verify target user first
-    const userDoc = await db.collection("users_data").doc(userId).get();
+        status.innerText =
+            "Please confirm that you are with this person.";
 
-    if (!userDoc.exists) {
-        throw new Error("SurakshaQR profile not found.");
+        return;
     }
 
-    const userData = userDoc.data();
+    // ------------------------------------------
+    // Loading state
+    // ------------------------------------------
 
-    // Create emergency request
-    const requestRef = await db.collection("rescuer_emergency_requests").add({
-        targetUserUid: userId,
-        targetUserName: userData.Name || "SurakshaQR Member",
-        rescuerName: rescuerName,
-        rescuerPhone: normalizedPhone,
-        withPerson: true,
-        status: "PENDING",
-        createdAt: firebase.firestore.FieldValue.serverTimestamp(),
-        source: "QR_WEB",
-        userAgent: navigator.userAgent
-    });
+    button.disabled = true;
 
-    console.log("🚨 Rescuer emergency request created:", requestRef.id);
+    button.innerHTML =
+        '<i class="fas fa-spinner fa-spin"></i> SENDING...';
 
-    // Success
-    status.className = "rescuer-status success";
-    status.innerText = "Emergency alert sent successfully.";
-    button.innerHTML = '<i class="fas fa-check"></i> ALERT SENT';
+    status.className =
+        "rescuer-status";
 
-} catch (error) {
-    console.error("❌ Rescuer emergency request error:", error);
+    status.innerText =
+        "Contacting emergency guardians...";
 
-    status.className = "rescuer-status error";
-    status.innerText = "Unable to send emergency alert. Please try again.";
+    try {
 
-    button.disabled = false;
-    button.innerHTML = '<i class="fas fa-bell"></i> SEND EMERGENCY ALERT';
+        // --------------------------------------
+        // Verify target user first
+        // --------------------------------------
+
+        const userDoc = await db
+            .collection("users_data")
+            .doc(userId)
+            .get();
+
+        if (!userDoc.exists) {
+            throw new Error(
+                "SurakshaQR profile not found."
+            );
+        }
+
+        const userData = userDoc.data();
+
+        // --------------------------------------
+        // Create emergency request
+        // --------------------------------------
+
+        const requestRef = await db
+            .collection("rescuer_emergency_requests")
+            .add({
+
+                targetUserUid: userId,
+
+                targetUserName:
+                    userData.Name || "SurakshaQR Member",
+
+                rescuerName: rescuerName,
+
+rescuerPhone: normalizedPhone,
+
+                withPerson: true,
+
+                status: "PENDING",
+
+                createdAt:
+                    firebase.firestore.FieldValue
+                        .serverTimestamp(),
+
+                source: "QR_WEB",
+
+                userAgent:
+                    navigator.userAgent
+
+            });
+
+        console.log(
+            "🚨 Rescuer emergency request created:",
+            requestRef.id
+        );
+
+        // --------------------------------------
+        // Success
+        // --------------------------------------
+
+        status.className =
+            "rescuer-status success";
+
+        status.innerText =
+            "Emergency alert sent successfully.";
+
+        button.innerHTML =
+            '<i class="fas fa-check"></i> ALERT SENT';
+
+        // Don't close immediately.
+        // User should see confirmation.
+
+    } catch (error) {
+
+        console.error(
+            "❌ Rescuer emergency request error:",
+            error
+        );
+
+        status.className =
+            "rescuer-status error";
+
+        status.innerText =
+            "Unable to send emergency alert. Please try again.";
+
+        button.disabled = false;
+
+        button.innerHTML =
+            '<i class="fas fa-bell"></i> SEND EMERGENCY ALERT';
+    }
 }
 
+
+// ==========================================================
 // VAULT MODAL — CLOSE WHEN CLICKING OUTSIDE THE CARD
-document.getElementById('vaultModal').addEventListener('click', function (event) {
-    if (event.target === this) closeVault();
-});
+// ==========================================================
+
+document
+    .getElementById('vaultModal')
+    .addEventListener('click', function (event) {
+
+        // Only close when the dark background itself is clicked.
+        // Clicking inside the Vault card will NOT close it.
+
+        if (event.target === this) {
+            closeVault();
+        }
+
+    });
 
     </script>
 </body>
