@@ -343,15 +343,14 @@ if (!userId) {
 }
 
 try {
-    // 2. FIRESTORE PROFILE
     console.log('[PROFILE] Searching:', `users_data/${userId}`);
+
     const docRef = db.collection('users_data').doc(userId);
     const doc = await docRef.get();
 
     nameEl.classList.remove('shimmer');
     console.log('[PROFILE] Firestore document exists:', doc.exists);
 
-    // 3. PROFILE NOT FOUND
     if (!doc.exists) {
         console.error('[PROFILE] ❌ Profile not found:', `users_data/${userId}`);
         nameEl.innerText = 'Profile Not Found';
@@ -360,7 +359,6 @@ try {
         return;
     }
 
-    // 4. USER DATA
     const user = doc.data();
     console.log('[PROFILE] ✅ User data received:', user);
 
