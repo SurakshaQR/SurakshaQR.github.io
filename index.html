@@ -1279,7 +1279,260 @@ console.log('================================');
 
 
 
+// ======================================================
+// BLOOD BUDDIES MODAL — GLOBAL FUNCTIONS
+// ======================================================
 
+let currentBloodBuddyUser = null;
+
+
+// ------------------------------------------------------
+// OPEN BLOOD BUDDIES
+// ------------------------------------------------------
+
+function openBloodBuddies() {
+
+    const modal =
+        document.getElementById('bloodBuddyModal');
+
+    const bloodBuddyList =
+        document.getElementById('bloodBuddyList');
+
+    if (!modal || !bloodBuddyList) {
+        console.error(
+            '[BLOOD BUDDY] Modal elements not found.'
+        );
+        return;
+    }
+
+    bloodBuddyList.innerHTML = '';
+
+    const user =
+        currentBloodBuddyUser;
+
+    if (!user) {
+
+        bloodBuddyList.innerHTML = `
+            <div class="buddy-empty">
+                <i class="fas fa-spinner fa-spin"></i>
+                Loading profile...
+            </div>
+        `;
+
+        modal.classList.add('show');
+
+        return;
+    }
+
+
+    // ==================================================
+    // QR SECURITY CHECK
+    // ==================================================
+
+    if (user.Blood_Buddy_QR_Enabled !== true) {
+
+        bloodBuddyList.innerHTML = `
+            <div class="buddy-empty">
+
+                <i class="fas fa-lock"></i>
+
+                <div>
+                    Blood Buddy contacts are protected.
+                </div>
+
+                <div style="
+                    margin-top:8px;
+                    font-size:9px;
+                    opacity:0.5;
+                    line-height:1.5;
+                ">
+                    Enable Blood Buddy QR from the
+                    SurakshaQR app to view contacts.
+                </div>
+
+            </div>
+        `;
+
+        modal.classList.add('show');
+
+        return;
+    }
+
+
+    // ==================================================
+    // READ BLOOD BUDDIES
+    // ==================================================
+
+    const raw =
+        user.Blood_Buddy || '';
+
+    const buddies =
+        raw
+            .split(',')
+            .map(item => item.trim())
+            .filter(item => item.length > 0)
+            .map(item => {
+
+                const parts =
+                    item.split(':');
+
+                return {
+                    name:
+                        (parts[0] || '').trim(),
+
+                    phone:
+                        (parts.slice(1).join(':') || '').trim()
+                };
+
+            })
+            .filter(item =>
+                item.name &&
+                item.phone
+            )
+            .slice(0, 3);
+
+
+    // ==================================================
+    // NO BUDDIES
+    // ==================================================
+
+    if (buddies.length === 0) {
+
+        bloodBuddyList.innerHTML = `
+            <div class="buddy-empty">
+
+                <i class="fas fa-user-group"></i>
+
+                No Blood Buddies available.
+
+            </div>
+        `;
+
+        modal.classList.add('show');
+
+        return;
+    }
+
+
+    // ==================================================
+    // CREATE PROFESSIONAL BUDDY CARDS
+    // ==================================================
+
+    buddies.forEach((buddy, index) => {
+
+        const item =
+            document.createElement('div');
+
+        item.className =
+            'buddy-item';
+
+
+        const info =
+            document.createElement('div');
+
+        info.className =
+            'buddy-info';
+
+
+        const number =
+            document.createElement('div');
+
+        number.className =
+            'buddy-number';
+
+        number.textContent =
+            `Blood Buddy ${index + 1}`;
+
+
+        const name =
+            document.createElement('div');
+
+        name.className =
+            'buddy-name';
+
+        name.textContent =
+            buddy.name;
+
+
+        const phone =
+            document.createElement('div');
+
+        phone.className =
+            'buddy-phone';
+
+        phone.textContent =
+            buddy.phone;
+
+
+        info.appendChild(number);
+        info.appendChild(name);
+        info.appendChild(phone);
+
+
+        // CALL BUTTON
+
+        const call =
+            document.createElement('a');
+
+        call.className =
+            'buddy-call-btn';
+
+        call.href =
+            `tel:${buddy.phone}`;
+
+        call.innerHTML =
+            `<i class="fas fa-phone"></i> CALL`;
+
+
+        item.appendChild(info);
+        item.appendChild(call);
+
+        bloodBuddyList.appendChild(item);
+
+    });
+
+
+    modal.classList.add('show');
+}
+
+
+// ======================================================
+// CLOSE BLOOD BUDDIES
+// ======================================================
+
+function closeBloodBuddies() {
+
+    const modal =
+        document.getElementById('bloodBuddyModal');
+
+    if (!modal) return;
+
+    modal.classList.remove('show');
+}
+
+
+// ======================================================
+// CLICK OUTSIDE MODAL = CLOSE
+// ======================================================
+
+document.addEventListener(
+    'click',
+    function(event) {
+
+        const modal =
+            document.getElementById('bloodBuddyModal');
+
+        if (
+            modal &&
+            event.target === modal
+        ) {
+
+            closeBloodBuddies();
+
+        }
+
+    }
+);
 
 async function loadFirestoreData() {
 
@@ -1358,13 +1611,16 @@ async function loadFirestoreData() {
         // 4. USER DATA
         // ======================================================
 
-        const user =
-            doc.data();
+       const user =
+    doc.data();
 
-        console.log(
-            '[PROFILE] ✅ User data received:',
-            user
-        );
+currentBloodBuddyUser =
+    user;
+
+console.log(
+    '[PROFILE] ✅ User data received:',
+    user
+);
 
         // ======================================================
         // 5. ACCOUNT STATUS
