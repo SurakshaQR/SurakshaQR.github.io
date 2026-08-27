@@ -333,87 +333,36 @@ async function loadFirestoreData() {
     // ==========================================================
     // 1. CHECK USER ID
     // ==========================================================
+if (!userId) {
+    console.error('[PROFILE] ❌ No user ID found in URL.');
+    nameEl.classList.remove('shimmer');
+    nameEl.innerText = 'Invalid Scan';
+    statusEl.innerText = 'NO USER ID';
+    statusEl.style.color = '#ff4757';
+    return;
+}
 
-    if (!userId) {
+try {
+    // 2. FIRESTORE PROFILE
+    console.log('[PROFILE] Searching:', `users_data/${userId}`);
+    const docRef = db.collection('users_data').doc(userId);
+    const doc = await docRef.get();
 
-        console.error(
-            '[PROFILE] ❌ No user ID found in URL.'
-        );
+    nameEl.classList.remove('shimmer');
+    console.log('[PROFILE] Firestore document exists:', doc.exists);
 
-        nameEl.classList.remove('shimmer');
-
-        nameEl.innerText =
-            'Invalid Scan';
-
-        statusEl.innerText =
-            'NO USER ID';
-
-        statusEl.style.color =
-            '#ff4757';
-
+    // 3. PROFILE NOT FOUND
+    if (!doc.exists) {
+        console.error('[PROFILE] ❌ Profile not found:', `users_data/${userId}`);
+        nameEl.innerText = 'Profile Not Found';
+        statusEl.innerText = 'NOT FOUND';
+        statusEl.style.color = '#ff4757';
         return;
     }
 
-    try {
-
-        // ======================================================
-        // 2. FIRESTORE PROFILE
-        // ======================================================
-
-        console.log(
-            '[PROFILE] Searching:',
-            `users_data/${userId}`
-        );
-
-        const docRef =
-            db
-                .collection('users_data')
-                .doc(userId);
-
-        const doc =
-            await docRef.get();
-
-        nameEl.classList.remove('shimmer');
-
-        console.log(
-            '[PROFILE] Firestore document exists:',
-            doc.exists
-        );
-
-        // ======================================================
-        // 3. PROFILE NOT FOUND
-        // ======================================================
-
-        if (!doc.exists) {
-
-            console.error(
-                '[PROFILE] ❌ Profile not found:',
-                `users_data/${userId}`
-            );
-
-            nameEl.innerText =
-                'Profile Not Found';
-
-            statusEl.innerText =
-                'NOT FOUND';
-
-            statusEl.style.color =
-                '#ff4757';
-
-            return;
-        }
-
-        // ======================================================
-        // 4. USER DATA
-        // ======================================================
-
-        const user =
-            doc.data();
-
-        console.log(
-            '[PROFILE] ✅ User data received:',
-            user
-        );
+    // 4. USER DATA
+    const user = doc.data();
+    console.log('[PROFILE] ✅ User data received:', user);
 
         // ======================================================
         // 5. ACCOUNT STATUS
