@@ -75,286 +75,166 @@
     box-sizing: border-box;
 }
 
-.rescuer-modal.show {
-    display: flex;
-}
-
 .rescuer-modal-card {
-
-    width: 100%;
-
-    max-width: 390px;
-
-    background:
-        linear-gradient(
-            145deg,
-            rgba(35, 20, 28, 0.98),
-            rgba(8, 10, 14, 0.98)
-        );
-
-    border: 1px solid rgba(255, 71, 87, 0.35);
-
-    border-radius: 28px;
-
-    padding: 25px;
-
-    box-sizing: border-box;
-
-    box-shadow:
-        0 25px 80px rgba(0, 0, 0, 0.7),
-        0 0 30px rgba(255, 71, 87, 0.12);
-
-    position: relative;
-
-    animation: rescuerModalIn 0.25s ease;
+  width: 100%;
+  max-width: 390px;
+  background: linear-gradient(145deg, rgba(35, 20, 28, 0.98), rgba(8, 10, 14, 0.98));
+  border: 1px solid rgba(255, 71, 87, 0.35);
+  border-radius: 28px;
+  padding: 25px;
+  box-sizing: border-box;
+  box-shadow: 0 25px 80px rgba(0, 0, 0, 0.7), 0 0 30px rgba(255, 71, 87, 0.12);
+  position: relative;
+  animation: rescuerModalIn 0.25s ease;
 }
 
 @keyframes rescuerModalIn {
-
-    from {
-        opacity: 0;
-        transform: translateY(25px) scale(0.96);
-    }
-
-    to {
-        opacity: 1;
-        transform: translateY(0) scale(1);
-    }
-
+  from {
+    opacity: 0;
+    transform: translateY(25px) scale(0.96);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0) scale(1);
+  }
 }
 
 .rescuer-close {
-
-    position: absolute;
-
-    top: 15px;
-
-    right: 15px;
-
-    width: 36px;
-
-    height: 36px;
-
-    border-radius: 50%;
-
-    border: 1px solid rgba(255,255,255,0.1);
-
-    background: rgba(255,255,255,0.05);
-
-    color: white;
-
-    cursor: pointer;
-
-    font-size: 14px;
+  position: absolute;
+  top: 15px;
+  right: 15px;
+  width: 36px;
+  height: 36px;
+  border-radius: 50%;
+  border: 1px solid rgba(255,255,255,0.1);
+  background: rgba(255,255,255,0.05);
+  color: white;
+  cursor: pointer;
+  font-size: 14px;
 }
-
-.rescuer-icon {
-
-    width: 58px;
-
-    height: 58px;
-
-    border-radius: 18px;
-
-    display: flex;
-
-    align-items: center;
-
-    justify-content: center;
-
-    background: rgba(255, 71, 87, 0.12);
-
-    border: 1px solid rgba(255, 71, 87, 0.25);
-
-    color: #ff4757;
-
-    font-size: 25px;
-
-    margin-bottom: 15px;
+        .rescuer-icon {
+  width: 58px;
+  height: 58px;
+  border-radius: 18px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: rgba(255, 71, 87, 0.12);
+  border: 1px solid rgba(255, 71, 87, 0.25);
+  color: #ff4757;
+  font-size: 25px;
+  margin-bottom: 15px;
 }
 
 .rescuer-modal-card h2 {
-
-    margin: 0;
-
-    font-size: 23px;
-
-    font-weight: 800;
+  margin: 0;
+  font-size: 23px;
+  font-weight: 800;
 }
 
 .rescuer-subtitle {
-
-    font-size: 12px;
-
-    line-height: 1.6;
-
-    opacity: 0.6;
-
-    margin: 8px 0 18px;
+  font-size: 12px;
+  line-height: 1.6;
+  opacity: 0.6;
+  margin: 8px 0 18px;
 }
 
 .rescuer-target {
-
-    padding: 14px;
-
-    border-radius: 16px;
-
-    background: rgba(255,255,255,0.04);
-
-    border: 1px solid rgba(255,255,255,0.07);
-
-    margin-bottom: 18px;
+  padding: 14px;
+  border-radius: 16px;
+  background: rgba(255,255,255,0.04);
+  border: 1px solid rgba(255,255,255,0.07);
+  margin-bottom: 18px;
 }
 
 .rescuer-target span {
-
-    display: block;
-
-    font-size: 9px;
-
-    text-transform: uppercase;
-
-    opacity: 0.45;
-
-    margin-bottom: 5px;
+  display: block;
+  font-size: 9px;
+  text-transform: uppercase;
+  opacity: 0.45;
+  margin-bottom: 5px;
 }
 
 .rescuer-target strong {
-
-    font-size: 16px;
-
-    color: var(--gold);
+  font-size: 16px;
+  color: var(--gold);
 }
 
 .rescuer-modal-card label:not(.rescuer-checkbox) {
-
-    display: block;
-
-    font-size: 10px;
-
-    text-transform: uppercase;
-
-    font-weight: 800;
-
-    opacity: 0.55;
-
-    margin: 14px 0 7px;
+  display: block;
+  font-size: 10px;
+  text-transform: uppercase;
+  font-weight: 800;
+  opacity: 0.55;
+  margin: 14px 0 7px;
 }
-
 .rescuer-modal-card input[type="text"],
 .rescuer-modal-card input[type="tel"] {
-
-    width: 100%;
-
-    box-sizing: border-box;
-
-    padding: 14px 15px;
-
-    border-radius: 14px;
-
-    border: 1px solid rgba(255,255,255,0.1);
-
-    background: rgba(255,255,255,0.05);
-
-    color: white;
-
-    outline: none;
-
-    font-family: inherit;
-
-    font-size: 14px;
+  width: 100%;
+  box-sizing: border-box;
+  padding: 14px 15px;
+  border-radius: 14px;
+  border: 1px solid rgba(255,255,255,0.1);
+  background: rgba(255,255,255,0.05);
+  color: white;
+  outline: none;
+  font-family: inherit;
+  font-size: 14px;
 }
 
 .rescuer-modal-card input:focus {
-
-    border-color: rgba(255, 71, 87, 0.6);
+  border-color: rgba(255,71,87,0.6);
 }
 
 .rescuer-checkbox {
-
-    display: flex;
-
-    align-items: center;
-
-    gap: 10px;
-
-    margin: 18px 0;
-
-    font-size: 12px;
-
-    color: rgba(255,255,255,0.8);
-
-    cursor: pointer;
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  margin: 18px 0;
+  font-size: 12px;
+  color: rgba(255,255,255,0.8);
+  cursor: pointer;
 }
 
 .rescuer-checkbox input {
-
-    width: 18px;
-
-    height: 18px;
-
-    accent-color: #2ed573;
+  width: 18px;
+  height: 18px;
+  accent-color: #2ed573;
 }
 
 .rescuer-send-btn {
-
-    width: 100%;
-
-    border: 0;
-
-    border-radius: 17px;
-
-    padding: 16px;
-
-    background:
-        linear-gradient(
-            135deg,
-            #ff4757,
-            #ff6b81
-        );
-
-    color: white;
-
-    font-family: inherit;
-
-    font-size: 13px;
-
-    font-weight: 800;
-
-    cursor: pointer;
-
-    box-shadow:
-        0 10px 25px rgba(255, 71, 87, 0.22);
+  width: 100%;
+  border: 0;
+  border-radius: 17px;
+  padding: 16px;
+  background: linear-gradient(135deg,#ff4757,#ff6b81);
+  color: white;
+  font-family: inherit;
+  font-size: 13px;
+  font-weight: 800;
+  cursor: pointer;
+  box-shadow: 0 10px 25px rgba(255,71,87,0.22);
 }
 
 .rescuer-send-btn:disabled {
-
-    opacity: 0.55;
-
-    cursor: not-allowed;
+  opacity: 0.55;
+  cursor: not-allowed;
 }
 
 .rescuer-status {
-
-    min-height: 20px;
-
-    text-align: center;
-
-    font-size: 11px;
-
-    margin-top: 12px;
+  min-height: 20px;
+  text-align: center;
+  font-size: 11px;
+  margin-top: 12px;
 }
 
 .rescuer-status.success {
-
-    color: #2ed573;
+  color: #2ed573;
 }
 
 .rescuer-status.error {
-
-    color: #ff6b81;
+  color: #ff6b81;
 }
-
         /* ==========================================================
    SECURE VAULT WEB MODAL
    ========================================================== */
@@ -379,243 +259,166 @@
 .vault-modal.show {
     display: flex;
 }
-
 .vault-modal-card {
-    width: 100%;
-    max-width: 390px;
-
-    max-height: 88vh;
-    overflow-y: auto;
-
-    background:
-        linear-gradient(
-            145deg,
-            rgba(14, 20, 27, 0.99),
-            rgba(5, 8, 12, 0.99)
-        );
-
-    border: 1px solid rgba(0, 229, 255, 0.35);
-
-    border-radius: 24px;
-
-    padding: 20px;
-
-    box-sizing: border-box;
-
-    box-shadow:
-        0 25px 80px rgba(0,0,0,0.75),
-        0 0 35px rgba(0,229,255,0.10);
-
-    position: relative;
-
-    animation: vaultModalIn 0.25s ease;
+  width: 100%;
+  max-width: 390px;
+  max-height: 88vh;
+  overflow-y: auto;
+  background: linear-gradient(145deg, rgba(14,20,27,0.99), rgba(5,8,12,0.99));
+  border: 1px solid rgba(0,229,255,0.35);
+  border-radius: 24px;
+  padding: 20px;
+  box-sizing: border-box;
+  box-shadow: 0 25px 80px rgba(0,0,0,0.75), 0 0 35px rgba(0,229,255,0.10);
+  position: relative;
+  animation: vaultModalIn 0.25s ease;
 }
 
 @keyframes vaultModalIn {
-    from {
-        opacity: 0;
-        transform: translateY(20px) scale(0.96);
-    }
-
-    to {
-        opacity: 1;
-        transform: translateY(0) scale(1);
-    }
+  from {
+    opacity: 0;
+    transform: translateY(20px) scale(0.96);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0) scale(1);
+  }
 }
 
 .vault-close {
-    position: absolute;
-
-    top: 14px;
-    right: 14px;
-
-    width: 34px;
-    height: 34px;
-
-    border-radius: 50%;
-
-    border: 1px solid rgba(255,255,255,0.10);
-
-    background: rgba(255,255,255,0.05);
-
-    color: white;
-
-    cursor: pointer;
+  position: absolute;
+  top: 14px;
+  right: 14px;
+  width: 34px;
+  height: 34px;
+  border-radius: 50%;
+  border: 1px solid rgba(255,255,255,0.10);
+  background: rgba(255,255,255,0.05);
+  color: white;
+  cursor: pointer;
 }
 
 .vault-header {
-    display: flex;
-    align-items: center;
-    gap: 12px;
-
-    margin-bottom: 18px;
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  margin-bottom: 18px;
 }
-
 .vault-header-icon {
-    width: 45px;
-    height: 45px;
-
-    border-radius: 14px;
-
-    display: flex;
-    align-items: center;
-    justify-content: center;
-
-    background: rgba(0,229,255,0.08);
-
-    border: 1px solid rgba(0,229,255,0.25);
-
-    color: #00e5ff;
-
-    font-size: 18px;
+    width:45px;
+    height:45px;
+    border-radius:14px;
+    display:flex;
+    align-items:center;
+    justify-content:center;
+    background:rgba(0,229,255,.08);
+    border:1px solid rgba(0,229,255,.25);
+    color:#00e5ff;
+    font-size:18px;
 }
 
 .vault-header h2 {
-    margin: 0;
-
-    font-size: 19px;
-    font-weight: 800;
+    margin:0;
+    font-size:19px;
+    font-weight:800;
 }
 
 .vault-header p {
-    margin: 4px 0 0;
-
-    font-size: 10px;
-
-    opacity: 0.5;
+    margin:4px 0 0;
+    font-size:10px;
+    opacity:.5;
 }
 
 .vault-document {
-    border-radius: 18px;
-
-    padding: 15px;
-
-    margin-bottom: 12px;
-
-    background: rgba(255,255,255,0.025);
-
-    border: 1px solid rgba(255,255,255,0.08);
+    border-radius:18px;
+    padding:15px;
+    margin-bottom:12px;
+    background:rgba(255,255,255,.025);
+    border:1px solid rgba(255,255,255,.08);
 }
 
 .vault-document-title {
-    display: flex;
-    align-items: center;
-    justify-content: space-between;
-
-    margin-bottom: 12px;
+    display:flex;
+    align-items:center;
+    justify-content:space-between;
+    margin-bottom:12px;
 }
 
-.vault-document-title strong {
-    font-size: 14px;
-}
+.vault-document-title strong { font-size:14px; }
 
 .vault-visible {
-    font-size: 9px;
-
-    color: #2ed573;
-
-    background: rgba(46,213,115,0.10);
-
-    border: 1px solid rgba(46,213,115,0.20);
-
-    padding: 4px 8px;
-
-    border-radius: 20px;
+    font-size:9px;
+    color:#2ed573;
+    background:rgba(46,213,115,.10);
+    border:1px solid rgba(46,213,115,.20);
+    padding:4px 8px;
+    border-radius:20px;
 }
 
 .vault-document img {
-    width: 100%;
-
-    max-height: 420px;
-
-    object-fit: contain;
-
-    border-radius: 12px;
-
-    background: #000;
-
-    display: block;
+    width:100%;
+    max-height:420px;
+    object-fit:contain;
+    border-radius:12px;
+    background:#000;
+    display:block;
 }
 
 .vault-empty {
-    text-align: center;
-
-    padding: 30px 15px;
-
-    color: rgba(255,255,255,0.55);
-
-    font-size: 12px;
-
-    line-height: 1.6;
+    text-align:center;
+    padding:30px 15px;
+    color:rgba(255,255,255,.55);
+    font-size:12px;
+    line-height:1.6;
 }
 
 .vault-loading {
-    text-align: center;
-
-    padding: 35px 15px;
-
-    color: #00e5ff;
-
-    font-size: 12px;
+    text-align:center;
+    padding:35px 15px;
+    color:#00e5ff;
+    font-size:12px;
 }
 
 .vault-error {
-    text-align: center;
-
-    padding: 25px 15px;
-
-    color: #ff6b81;
-
-    font-size: 12px;
-
-    line-height: 1.6;
+    text-align:center;
+    padding:25px 15px;
+    color:#ff6b81;
+    font-size:12px;
+    line-height:1.6;
 }
-    </style>
+</style>
 </head>
 
+<body>
+<div class="container">
+    <div class="header">
+        <img src="https://raw.githubusercontent.com/SurakshaQR/SurakshaQR.github.io/main/logo.png.png" id="mainLogo" class="logo-img" alt="SurakshaQR Logo">
+        <div class="brand-name">SURAKSHA<span>QR</span></div>
+        <div class="trust-badge"><i class="fas fa-shield-check"></i> VERIFIED SAFETY PROFILE</div>
+    </div>
 
-    <body>
-    <div class="container">
-        <div class="header">
-            <img src="https://raw.githubusercontent.com/SurakshaQR/SurakshaQR.github.io/main/logo.png.png" 
-                 id="mainLogo" class="logo-img" alt="SurakshaQR Logo">
-
-                
-            <div class="brand-name">SURAKSHA<span>QR</span></div>
-            <div class="trust-badge"><i class="fas fa-shield-check"></i> VERIFIED SAFETY PROFILE</div>
+    <div class="bento-grid">
+        <div class="card full">
+            <div class="label">Primary Member</div>
+            <h1 id="userName" class="shimmer">Scanning Profile...</h1>
+            <div id="bloodGroup" class="blood-tag"><i class="fas fa-tint"></i> ---</div>
         </div>
 
-        <div class="bento-grid">
-            <div class="card full">
-                <div class="label">Primary Member</div>
-                <h1 id="userName" class="shimmer">Scanning Profile...</h1>
-                <div id="bloodGroup" class="blood-tag"><i class="fas fa-tint"></i> ---</div>
+        <div class="card" onclick="openVault()">
+            <div class="label">Vault</div>
+            <div style="font-size:12px;font-weight:800;color:var(--gold)">
+                <i class="fas fa-lock"></i> ENCRYPTED
             </div>
+            <div style="font-size:9px;opacity:.45;margin-top:8px;">Emergency documents</div>
+        </div>
 
-            <div class="card" onclick="openVault()">
-    <div class="label">Vault</div>
+        <div class="card">
+            <div class="label">Identity</div>
+            <div id="statusLabel" style="font-size:12px;font-weight:800;color:#2ed573">VERIFIED</div>
+        </div>
 
-    <div style="font-size:12px; font-weight:800; color:var(--gold)">
-        <i class="fas fa-lock"></i> ENCRYPTED
-    </div>
-
-    <div style="font-size:9px; opacity:.45; margin-top:8px;">
-        Emergency documents
-    </div>
-</div>
-
-            <div class="card">
-                <div class="label">Identity</div>
-                <div id="statusLabel" style="font-size:12px; font-weight:800; color:#2ed573">VERIFIED</div>
-            </div>
-
-           <a href="javascript:void(0)"
-   id="callBtn"
-   class="btn btn-call full"
-   onclick="openRescuerEmergency(); return false;">
-
-    <i class="fas fa-phone-alt"></i>
-    EMERGENCY CALL
+        <a href="javascript:void(0)" id="callBtn" class="btn btn-call full" onclick="openRescuerEmergency();return false;">
+            <i class="fas fa-phone-alt"></i> EMERGENCY CALL
 
 </a>
             
@@ -635,176 +438,57 @@
         <!-- ==========================================
      SECURE VAULT MODAL
      ========================================== -->
-
 <div id="vaultModal" class="vault-modal">
-
     <div class="vault-modal-card">
-
-        <button
-            type="button"
-            class="vault-close"
-            onclick="closeVault()">
-
-            <i class="fas fa-times"></i>
-
-        </button>
-
+        <button type="button" class="vault-close" onclick="closeVault()"><i class="fas fa-times"></i></button>
         <div class="vault-header">
-
-            <div class="vault-header-icon">
-
-                <i class="fas fa-shield-halved"></i>
-
-            </div>
-
+            <div class="vault-header-icon"><i class="fas fa-shield-halved"></i></div>
             <div>
-
                 <h2>Emergency Vault</h2>
-
-                <p>
-                    Documents shared by the member
-                </p>
-
+                <p>Documents shared by the member</p>
             </div>
-
         </div>
-
         <div id="vaultContent">
-
             <div class="vault-loading">
-
-                <i class="fas fa-spinner fa-spin"></i>
-
-                <br><br>
-
+                <i class="fas fa-spinner fa-spin"></i><br><br>
                 Verifying vault access...
-
             </div>
-
         </div>
-
     </div>
-
 </div>
-     <!-- ==========================================
-     RESCUER EMERGENCY MODAL
-     ========================================== -->
 
+<!-- RESCUER EMERGENCY MODAL -->
 <div id="rescuerEmergencyModal" class="rescuer-modal">
-
     <div class="rescuer-modal-card">
+        <button type="button" class="rescuer-close" onclick="closeRescuerEmergency()"><i class="fas fa-times"></i></button>
 
-        <!-- Close -->
-        <button
-            type="button"
-            class="rescuer-close"
-            onclick="closeRescuerEmergency()">
+        <div class="rescuer-icon"><i class="fas fa-triangle-exclamation"></i></div>
 
-            <i class="fas fa-times"></i>
-
-        </button>
-
-
-        <!-- Emergency Icon -->
-        <div class="rescuer-icon">
-
-            <i class="fas fa-triangle-exclamation"></i>
-
-        </div>
-
-
-        <!-- Title -->
         <h2>Emergency Contact</h2>
+        <p class="rescuer-subtitle">You are about to notify the emergency guardians of this SurakshaQR member.</p>
 
-        <p class="rescuer-subtitle">
-
-            You are about to notify the emergency guardians
-            of this SurakshaQR member.
-
-        </p>
-
-
-        <!-- Target User -->
         <div class="rescuer-target">
-
             <span>PERSON NEEDING HELP</span>
-
-            <strong id="rescuerTargetName">
-                Loading...
-            </strong>
-
+            <strong id="rescuerTargetName">Loading...</strong>
         </div>
 
+        <label for="rescuerName">YOUR NAME</label>
+        <input type="text" id="rescuerName" placeholder="Enter your name" autocomplete="name">
 
-        <!-- Rescuer Name -->
-        <label for="rescuerName">
+        <label for="rescuerPhone">YOUR PHONE NUMBER</label>
+        <input type="tel" id="rescuerPhone" placeholder="10-digit mobile number" autocomplete="tel" inputmode="numeric" maxlength="15">
 
-            YOUR NAME
-
-        </label>
-
-        <input
-            type="text"
-            id="rescuerName"
-            placeholder="Enter your name"
-            autocomplete="name"
-        >
-
-
-        <!-- Rescuer Phone -->
-        <label for="rescuerPhone">
-
-            YOUR PHONE NUMBER
-
-        </label>
-
-        <input
-    type="tel"
-    id="rescuerPhone"
-    placeholder="10-digit mobile number"
-    autocomplete="tel"
-    inputmode="numeric"
-    maxlength="15"
->
-
-
-        <!-- Confirmation -->
         <label class="rescuer-checkbox">
-
-            <input
-                type="checkbox"
-                id="rescuerWithPerson"
-            >
-
-            <span>
-                I am with this person
-            </span>
-
+            <input type="checkbox" id="rescuerWithPerson">
+            <span>I am with this person</span>
         </label>
 
-
-        <!-- Send -->
-        <button
-            type="button"
-            id="sendRescuerAlertBtn"
-            class="rescuer-send-btn"
-            onclick="sendRescuerEmergencyAlert()">
-
-            <i class="fas fa-bell"></i>
-
-            SEND EMERGENCY ALERT
-
+        <button type="button" id="sendRescuerAlertBtn" class="rescuer-send-btn" onclick="sendRescuerEmergencyAlert()">
+            <i class="fas fa-bell"></i> SEND EMERGENCY ALERT
         </button>
 
-
-        <!-- Status -->
-        <div
-            id="rescuerStatus"
-            class="rescuer-status">
-        </div>
-
+        <div id="rescuerStatus" class="rescuer-status"></div>
     </div>
-
 </div>
 
         <script>
@@ -864,275 +548,103 @@ async function loadFirestoreData() {
     // ==========================================================
 
     if (!userId) {
+    console.error('[PROFILE] ❌ No user ID found in URL.');
+    nameEl.classList.remove('shimmer');
+    nameEl.innerText = 'Invalid Scan';
+    statusEl.innerText = 'NO USER ID';
+    statusEl.style.color = '#ff4757';
+    return;
+}
 
-        console.error(
-            '[PROFILE] ❌ No user ID found in URL.'
-        );
+try {
+    console.log('[PROFILE] Searching:', `users_data/${userId}`);
 
-        nameEl.classList.remove('shimmer');
+    const docRef = db.collection('users_data').doc(userId);
+    const doc = await docRef.get();
 
-        nameEl.innerText =
-            'Invalid Scan';
+    nameEl.classList.remove('shimmer');
+    console.log('[PROFILE] Firestore document exists:', doc.exists);
 
-        statusEl.innerText =
-            'NO USER ID';
-
-        statusEl.style.color =
-            '#ff4757';
-
+    if (!doc.exists) {
+        console.error('[PROFILE] ❌ Profile not found:', `users_data/${userId}`);
+        nameEl.innerText = 'Profile Not Found';
+        statusEl.innerText = 'NOT FOUND';
+        statusEl.style.color = '#ff4757';
         return;
     }
 
-    try {
+    const user = doc.data();
+    console.log('[PROFILE] ✅ User data received:', user);
 
-        // ======================================================
-        // 2. FIRESTORE PROFILE
-        // ======================================================
+    if (user.Status !== 'Active') {
+        console.warn('[PROFILE] ⚠️ User is not Active:', user.Status);
+        nameEl.innerText = 'System Ready';
+        statusEl.innerText = 'INACTIVE';
+        statusEl.style.color = 'orange';
+        return;
+    }
 
-        console.log(
-            '[PROFILE] Searching:',
-            `users_data/${userId}`
-        );
+    nameEl.innerText = user.Name || 'Registered User';
 
-        const docRef =
-            db
-                .collection('users_data')
-                .doc(userId);
+    document.getElementById('bloodGroup').innerHTML =
+        `<i class="fas fa-tint"></i> ${user.Blood_Group || 'N/A'}`;
 
-        const doc =
-            await docRef.get();
+    const buddyListDiv = document.getElementById('buddyList');
 
-        nameEl.classList.remove('shimmer');
-
-        console.log(
-            '[PROFILE] Firestore document exists:',
-            doc.exists
-        );
-
-        // ======================================================
-        // 3. PROFILE NOT FOUND
-        // ======================================================
-
-        if (!doc.exists) {
-
-            console.error(
-                '[PROFILE] ❌ Profile not found:',
-                `users_data/${userId}`
-            );
-
-            nameEl.innerText =
-                'Profile Not Found';
-
-            statusEl.innerText =
-                'NOT FOUND';
-
-            statusEl.style.color =
-                '#ff4757';
-
-            return;
-        }
-
-        // ======================================================
-        // 4. USER DATA
-        // ======================================================
-
-        const user =
-            doc.data();
-
-        console.log(
-            '[PROFILE] ✅ User data received:',
-            user
-        );
-
-        // ======================================================
-        // 5. ACCOUNT STATUS
-        // ======================================================
-
-        if (user.Status !== 'Active') {
-
-            console.warn(
-                '[PROFILE] ⚠️ User is not Active:',
-                user.Status
-            );
-
-            nameEl.innerText =
-                'System Ready';
-
-            statusEl.innerText =
-                'INACTIVE';
-
-            statusEl.style.color =
-                'orange';
-
-            return;
-        }
-
-        // ======================================================
-        // 6. BASIC PROFILE
-        // ======================================================
-
-        nameEl.innerText =
-            user.Name ||
-            'Registered User';
-
-        document
-            .getElementById('bloodGroup')
-            .innerHTML =
-                `<i class="fas fa-tint"></i> ${
-                    user.Blood_Group || 'N/A'
-                }`;
-
-        // ======================================================
-        // 7. BLOOD BUDDY
-        // ======================================================
-
-        const buddyListDiv =
-            document.getElementById(
-                'buddyList'
-            );
-
-        if (user.Blood_Buddy) {
-
-            buddyListDiv.innerHTML = `
-                <div class="buddy-item">
-
-                    <span>
-                        Blood Buddy
-                    </span>
-
-                    <a
-                        href="tel:${user.Blood_Buddy}"
-                        style="
-                            color:#2ed573;
-                            text-decoration:none;
-                            font-weight:800;
-                        "
-                    >
-                        CALL NOW
-                    </a>
-
-                </div>
-            `;
-
-        } else {
-
-            buddyListDiv.innerHTML =
-                '<div style="padding:10px; opacity:0.5;">No buddy found.</div>';
-        }
+    if (user.Blood_Buddy) {
+        buddyListDiv.innerHTML = `
+            <div class="buddy-item">
+                <span>Blood Buddy</span>
+                <a href="tel:${user.Blood_Buddy}" style="color:#2ed573;text-decoration:none;font-weight:800;">CALL NOW</a>
+            </div>`;
+    } else {
+        buddyListDiv.innerHTML =
+            '<div style="padding:10px;opacity:0.5;">No buddy found.</div>';
+    }
 
         // ======================================================
         // 8. SOCIAL LINKS
         // ======================================================
+const socialDiv = document.getElementById('socialLinks');
 
-        const socialDiv =
-            document.getElementById(
-                'socialLinks'
-            );
+if (user.Social_Links) {
+    socialDiv.innerHTML = '';
 
-        if (user.Social_Links) {
+    user.Social_Links.split(',').forEach(link => {
+        const cleanLink = link.trim();
+        let icon = 'fas fa-link';
 
-            socialDiv.innerHTML = '';
+        if (cleanLink.includes('facebook')) icon = 'fab fa-facebook';
+        if (cleanLink.includes('instagram')) icon = 'fab fa-instagram';
 
-            user.Social_Links
-                .split(',')
-                .forEach(link => {
+        socialDiv.innerHTML += `
+            <a href="${cleanLink}" target="_blank" rel="noopener noreferrer">
+                <i class="${icon}"></i>
+            </a>`;
+    });
+}
 
-                    const cleanLink =
-                        link.trim();
+if (user.Mobile) {
+    const msg = encodeURIComponent(
+        `SURAKSHAQR ALERT: Your vehicle needs attention. Please check immediately_ ${user.Name}!`
+    );
+    document.getElementById('notifyBtn').href =
+        `https://wa.me/${user.Mobile}?text=${msg}`;
+}
 
-                    let icon =
-                        'fas fa-link';
+console.log('[PROFILE] ✅ Profile loaded successfully:', user.Name);
+console.log('[PROFILE] UID:', userId);
+console.log('================================');
 
-                    if (
-                        cleanLink.includes(
-                            'facebook'
-                        )
-                    ) {
-                        icon =
-                            'fab fa-facebook';
-                    }
+} catch (error) {
+    console.error('[PROFILE] ❌ Firestore error:', error);
+    console.error('[PROFILE] UID used:', userId);
 
-                    if (
-                        cleanLink.includes(
-                            'instagram'
-                        )
-                    ) {
-                        icon =
-                            'fab fa-instagram';
-                    }
-
-                    socialDiv.innerHTML += `
-                        <a
-                            href="${cleanLink}"
-                            target="_blank"
-                            rel="noopener noreferrer"
-                        >
-                            <i
-                                class="${icon}"
-                            ></i>
-                        </a>
-                    `;
-                });
-        }
-
-        // ======================================================
-        // 9. WHATSAPP
-        // ======================================================
-
-        if (user.Mobile) {
-
-            const msg =
-                encodeURIComponent(
-                    `SURAKSHAQR ALERT: Your vehicle needs attention. Please check immediately_ ${user.Name}!`
-                );
-
-            document
-                .getElementById('notifyBtn')
-                .href =
-                    `https://wa.me/${user.Mobile}?text=${msg}`;
-        }
-
-        // ======================================================
-        // SUCCESS
-        // ======================================================
-
-        console.log(
-            '[PROFILE] ✅ Profile loaded successfully:',
-            user.Name
-        );
-
-        console.log(
-            '[PROFILE] UID:',
-            userId
-        );
-
-        console.log(
-            '================================'
-        );
-
-    } catch (error) {
-
-        console.error(
-            '[PROFILE] ❌ Firestore error:',
-            error
-        );
-
-        console.error(
-            '[PROFILE] UID used:',
-            userId
-        );
-
-        nameEl.classList.remove('shimmer');
-
-        nameEl.innerText =
-            'Profile Error';
-
-        statusEl.innerText =
-            'FIREBASE ERROR';
-
-        statusEl.style.color =
-            '#ff4757';
-    }
+    nameEl.classList.remove('shimmer');
+    nameEl.innerText = 'Profile Error';
+    statusEl.innerText = 'FIREBASE ERROR';
+    statusEl.style.color = '#ff4757';
+}
 }
 
 loadFirestoreData();
@@ -1140,150 +652,63 @@ loadFirestoreData();
             // ==========================================================
 // SECURE VAULT WEB FLOW
 // ==========================================================
-
 function openVault() {
-
-    const modal =
-        document.getElementById('vaultModal');
-
-    const content =
-        document.getElementById('vaultContent');
+    const modal = document.getElementById('vaultModal');
+    const content = document.getElementById('vaultContent');
 
     modal.classList.add('show');
-
     content.innerHTML = `
         <div class="vault-loading">
-            <i class="fas fa-spinner fa-spin"></i>
-            <br><br>
+            <i class="fas fa-spinner fa-spin"></i><br><br>
             Verifying vault access...
-        </div>
-    `;
-
+        </div>`;
     loadVaultDocuments();
 }
 
-
-// ==========================================================
-// CLOSE VAULT
-// ==========================================================
-
 function closeVault() {
-
-    document
-        .getElementById('vaultModal')
-        .classList.remove('show');
+    document.getElementById('vaultModal').classList.remove('show');
 }
 
-
-// ==========================================================
-// LOAD VAULT DOCUMENTS
-// ==========================================================
-
 async function loadVaultDocuments() {
-
-    const content =
-        document.getElementById('vaultContent');
-
-    // ======================================================
-    // CHECK USER ID
-    // ======================================================
+    const content = document.getElementById('vaultContent');
 
     if (!userId) {
-
-        console.error(
-            '[VAULT] ❌ No userId available.'
-        );
-
-        content.innerHTML = `
-            <div class="vault-error">
-                Invalid SurakshaQR profile.
-            </div>
-        `;
-
+        console.error('[VAULT] ❌ No userId available.');
+        content.innerHTML = `<div class="vault-error">Invalid SurakshaQR profile.</div>`;
         return;
     }
 
-    console.log(
-        '[VAULT] 🔐 Loading vault for UID:',
-        userId
-    );
+    console.log('[VAULT] 🔐 Loading vault for UID:', userId);
 
     try {
-
-        // ======================================================
-        // ONLY THESE TWO DOCUMENTS CAN BE SHARED
-        // ======================================================
-
         const allowedDocuments = [
-
-            {
-                folder: 'driving_licence',
-                title: 'Driving Licence',
-                icon: 'fa-id-card'
-            },
-
-            {
-                folder: 'mediclaim',
-                title: 'Mediclaim',
-                icon: 'fa-file-medical'
-            }
-
+            { folder: 'driving_licence', title: 'Driving Licence', icon: 'fa-id-card' },
+            { folder: 'mediclaim', title: 'Mediclaim', icon: 'fa-file-medical' }
         ];
 
         const visibleDocuments = [];
 
-        // ======================================================
-        // CHECK EACH DOCUMENT
-        // ======================================================
-
         for (const document of allowedDocuments) {
-
-            console.log(
-                '[VAULT] 🔎 Checking:',
-                document.folder
-            );
+            console.log('[VAULT] 🔎 Checking:', document.folder);
 
             try {
-
-                // ------------------------------------------------
-                // METADATA PATH
-                // ------------------------------------------------
-
                 const metadataPath =
                     `vault_documents/${userId}/${document.folder}/metadata.json`;
 
-                console.log(
-                    '[VAULT] 📄 Metadata path:',
-                    metadataPath
-                );
+                console.log('[VAULT] 📄 Metadata path:', metadataPath);
 
+                const metadataRef = storage.ref().child(metadataPath);
 
-const metadataRef =
-    storage
-        .ref()
-        .child(metadataPath);
+                console.log('[VAULT] 📄 Getting metadata URL:', document.folder);
 
-console.log(
-    '[VAULT] 📄 Getting metadata URL:',
-    document.folder
-);
+                const metadataUrl = await metadataRef.getDownloadURL();
 
-const metadataUrl =
-    await metadataRef.getDownloadURL();
+                console.log('[VAULT] ✅ Metadata URL received:', document.folder);
 
-console.log(
-    '[VAULT] ✅ Metadata URL received:',
-    document.folder
-);
-
-const response =
-    await fetch(
-        metadataUrl,
-        {
-            method: 'GET',
-            cache: 'no-store'
-        }
-    );
+                const response = await fetch(metadataUrl, {
+                    method: 'GET',
+                    cache: 'no-store'
+                }); 
 
 if (!response.ok) {
 
