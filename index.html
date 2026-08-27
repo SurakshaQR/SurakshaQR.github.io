@@ -1081,61 +1081,101 @@ async function loadFirestoreData() {
                 '<div style="padding:10px; opacity:0.5;">No buddy found.</div>';
         }
 
-        // ======================================================
-        // 8. SOCIAL LINKS
-        // ======================================================
+const socialDiv =
+    document.getElementById('socialLinks');
 
-        const socialDiv =
-            document.getElementById(
-                'socialLinks'
-            );
+socialDiv.innerHTML = '';
 
-        if (user.Social_Links) {
+if (user.Social_Links) {
 
-            socialDiv.innerHTML = '';
+    // DEBUG — Firestore থেকে ঠিক কী আসছে দেখুন
+    console.log(
+        'SOCIAL LINKS FROM FIRESTORE:',
+        user.Social_Links
+    );
 
-            user.Social_Links
-                .split(',')
-                .forEach(link => {
+    user.Social_Links
+        .split(',')
+        .map(link => link.trim())
+        .filter(link => link.length > 0)
+        .forEach(link => {
 
-                    const cleanLink =
-                        link.trim();
+            // --------------------------------------------------
+            // Make sure the URL is a real external URL
+            // --------------------------------------------------
 
-                    let icon =
-                        'fas fa-link';
+            let cleanLink = link.trim();
 
-                    if (
-                        cleanLink.includes(
-                            'facebook'
-                        )
-                    ) {
-                        icon =
-                            'fab fa-facebook';
-                    }
+            if (
+                !/^https?:\/\//i.test(cleanLink)
+            ) {
+                cleanLink =
+                    'https://' +
+                    cleanLink.replace(/^\/\//, '');
+            }
 
-                    if (
-                        cleanLink.includes(
-                            'instagram'
-                        )
-                    ) {
-                        icon =
-                            'fab fa-instagram';
-                    }
+            // Lowercase copy only for platform detection
+            const lowerLink =
+                cleanLink.toLowerCase();
 
-                    socialDiv.innerHTML += `
-                        <a
-                            href="${cleanLink}"
-                            target="_blank"
-                            rel="noopener noreferrer"
-                        >
-                            <i
-                                class="${icon}"
-                            ></i>
-                        </a>
-                    `;
-                });
-        }
+            // --------------------------------------------------
+            // Detect social platform
+            // --------------------------------------------------
 
+            let icon =
+                'fas fa-link';
+
+            if (
+                lowerLink.includes('facebook.com') ||
+                lowerLink.includes('facebook')
+            ) {
+
+                icon =
+                    'fab fa-facebook-f';
+
+            } else if (
+                lowerLink.includes('instagram.com') ||
+                lowerLink.includes('instagram')
+            ) {
+
+                icon =
+                    'fab fa-instagram';
+
+            } else if (
+                lowerLink.includes('youtube.com') ||
+                lowerLink.includes('youtu.be') ||
+                lowerLink.includes('youtube')
+            ) {
+
+                icon =
+                    'fab fa-youtube';
+            }
+
+            // --------------------------------------------------
+            // Create external social link
+            // --------------------------------------------------
+
+            const a =
+                document.createElement('a');
+
+            a.href =
+                cleanLink;
+
+            a.target =
+                '_blank';
+
+            a.rel =
+                'noopener noreferrer';
+
+            a.title =
+                cleanLink;
+
+            a.innerHTML =
+                `<i class="${icon}"></i>`;
+
+            socialDiv.appendChild(a);
+        });
+}
         // ======================================================
         // 9. WHATSAPP
         // ======================================================
