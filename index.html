@@ -135,9 +135,302 @@
         .btn-hosp { background: rgba(255, 255, 255, 0.05); border: 1px solid var(--border); color: white; }
         .btn-buddy { background: rgba(255, 215, 0, 0.05); border: 1px solid var(--gold); color: var(--gold); }
 
-        #buddyDrawer { display: none; grid-column: span 2; background: rgba(255,255,255,0.02); border-radius: 22px; padding: 15px; border: 1px solid var(--border); margin-top: 0; animation: fadeIn 0.4s ease; }
-        @keyframes fadeIn { from { opacity: 0; transform: translateY(-10px); } to { opacity: 1; transform: translateY(0); } }
-        .buddy-item { display: flex; justify-content: space-between; align-items: center; padding: 12px; border-bottom: 1px solid var(--border); }
+       /* ======================================================
+   BLOOD BUDDIES PROFESSIONAL MODAL
+   ====================================================== */
+
+.blood-buddy-modal {
+    display: none;
+    position: fixed;
+    inset: 0;
+    z-index: 99998;
+
+    background: rgba(0, 0, 0, 0.86);
+    backdrop-filter: blur(14px);
+
+    align-items: center;
+    justify-content: center;
+
+    padding: 18px;
+    box-sizing: border-box;
+}
+
+.blood-buddy-modal.show {
+    display: flex;
+}
+
+.blood-buddy-card {
+    width: 100%;
+    max-width: 390px;
+
+    background:
+        linear-gradient(
+            145deg,
+            rgba(34, 19, 29, 0.98),
+            rgba(9, 10, 14, 0.99)
+        );
+
+    border: 1px solid rgba(255, 71, 87, 0.28);
+
+    border-radius: 28px;
+
+    padding: 22px;
+
+    box-sizing: border-box;
+
+    position: relative;
+
+    box-shadow:
+        0 25px 80px rgba(0, 0, 0, 0.75),
+        0 0 35px rgba(255, 71, 87, 0.10);
+
+    animation: bloodBuddyModalIn 0.25s ease;
+}
+
+@keyframes bloodBuddyModalIn {
+
+    from {
+        opacity: 0;
+        transform: translateY(25px) scale(0.96);
+    }
+
+    to {
+        opacity: 1;
+        transform: translateY(0) scale(1);
+    }
+}
+
+
+/* HEADER */
+
+.blood-buddy-header {
+    display: flex;
+    align-items: center;
+    gap: 14px;
+
+    padding-bottom: 18px;
+
+    border-bottom: 1px solid var(--border);
+}
+
+.blood-buddy-icon {
+    width: 48px;
+    height: 48px;
+
+    border-radius: 15px;
+
+    display: flex;
+    align-items: center;
+    justify-content: center;
+
+    background: rgba(255, 71, 87, 0.12);
+
+    color: #ff4757;
+
+    font-size: 20px;
+
+    flex-shrink: 0;
+}
+
+.blood-buddy-title {
+    color: #ff4757;
+
+    font-size: 17px;
+    font-weight: 900;
+
+    letter-spacing: 1px;
+}
+
+.blood-buddy-subtitle {
+    margin-top: 4px;
+
+    color: rgba(255,255,255,0.45);
+
+    font-size: 10px;
+}
+
+
+/* CLOSE BUTTON */
+
+.blood-buddy-close {
+    position: absolute;
+
+    top: 16px;
+    right: 16px;
+
+    width: 34px;
+    height: 34px;
+
+    border: 0;
+    border-radius: 50%;
+
+    background: rgba(255,255,255,0.06);
+
+    color: rgba(255,255,255,0.7);
+
+    cursor: pointer;
+
+    font-size: 14px;
+}
+
+.blood-buddy-close:hover {
+    background: rgba(255,71,87,0.15);
+    color: white;
+}
+
+
+/* INDIVIDUAL BUDDY */
+
+.buddy-item {
+    display: flex;
+
+    align-items: center;
+    justify-content: space-between;
+
+    gap: 12px;
+
+    margin-top: 12px;
+
+    padding: 15px;
+
+    border-radius: 18px;
+
+    background: rgba(255,255,255,0.035);
+
+    border: 1px solid rgba(255,255,255,0.07);
+}
+
+.buddy-info {
+    min-width: 0;
+    flex: 1;
+}
+
+.buddy-number {
+    font-size: 10px;
+
+    color: rgba(255,255,255,0.38);
+
+    text-transform: uppercase;
+
+    letter-spacing: 1px;
+
+    margin-bottom: 5px;
+}
+
+.buddy-name {
+    color: white;
+
+    font-size: 15px;
+
+    font-weight: 800;
+
+    white-space: nowrap;
+
+    overflow: hidden;
+
+    text-overflow: ellipsis;
+}
+
+.buddy-phone {
+    color: rgba(255,255,255,0.45);
+
+    font-size: 11px;
+
+    margin-top: 3px;
+}
+
+
+/* CALL BUTTON */
+
+.buddy-call-btn {
+    display: flex;
+
+    align-items: center;
+    justify-content: center;
+
+    gap: 7px;
+
+    min-width: 82px;
+
+    padding: 11px 13px;
+
+    border-radius: 13px;
+
+    background: rgba(46, 213, 115, 0.10);
+
+    border: 1px solid rgba(46, 213, 115, 0.45);
+
+    color: #2ed573;
+
+    text-decoration: none;
+
+    font-size: 11px;
+
+    font-weight: 900;
+
+    transition: 0.25s;
+}
+
+.buddy-call-btn:hover {
+    background: #2ed573;
+    color: #052c14;
+
+    transform: translateY(-1px);
+}
+
+
+/* EMPTY / LOCKED */
+
+.buddy-empty {
+    margin-top: 18px;
+
+    padding: 25px 15px;
+
+    text-align: center;
+
+    border-radius: 18px;
+
+    background: rgba(255,255,255,0.025);
+
+    border: 1px solid rgba(255,255,255,0.06);
+
+    color: rgba(255,255,255,0.45);
+
+    font-size: 12px;
+}
+
+.buddy-empty i {
+    display: block;
+
+    font-size: 25px;
+
+    margin-bottom: 10px;
+
+    color: rgba(255,71,87,0.6);
+}
+
+
+/* FOOTER */
+
+.blood-buddy-footer {
+    margin-top: 17px;
+
+    padding-top: 14px;
+
+    border-top: 1px solid var(--border);
+
+    text-align: center;
+
+    color: rgba(255,255,255,0.30);
+
+    font-size: 9px;
+}
+
+.blood-buddy-footer i {
+    margin-right: 5px;
+
+    color: #2ed573;
+}
         .social-pill { margin-top: 25px; background: var(--glass); border-radius: 50px; padding: 18px; display: flex; justify-content: space-around; border: 1px solid var(--border); }
         .social-pill a { color: white; font-size: 24px; opacity: 0.6; transition: 0.3s; }
         .shimmer { color: rgba(255,215,0,0.5); animation: loading 1.5s infinite; }
@@ -665,7 +958,50 @@
 }
     </style>
 </head>
+<!-- ======================================================
+     BLOOD BUDDIES MODAL
+     ====================================================== -->
 
+<div id="bloodBuddyModal" class="blood-buddy-modal">
+
+    <div class="blood-buddy-card">
+
+        <button
+            class="blood-buddy-close"
+            onclick="closeBloodBuddies()"
+            aria-label="Close"
+        >
+            <i class="fas fa-times"></i>
+        </button>
+
+        <div class="blood-buddy-header">
+
+            <div class="blood-buddy-icon">
+                <i class="fas fa-users"></i>
+            </div>
+
+            <div>
+                <div class="blood-buddy-title">
+                    BLOOD BUDDIES
+                </div>
+
+                <div class="blood-buddy-subtitle">
+                    Emergency blood contacts
+                </div>
+            </div>
+
+        </div>
+
+        <div id="bloodBuddyList"></div>
+
+        <div class="blood-buddy-footer">
+            <i class="fas fa-shield-halved"></i>
+            Protected emergency contacts
+        </div>
+
+    </div>
+
+</div>
 
     <body>
     <div class="container">
@@ -702,19 +1038,17 @@
                 </div>
             </div>
 
-            <div class="card action-card buddies" onclick="toggleBuddies()">
-                <div class="label">Blood Buddies</div>
-                <div class="card-title">
-                    <i class="fas fa-users"></i> BLOOD BUDDIES
-                </div>
-                <div class="card-subtitle">
-                    Emergency blood-buddy contact
-                </div>
-            </div>
+            <div class="card action-card buddies" onclick="openBloodBuddies()">
+    <div class="label">Blood Buddies</div>
 
-            <div id="buddyDrawer">
-                <div id="buddyList"></div>
-            </div>
+    <div class="card-title">
+        <i class="fas fa-users"></i> BLOOD BUDDIES
+    </div>
+
+    <div class="card-subtitle">
+        Emergency blood-buddy contact
+    </div>
+</div>
 
             <a href="javascript:void(0)"
                id="callBtn"
@@ -1064,43 +1398,257 @@ async function loadFirestoreData() {
                     user.Blood_Group || 'N/A'
                 }`;
 
-        // ======================================================
-        // 7. BLOOD BUDDY
-        // ======================================================
+       // ======================================================
+// 7. BLOOD BUDDIES
+// ======================================================
 
-        const buddyListDiv =
-            document.getElementById(
-                'buddyList'
-            );
+const bloodBuddyList =
+    document.getElementById('bloodBuddyList');
 
-        if (user.Blood_Buddy) {
 
-            buddyListDiv.innerHTML = `
-                <div class="buddy-item">
+// ------------------------------------------------------
+// CHECK QR STATUS
+// ------------------------------------------------------
+//
+// IMPORTANT:
+// Flutter app থেকে Firestore-এ এই field রাখতে হবে:
+//
+// Blood_Buddy_QR_Enabled: true / false
+//
+// QR ON  = true
+// QR OFF = false
+//
 
-                    <span>
-                        Blood Buddy
-                    </span>
+function isBloodBuddyQRVisible(user) {
 
-                    <a
-                        href="tel:${user.Blood_Buddy}"
-                        style="
-                            color:#2ed573;
-                            text-decoration:none;
-                            font-weight:800;
-                        "
-                    >
-                        CALL NOW
-                    </a>
+    return (
+        user.Blood_Buddy_QR_Enabled === true
+    );
+}
 
+
+// ------------------------------------------------------
+// OPEN BLOOD BUDDIES
+// ------------------------------------------------------
+
+function openBloodBuddies() {
+
+    const modal =
+        document.getElementById('bloodBuddyModal');
+
+    if (!modal) return;
+
+    bloodBuddyList.innerHTML = '';
+
+    // --------------------------------------------------
+    // QR OFF
+    // --------------------------------------------------
+
+    if (!isBloodBuddyQRVisible(user)) {
+
+        bloodBuddyList.innerHTML = `
+            <div class="buddy-empty">
+
+                <i class="fas fa-lock"></i>
+
+                <div>
+                    Blood Buddy contacts are
+                    currently protected.
                 </div>
-            `;
 
-        } else {
+                <div style="
+                    margin-top:6px;
+                    font-size:9px;
+                    opacity:0.5;
+                ">
+                    Enable QR from the SurakshaQR app
+                    to view emergency contacts.
+                </div>
 
-            buddyListDiv.innerHTML =
-                '<div style="padding:10px; opacity:0.5;">No buddy found.</div>';
+            </div>
+        `;
+
+        modal.classList.add('show');
+
+        return;
+    }
+
+
+    // --------------------------------------------------
+    // QR ON
+    // --------------------------------------------------
+
+    const raw =
+        user.Blood_Buddy || '';
+
+
+    const buddies =
+        raw
+            .split(',')
+            .map(item => item.trim())
+            .filter(item => item.length > 0)
+            .map(item => {
+
+                const parts =
+                    item.split(':');
+
+                return {
+                    name:
+                        (parts[0] || '').trim(),
+
+                    phone:
+                        (parts.slice(1).join(':') || '').trim()
+                };
+
+            })
+            .filter(item =>
+                item.name &&
+                item.phone
+            )
+            .slice(0, 3);
+
+
+    // --------------------------------------------------
+    // NO DATA
+    // --------------------------------------------------
+
+    if (buddies.length === 0) {
+
+        bloodBuddyList.innerHTML = `
+            <div class="buddy-empty">
+
+                <i class="fas fa-user-group"></i>
+
+                No Blood Buddies available.
+
+            </div>
+        `;
+
+        modal.classList.add('show');
+
+        return;
+    }
+
+
+    // --------------------------------------------------
+    // CREATE BUDDY CARDS
+    // --------------------------------------------------
+
+    buddies.forEach((buddy, index) => {
+
+        const item =
+            document.createElement('div');
+
+        item.className =
+            'buddy-item';
+
+
+        const info =
+            document.createElement('div');
+
+        info.className =
+            'buddy-info';
+
+
+        const number =
+            document.createElement('div');
+
+        number.className =
+            'buddy-number';
+
+        number.textContent =
+            `Blood Buddy ${index + 1}`;
+
+
+        const name =
+            document.createElement('div');
+
+        name.className =
+            'buddy-name';
+
+        name.textContent =
+            buddy.name;
+
+
+        const phone =
+            document.createElement('div');
+
+        phone.className =
+            'buddy-phone';
+
+        phone.textContent =
+            buddy.phone;
+
+
+        info.appendChild(number);
+        info.appendChild(name);
+        info.appendChild(phone);
+
+
+        // ------------------------------------------------
+        // CALL BUTTON
+        // ------------------------------------------------
+
+        const call =
+            document.createElement('a');
+
+        call.className =
+            'buddy-call-btn';
+
+        call.href =
+            `tel:${buddy.phone}`;
+
+        call.innerHTML =
+            `<i class="fas fa-phone"></i> CALL`;
+
+
+        item.appendChild(info);
+        item.appendChild(call);
+
+        bloodBuddyList.appendChild(item);
+
+    });
+
+
+    modal.classList.add('show');
+}
+
+
+// ------------------------------------------------------
+// CLOSE BLOOD BUDDIES
+// ------------------------------------------------------
+
+function closeBloodBuddies() {
+
+    const modal =
+        document.getElementById('bloodBuddyModal');
+
+    if (!modal) return;
+
+    modal.classList.remove('show');
+}
+
+
+// ------------------------------------------------------
+// CLOSE WHEN CLICKING OUTSIDE
+// ------------------------------------------------------
+
+document.addEventListener(
+    'click',
+    function(event) {
+
+        const modal =
+            document.getElementById('bloodBuddyModal');
+
+        if (
+            modal &&
+            event.target === modal
+        ) {
+            closeBloodBuddies();
         }
+
+    }
+);
 // ======================================================
 // 8. SOCIAL LINKS — FINAL WORKING VERSION
 // ======================================================
