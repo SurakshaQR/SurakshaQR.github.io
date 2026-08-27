@@ -1020,6 +1020,11 @@ async function loadFirestoreData() {
                 '<div style="padding:10px; opacity:0.5;">No buddy found.</div>';
         }
 
+
+
+
+
+        
         // ======================================================
         // 8. SOCIAL LINKS
         // ======================================================
@@ -1039,6 +1044,8 @@ async function loadFirestoreData() {
         socialDiv.innerHTML = '';
 
         if (user.Social_Links) {
+            console.log("SOCIAL LINKS FROM FIRESTORE:", user.Social_Links);
+alert("Social Links: " + user.Social_Links);
 
             user.Social_Links
                 .split(',')
