@@ -1080,101 +1080,182 @@ async function loadFirestoreData() {
             buddyListDiv.innerHTML =
                 '<div style="padding:10px; opacity:0.5;">No buddy found.</div>';
         }
+// ======================================================
+// 8. SOCIAL LINKS — FINAL WORKING VERSION
+// ======================================================
 
-const socialDiv =
-    document.getElementById('socialLinks');
+const socialDiv = document.getElementById('socialLinks');
 
-socialDiv.innerHTML = '';
+if (socialDiv) {
 
-if (user.Social_Links) {
+    socialDiv.innerHTML = '';
 
-    // DEBUG — Firestore থেকে ঠিক কী আসছে দেখুন
-    console.log(
-        'SOCIAL LINKS FROM FIRESTORE:',
-        user.Social_Links
-    );
+    let socialLinks = user.Social_Links;
 
-    user.Social_Links
-        .split(',')
-        .map(link => link.trim())
-        .filter(link => link.length > 0)
-        .forEach(link => {
+    // --------------------------------------------------
+    // Support both String and Array
+    // --------------------------------------------------
 
-            // --------------------------------------------------
-            // Make sure the URL is a real external URL
-            // --------------------------------------------------
+    if (Array.isArray(socialLinks)) {
 
-            let cleanLink = link.trim();
+        socialLinks = socialLinks.join(',');
 
-            if (
-                !/^https?:\/\//i.test(cleanLink)
-            ) {
+    }
+
+    if (
+        typeof socialLinks === 'string' &&
+        socialLinks.trim().length > 0
+    ) {
+
+        console.log(
+            'SOCIAL LINKS FROM FIRESTORE:',
+            socialLinks
+        );
+
+        socialLinks
+            .split(',')
+            .map(link => link.trim())
+            .filter(link => link.length > 0)
+            .forEach(link => {
+
+                // ------------------------------------------
+                // Clean stored value
+                // ------------------------------------------
+
+                let cleanLink = link
+                    .trim()
+                    .replace(/^["']|["']$/g, '');
+
+                // ------------------------------------------
+                // If Firestore contains something like:
+                // Facebook: https://facebook.com/...
+                // ------------------------------------------
+
+                const urlMatch = cleanLink.match(
+                    /(https?:\/\/[^\s,]+)/i
+                );
+
+                if (urlMatch) {
+                    cleanLink = urlMatch[1];
+                }
+
+                // ------------------------------------------
+                // Convert //facebook.com/... to https://
+                // ------------------------------------------
+
+                if (cleanLink.startsWith('//')) {
+
+                    cleanLink =
+                        'https:' + cleanLink;
+
+                }
+
+                // ------------------------------------------
+                // Convert www.facebook.com/... to https://
+                // Convert facebook.com/... to https://
+                // ------------------------------------------
+
+                if (
+                    !/^https?:\/\//i.test(cleanLink)
+                ) {
+
+                    cleanLink =
+                        'https://' +
+                        cleanLink.replace(
+                            /^\/+/,
+                            ''
+                        );
+                }
+
+                // ------------------------------------------
+                // Remove accidental spaces
+                // ------------------------------------------
+
                 cleanLink =
-                    'https://' +
-                    cleanLink.replace(/^\/\//, '');
-            }
+                    cleanLink.replace(/\s+/g, '');
 
-            // Lowercase copy only for platform detection
-            const lowerLink =
-                cleanLink.toLowerCase();
+                // ------------------------------------------
+                // Detect platform
+                // ------------------------------------------
 
-            // --------------------------------------------------
-            // Detect social platform
-            // --------------------------------------------------
+                const lowerLink =
+                    cleanLink.toLowerCase();
 
-            let icon =
-                'fas fa-link';
+                let icon =
+                    'fas fa-link';
 
-            if (
-                lowerLink.includes('facebook.com') ||
-                lowerLink.includes('facebook')
-            ) {
+                if (
+                    lowerLink.includes('facebook.com') ||
+                    lowerLink.includes('facebook')
+                ) {
 
-                icon =
-                    'fab fa-facebook-f';
+                    icon =
+                        'fab fa-facebook-f';
 
-            } else if (
-                lowerLink.includes('instagram.com') ||
-                lowerLink.includes('instagram')
-            ) {
+                } else if (
+                    lowerLink.includes('instagram.com') ||
+                    lowerLink.includes('instagram')
+                ) {
 
-                icon =
-                    'fab fa-instagram';
+                    icon =
+                        'fab fa-instagram';
 
-            } else if (
-                lowerLink.includes('youtube.com') ||
-                lowerLink.includes('youtu.be') ||
-                lowerLink.includes('youtube')
-            ) {
+                } else if (
+                    lowerLink.includes('youtube.com') ||
+                    lowerLink.includes('youtu.be') ||
+                    lowerLink.includes('youtube')
+                ) {
 
-                icon =
-                    'fab fa-youtube';
-            }
+                    icon =
+                        'fab fa-youtube';
+                }
 
-            // --------------------------------------------------
-            // Create external social link
-            // --------------------------------------------------
+                // ------------------------------------------
+                // Create link
+                // ------------------------------------------
 
-            const a =
-                document.createElement('a');
+                const a =
+                    document.createElement('a');
 
-            a.href =
-                cleanLink;
+                a.href =
+                    cleanLink;
 
-            a.target =
-                '_blank';
+                a.target =
+                    '_blank';
 
-            a.rel =
-                'noopener noreferrer';
+                a.rel =
+                    'noopener noreferrer';
 
-            a.title =
-                cleanLink;
+                a.title =
+                    cleanLink;
 
-            a.innerHTML =
-                `<i class="${icon}"></i>`;
+                // ------------------------------------------
+                // IMPORTANT:
+                // Prevent any page/router click handler
+                // from treating social URL as local page.
+                // ------------------------------------------
 
-            socialDiv.appendChild(a);
-        });
+                a.addEventListener(
+                    'click',
+                    function (event) {
+
+                        event.preventDefault();
+                        event.stopPropagation();
+
+                        window.open(
+                            cleanLink,
+                            '_blank',
+                            'noopener,noreferrer'
+                        );
+                    }
+                );
+
+                a.innerHTML =
+                    `<i class="${icon}"></i>`;
+
+                socialDiv.appendChild(a);
+            });
+    }
 }
         // ======================================================
         // 9. WHATSAPP
