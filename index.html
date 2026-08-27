@@ -35,6 +35,78 @@
         h1 { margin: 0; font-size: 26px; font-weight: 800; }
         .blood-tag { display: inline-flex; align-items: center; gap: 6px; background: rgba(255, 71, 87, 0.15); color: #ff4757; padding: 6px 14px; border-radius: 12px; font-size: 13px; font-weight: 800; margin-top: 10px; }
 
+        /* MEMBER NAME + SOCIAL LINKS */
+        .member-main-row {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            gap: 10px;
+        }
+        .member-text {
+            min-width: 0;
+            flex: 1;
+        }
+        .member-socials {
+            display: flex;
+            align-items: center;
+            justify-content: flex-end;
+            gap: 12px;
+            flex-shrink: 0;
+        }
+        .member-socials:empty {
+            display: none;
+        }
+        .member-socials a {
+            color: white;
+            text-decoration: none;
+            font-size: 25px;
+            line-height: 1;
+            opacity: 0.95;
+            transition: 0.25s;
+        }
+        .member-socials a:hover {
+            transform: scale(1.08);
+            opacity: 1;
+        }
+
+        /* EMERGENCY DOCUMENTS + BLOOD BUDDIES */
+        .action-card {
+            min-height: 96px;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            padding: 17px;
+        }
+        .action-card .card-title {
+            font-size: 12px;
+            font-weight: 800;
+            line-height: 1.25;
+        }
+        .action-card .card-subtitle {
+            font-size: 9px;
+            opacity: 0.45;
+            margin-top: 8px;
+            line-height: 1.35;
+        }
+        .action-card.documents .card-title {
+            color: var(--gold);
+        }
+        .action-card.buddies .card-title {
+            color: #ff4757;
+        }
+
+        @media (max-width: 360px) {
+            .member-socials {
+                gap: 8px;
+            }
+            .member-socials a {
+                font-size: 22px;
+            }
+            h1 {
+                font-size: 23px;
+            }
+        }
+
         /* BUTTONS UX */
         .btn { display: flex; align-items: center; justify-content: center; gap: 12px; text-decoration: none; font-weight: 800; font-size: 15px; padding: 18px; border-radius: 22px; margin-top: 10px; transition: 0.3s; border: 1px solid transparent; }
         .btn-call { background: linear-gradient(135deg, #ff4757, #ff6b81); color: white; box-shadow: 0 10px 20px rgba(255, 71, 87, 0.2); }
@@ -42,7 +114,7 @@
         .btn-hosp { background: rgba(255, 255, 255, 0.05); border: 1px solid var(--border); color: white; }
         .btn-buddy { background: rgba(255, 215, 0, 0.05); border: 1px solid var(--gold); color: var(--gold); }
 
-        #buddyDrawer { display: none; grid-column: span 2; background: rgba(255,255,255,0.02); border-radius: 22px; padding: 15px; border: 1px solid var(--border); margin-top: 5px; animation: fadeIn 0.4s ease; }
+        #buddyDrawer { display: none; grid-column: span 2; background: rgba(255,255,255,0.02); border-radius: 22px; padding: 15px; border: 1px solid var(--border); margin-top: 0; animation: fadeIn 0.4s ease; }
         @keyframes fadeIn { from { opacity: 0; transform: translateY(-10px); } to { opacity: 1; transform: translateY(0); } }
         .buddy-item { display: flex; justify-content: space-between; align-items: center; padding: 12px; border-bottom: 1px solid var(--border); }
         .social-pill { margin-top: 25px; background: var(--glass); border-radius: 50px; padding: 18px; display: flex; justify-content: space-around; border: 1px solid var(--border); }
@@ -588,48 +660,57 @@
         <div class="bento-grid">
             <div class="card full">
                 <div class="label">Primary Member</div>
-                <h1 id="userName" class="shimmer">Scanning Profile...</h1>
-                <div id="bloodGroup" class="blood-tag"><i class="fas fa-tint"></i> ---</div>
+
+                <div class="member-main-row">
+                    <div class="member-text">
+                        <h1 id="userName" class="shimmer">Scanning Profile...</h1>
+                        <div id="bloodGroup" class="blood-tag"><i class="fas fa-tint"></i> ---</div>
+                    </div>
+
+                    <div class="member-socials" id="socialLinks"></div>
+                </div>
             </div>
 
-            <div class="card" onclick="openVault()">
-    <div class="label">Vault</div>
-
-    <div style="font-size:12px; font-weight:800; color:var(--gold)">
-        <i class="fas fa-lock"></i> ENCRYPTED
-    </div>
-
-    <div style="font-size:9px; opacity:.45; margin-top:8px;">
-        Emergency documents
-    </div>
-</div>
-
-            <div class="card">
-                <div class="label">Identity</div>
-                <div id="statusLabel" style="font-size:12px; font-weight:800; color:#2ed573">VERIFIED</div>
+            <div class="card action-card documents" onclick="openVault()">
+                <div class="label">Emergency Documents</div>
+                <div class="card-title">
+                    <i class="fas fa-file-shield"></i> EMERGENCY DOCUMENTS
+                </div>
+                <div class="card-subtitle">
+                    <i class="fas fa-lock"></i> Encrypted &amp; shared documents
+                </div>
             </div>
 
-           <a href="javascript:void(0)"
-   id="callBtn"
-   class="btn btn-call full"
-   onclick="openRescuerEmergency(); return false;">
+            <div class="card action-card buddies" onclick="toggleBuddies()">
+                <div class="label">Blood Buddies</div>
+                <div class="card-title">
+                    <i class="fas fa-users"></i> BLOOD BUDDIES
+                </div>
+                <div class="card-subtitle">
+                    Emergency blood-buddy contact
+                </div>
+            </div>
 
-    <i class="fas fa-phone-alt"></i>
-    EMERGENCY CALL
-
-</a>
-            
-            <a href="javascript:void(0)" onclick="toggleBuddies()" id="buddyBtn" class="btn btn-buddy full"><i class="fas fa-users"></i> BLOOD BUDDIES CONTACTS</a>
-            
             <div id="buddyDrawer">
                 <div id="buddyList"></div>
             </div>
 
-            <a href="#" id="notifyBtn" class="btn btn-notify full"><i class="fab fa-whatsapp"></i> PARKING ALERT</a>
-            <a href="https://www.google.com/maps/search/nearest+hospital" target="_blank" class="btn btn-hosp full"><i class="fas fa-ambulance"></i> NEAREST HOSPITAL</a>
+            <a href="javascript:void(0)"
+               id="callBtn"
+               class="btn btn-call full"
+               onclick="openRescuerEmergency(); return false;">
+                <i class="fas fa-phone-alt"></i>
+                EMERGENCY CALL
+            </a>
+
+            <a href="https://www.google.com/maps/search/nearest+hospital"
+               target="_blank"
+               class="btn btn-hosp full">
+                <i class="fas fa-ambulance"></i>
+                NEAREST HOSPITALS
+            </a>
         </div>
 
-        <div class="social-pill" id="socialLinks"></div>
     </div>
 
         <!-- ==========================================
@@ -850,9 +931,7 @@ async function loadFirestoreData() {
     const nameEl =
         document.getElementById('userName');
 
-    const statusEl =
-        document.getElementById('statusLabel');
-
+    // Identity status is no longer shown as a separate card.
     console.log('================================');
     console.log('[PROFILE] Loading profile...');
     console.log('[PROFILE] URL:', window.location.href);
@@ -873,12 +952,6 @@ async function loadFirestoreData() {
 
         nameEl.innerText =
             'Invalid Scan';
-
-        statusEl.innerText =
-            'NO USER ID';
-
-        statusEl.style.color =
-            '#ff4757';
 
         return;
     }
@@ -923,12 +996,6 @@ async function loadFirestoreData() {
             nameEl.innerText =
                 'Profile Not Found';
 
-            statusEl.innerText =
-                'NOT FOUND';
-
-            statusEl.style.color =
-                '#ff4757';
-
             return;
         }
 
@@ -957,12 +1024,6 @@ async function loadFirestoreData() {
 
             nameEl.innerText =
                 'System Ready';
-
-            statusEl.innerText =
-                'INACTIVE';
-
-            statusEl.style.color =
-                'orange';
 
             return;
         }
@@ -1127,11 +1188,6 @@ async function loadFirestoreData() {
         nameEl.innerText =
             'Profile Error';
 
-        statusEl.innerText =
-            'FIREBASE ERROR';
-
-        statusEl.style.color =
-            '#ff4757';
     }
 }
 
@@ -1849,7 +1905,6 @@ document
 </body>
 </html>
         
-
 
 
 
