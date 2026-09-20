@@ -932,7 +932,48 @@
 }
 .incident-photo-box{margin:14px 0 18px;padding:14px;border:1px solid rgba(255,255,255,.08);border-radius:16px;background:rgba(255,255,255,.035)}.incident-photo-title{font-size:11px;font-weight:800;color:#fff}.incident-photo-title i{color:#ffd700;margin-right:6px}.incident-photo-title span{font-size:9px;opacity:.45}.incident-photo-subtitle{font-size:9px;line-height:1.5;color:rgba(255,255,255,.45);margin:6px 0 10px}.incident-photo-btn{width:100%;padding:12px;border-radius:13px;border:1px solid rgba(255,215,0,.35);background:rgba(255,215,0,.06);color:#ffd700;font-family:inherit;font-size:11px;font-weight:800;cursor:pointer}.incident-photo-btn.photo-ready{border-color:rgba(46,213,115,.5);color:#2ed573;background:rgba(46,213,115,.06)}#incidentPhotoPreview{margin-top:12px}#incidentPhotoImage{display:block;width:100%;max-height:220px;object-fit:cover;border-radius:13px;background:#000}.incident-photo-actions{display:flex;gap:8px;margin-top:8px}.incident-photo-actions button{flex:1;padding:10px;border:0;border-radius:11px;font-family:inherit;font-size:10px;font-weight:800;cursor:pointer}.incident-photo-actions button:first-child{background:rgba(255,71,87,.12);color:#ff6b81}.incident-photo-actions button:last-child{background:#2ed573;color:#052c14}
         
-    </style>
+    <style>
+
+    /* আপনার existing CSS */
+
+    .incident-photo-box {
+        /* ... */
+    }
+
+    .incident-photo-btn {
+        /* ... */
+    }
+
+
+    /* NEW: HEARTBEAT HINT */
+
+    .pulse-hint {
+        animation: helperHeartbeat 1.5s ease-in-out infinite;
+    }
+
+    @keyframes helperHeartbeat {
+        0%, 100% {
+            transform: scale(1);
+        }
+
+        10% {
+            transform: scale(1.06);
+        }
+
+        20% {
+            transform: scale(1);
+        }
+
+        30% {
+            transform: scale(1.04);
+        }
+
+        40% {
+            transform: scale(1);
+        }
+    }
+
+</style>
 </head>
 <!-- ======================================================
      BLOOD BUDDIES MODAL
@@ -1188,8 +1229,18 @@
 >
 
 <label class="rescuer-checkbox"><input type="checkbox" id="rescuerWithPerson"><span>I am with this person</span></label>
-<div class="incident-photo-box"><div class="incident-photo-title"><i class="fas fa-camera"></i> TAKE A LIVE PICTURE <span>(OPTIONAL)</span></div><div class="incident-photo-subtitle">Take a live picture of the situation for the emergency guardians.</div><input type="file" id="incidentPhotoInput" accept="image/*" capture="environment" style="display:none;"><button type="button" id="takeIncidentPhotoBtn" class="incident-photo-btn" onclick="openIncidentCamera()"><i class="fas fa-camera"></i> TAKE A LIVE PICTURE</button><div id="incidentPhotoPreview" style="display:none;"><img id="incidentPhotoImage" alt="Incident photo"><div class="incident-photo-actions"><button type="button" onclick="retakeIncidentPhoto()">RETAKE</button><button type="button" onclick="confirmIncidentPhoto()">OK</button></div><!-- NEW: EMERGENCY PHOTO DISCLOSURE --><div id="incidentPhotoDisclosure" style="display:none;margin-top:12px;padding:14px;border:1px solid rgba(255,255,255,.15);border-radius:12px;background:rgba(255,255,255,.05);"><div style="font-size:14px;font-weight:800;color:#fff;margin-bottom:8px;">Emergency Photo Sharing</div><div style="font-size:13px;line-height:1.55;color:#d7d7d7;">When you submit an emergency photo, LyfQR securely uploads the photo and shares it with the designated guardian to help with the emergency situation. Emergency photos are automatically deleted after 3 days.</div><label style="display:flex;align-items:flex-start;gap:8px;margin-top:12px;font-size:13px;line-height:1.4;color:#fff;cursor:pointer;"><input type="checkbox" id="incidentPhotoConsent" style="margin-top:3px;"><span>I understand and agree to share this emergency photo with the designated guardian.</span></label></div></div></div>
-<button type="button" id="sendRescuerAlertBtn" class="rescuer-send-btn" onclick="sendRescuerEmergencyAlert()"><i class="fas fa-bell"></i>SEND EMERGENCY ALERT</button>
+<div class="incident-photo-box"><div class="incident-photo-title"><i class="fas fa-camera"></i> TAKE A LIVE PICTURE <span>(OPTIONAL)</span></div><div class="incident-photo-subtitle">Take a live picture of the situation for the emergency guardians.</div><input type="file" id="incidentPhotoInput" accept="image/*" capture="environment" style="display:none;"><button type="button" id="takeIncidentPhotoBtn" class="incident-photo-btn" onclick="openIncidentCamera()"><i class="fas fa-camera"></i> TAKE A LIVE PICTURE</button><div id="incidentPhotoPreview" style="display:none;"><img id="incidentPhotoImage" alt="Incident photo"><div class="incident-photo-actions"><button type="button" onclick="retakeIncidentPhoto()">RETAKE</button> <button
+    type="button"
+    class="pulse-hint"
+    onclick="confirmIncidentPhoto()">
+    OK
+</button>    </div><!-- NEW: EMERGENCY PHOTO DISCLOSURE --><div id="incidentPhotoDisclosure" style="display:none;margin-top:12px;padding:14px;border:1px solid rgba(255,255,255,.15);border-radius:12px;background:rgba(255,255,255,.05);"><div style="font-size:14px;font-weight:800;color:#fff;margin-bottom:8px;">Emergency Photo Sharing</div><div style="font-size:13px;line-height:1.55;color:#d7d7d7;">When you submit an emergency photo, LyfQR securely uploads the photo and shares it with the designated guardian to help with the emergency situation. Emergency photos are automatically deleted after 3 days.</div><label style="display:flex;align-items:flex-start;gap:8px;margin-top:12px;font-size:13px;line-height:1.4;color:#fff;cursor:pointer;"><input
+    type="checkbox"
+    id="incidentPhotoConsent"
+    class="pulse-hint"
+    style="margin-top:3px;"
+><span>I understand and agree to share this emergency photo with the designated guardian.</span></label></div></div></div>
+<button type="button" id="sendRescuerAlertBtn" class="rescuer-send-btn pulse-hint" onclick="sendRescuerEmergencyAlert()"><i class="fas fa-bell"></i>SEND EMERGENCY ALERT</button>
 <div id="rescuerStatus" class="rescuer-status"></div>
 
     </div>
