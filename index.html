@@ -16,14 +16,16 @@
         :root { --glass: rgba(255, 255, 255, 0.03); --border: rgba(255, 255, 255, 0.08); --gold: #FFD700; --accent: #ff4757; --bg: #05070a; }
         body { margin: 0; font-family: 'Plus Jakarta Sans', sans-serif; background: var(--bg); color: white; overflow-x: hidden; background-image: radial-gradient(at 0% 0%, hsla(253,16%,15%,1) 0, transparent 50%), radial-gradient(at 100% 0%, hsla(339,49%,20%,1) 0, transparent 50%); display: flex; justify-content: center; min-height: 100vh; }
         .container { width: 100%; max-width: 420px; padding: 25px 16px; margin: 0 auto; box-sizing : border-box; }
-        
-        /* HEADER UX */
-        .header { display: flex; flex-direction: column; align-items: center; margin-bottom: 30px; }
-        .logo-img { width: 100px; height: 100px; object-fit: contain; margin-bottom: 12px; filter: drop-shadow(0 0 10px rgba(255,215,0,0.2)); }
-      .brand-name{font-weight:800;font-size:28px;letter-spacing:0;color:#fff;text-transform:none;margin-bottom:5px}
-.brand-name span{font-weight:800;font-size:28px;letter-spacing:0;color:#7bed9f;margin-left:0}
-.brand-name .brand-small{font-size:18px;color:#fff}
-        .trust-badge { font-size: 10px; color: #2ed573; background: rgba(46, 213, 115, 0.1); padding: 5px 15px; border-radius: 30px; border: 1px solid rgba(46, 213, 115, 0.2); text-transform: uppercase; font-weight: 800; }
+            
+            /* HEADER UX */
+           .header{display:flex;flex-direction:column;align-items:center;margin-bottom:30px}
+    .brand-link{width:100%;display:flex;flex-direction:column;align-items:center;text-decoration:none;color:inherit}
+    .brand-link:active{opacity:.85}
+    .logo-img{width:100px;height:100px;object-fit:contain;margin:0 auto 12px;display:block;filter:drop-shadow(0 0 10px rgba(255,215,0,.2))}
+          .brand-name{font-weight:800;font-size:28px;letter-spacing:0;color:#fff;text-transform:none;margin-bottom:5px}
+    .brand-name span{font-weight:800;font-size:28px;letter-spacing:0;color:#7bed9f;margin-left:0}
+    .brand-name .brand-small{font-size:18px;color:#fff}
+            .trust-badge { font-size: 10px; color: #2ed573; background: rgba(46, 213, 115, 0.1); padding: 5px 15px; border-radius: 30px; border: 1px solid rgba(46, 213, 115, 0.2); text-transform: uppercase; font-weight: 800; }
 
         /* BENTO BOX GRID UX */
         .bento-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; }
