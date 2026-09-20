@@ -956,6 +956,8 @@
 
     line-height: 1.6;
 }
+.incident-photo-box{margin:14px 0 18px;padding:14px;border:1px solid rgba(255,255,255,.08);border-radius:16px;background:rgba(255,255,255,.035)}.incident-photo-title{font-size:11px;font-weight:800;color:#fff}.incident-photo-title i{color:#ffd700;margin-right:6px}.incident-photo-title span{font-size:9px;opacity:.45}.incident-photo-subtitle{font-size:9px;line-height:1.5;color:rgba(255,255,255,.45);margin:6px 0 10px}.incident-photo-btn{width:100%;padding:12px;border-radius:13px;border:1px solid rgba(255,215,0,.35);background:rgba(255,215,0,.06);color:#ffd700;font-family:inherit;font-size:11px;font-weight:800;cursor:pointer}.incident-photo-btn.photo-ready{border-color:rgba(46,213,115,.5);color:#2ed573;background:rgba(46,213,115,.06)}#incidentPhotoPreview{margin-top:12px}#incidentPhotoImage{display:block;width:100%;max-height:220px;object-fit:cover;border-radius:13px;background:#000}.incident-photo-actions{display:flex;gap:8px;margin-top:8px}.incident-photo-actions button{flex:1;padding:10px;border:0;border-radius:11px;font-family:inherit;font-size:10px;font-weight:800;cursor:pointer}.incident-photo-actions button:first-child{background:rgba(255,71,87,.12);color:#ff6b81}.incident-photo-actions button:last-child{background:#2ed573;color:#052c14}
+        
     </style>
 </head>
 <!-- ======================================================
@@ -1203,41 +1205,10 @@
     maxlength="15"
 >
 
-
-        <!-- Confirmation -->
-        <label class="rescuer-checkbox">
-
-            <input
-                type="checkbox"
-                id="rescuerWithPerson"
-            >
-
-            <span>
-                I am with this person
-            </span>
-
-        </label>
-
-
-        <!-- Send -->
-        <button
-            type="button"
-            id="sendRescuerAlertBtn"
-            class="rescuer-send-btn"
-            onclick="sendRescuerEmergencyAlert()">
-
-            <i class="fas fa-bell"></i>
-
-            SEND EMERGENCY ALERT
-
-        </button>
-
-
-        <!-- Status -->
-        <div
-            id="rescuerStatus"
-            class="rescuer-status">
-        </div>
+<label class="rescuer-checkbox"><input type="checkbox" id="rescuerWithPerson"><span>I am with this person</span></label>
+<div class="incident-photo-box"><div class="incident-photo-title"><i class="fas fa-camera"></i> TAKE A LIVE PICTURE <span>(OPTIONAL)</span></div><div class="incident-photo-subtitle">Take a live picture of the situation for the emergency guardians.</div><input type="file" id="incidentPhotoInput" accept="image/*" capture="environment" style="display:none;"><button type="button" id="takeIncidentPhotoBtn" class="incident-photo-btn" onclick="openIncidentCamera()"><i class="fas fa-camera"></i> TAKE A LIVE PICTURE</button><div id="incidentPhotoPreview" style="display:none;"><img id="incidentPhotoImage" alt="Incident photo"><div class="incident-photo-actions"><button type="button" onclick="retakeIncidentPhoto()">RETAKE</button><button type="button" onclick="confirmIncidentPhoto()">OK</button></div></div></div>
+<button type="button" id="sendRescuerAlertBtn" class="rescuer-send-btn" onclick="sendRescuerEmergencyAlert()"><i class="fas fa-bell"></i>SEND EMERGENCY ALERT</button>
+<div id="rescuerStatus" class="rescuer-status"></div>
 
     </div>
 
@@ -2677,6 +2648,12 @@ function closeRescuerEmergency() {
         .getElementById("rescuerEmergencyModal")
         .classList.remove("show");
 }
+
+            let incidentPhotoFile=null,incidentPhotoConfirmed=false;
+function openIncidentCamera(){const i=document.getElementById("incidentPhotoInput");if(i)i.click()}
+document.getElementById("incidentPhotoInput")?.addEventListener("change",function(){const f=this.files?.[0];if(!f)return;if(!f.type.startsWith("image/")){alert("Please select an image.");this.value="";return}incidentPhotoFile=f;incidentPhotoConfirmed=false;const p=document.getElementById("incidentPhotoPreview"),img=document.getElementById("incidentPhotoImage");img.src=URL.createObjectURL(f);p.style.display="block";document.getElementById("takeIncidentPhotoBtn").innerHTML='<i class="fas fa-camera"></i> PHOTO SELECTED'});
+function retakeIncidentPhoto(){incidentPhotoFile=null;incidentPhotoConfirmed=false;document.getElementById("incidentPhotoInput").value="";document.getElementById("incidentPhotoPreview").style.display="none";document.getElementById("takeIncidentPhotoBtn").innerHTML='<i class="fas fa-camera"></i> TAKE A LIVE PICTURE';openIncidentCamera()}
+function confirmIncidentPhoto(){if(!incidentPhotoFile)return;incidentPhotoConfirmed=true;const b=document.getElementById("takeIncidentPhotoBtn");b.classList.add("photo-ready");b.innerHTML='<i class="fas fa-check"></i> PHOTO READY'}
             async function sendRescuerEmergencyAlert() {
 
     const nameInput =
@@ -2833,38 +2810,9 @@ if (!withPerson.checked) {
 
         const userData = userDoc.data();
 
-        // --------------------------------------
-        // Create emergency request
-        // --------------------------------------
-
-        const requestRef = await db
-            .collection("rescuer_emergency_requests")
-            .add({
-
-                targetUserUid: userId,
-
-                targetUserName:
-                    userData.Name || "SurakshaQR Member",
-
-                rescuerName: rescuerName,
-
-rescuerPhone: normalizedPhone,
-
-                withPerson: true,
-
-                status: "PENDING",
-
-                createdAt:
-                    firebase.firestore.FieldValue
-                        .serverTimestamp(),
-
-                source: "QR_WEB",
-
-                userAgent:
-                    navigator.userAgent
-
-            });
-
+      let photoPath=null,photoAvailable=false,uploadedPhotoRef=null;
+if(incidentPhotoFile&&incidentPhotoConfirmed){const photoRef=storage.ref().child(`rescuer_emergency/${userId}/emergency_photo.jpg`);uploadedPhotoRef=photoRef;await photoRef.put(incidentPhotoFile);photoPath=`rescuer_emergency/${userId}/emergency_photo.jpg`;photoAvailable=true}
+const requestRef=await db.collection("rescuer_emergency_requests").add({targetUserUid:userId,targetUserName:userData.Name||"SurakshaQR Member",rescuerName:rescuerName,rescuerPhone:normalizedPhone,withPerson:true,status:"PENDING",createdAt:firebase.firestore.FieldValue.serverTimestamp(),source:"QR_WEB",userAgent:navigator.userAgent,photoAvailable:photoAvailable,photoPath:photoPath});
         console.log(
             "🚨 Rescuer emergency request created:",
             requestRef.id
@@ -2886,24 +2834,7 @@ rescuerPhone: normalizedPhone,
         // Don't close immediately.
         // User should see confirmation.
 
-    } catch (error) {
-
-        console.error(
-            "❌ Rescuer emergency request error:",
-            error
-        );
-
-        status.className =
-            "rescuer-status error";
-
-        status.innerText =
-            "Unable to send emergency alert. Please try again.";
-
-        button.disabled = false;
-
-        button.innerHTML =
-            '<i class="fas fa-bell"></i> SEND EMERGENCY ALERT';
-    }
+}catch(error){console.error("❌ Rescuer emergency request error:",error);if(uploadedPhotoRef){try{await uploadedPhotoRef.delete()}catch(e){console.error("Photo cleanup error:",e)}}status.className="rescuer-status error";status.innerText="Unable to send emergency alert. Please try again.";button.disabled=false;button.innerHTML='<i class="fas fa-bell"></i> SEND EMERGENCY ALERT';}
 }
 
 
