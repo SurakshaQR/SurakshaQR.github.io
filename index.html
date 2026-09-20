@@ -2809,14 +2809,16 @@ if (!withPerson.checked) {
 
         const userData = userDoc.data();
 
-      let photoPath=null,photoAvailable=false,uploadedPhotoRef=null;
+const requestRef=db.collection("rescuer_emergency_requests").doc();
+const requestId=requestRef.id;
+
+let photoPath=null,photoAvailable=false,uploadedPhotoRef=null;
+
 if(incidentPhotoFile&&incidentPhotoConfirmed){
   status.innerText="Preparing photo...";
 
   const compressedPhoto=await compressIncidentPhoto(incidentPhotoFile);
 
-  status.innerText="Uploading photo...";
-
   console.log(
     "Original:",
     (incidentPhotoFile.size/1024/1024).toFixed(2),
@@ -2829,36 +2831,44 @@ if(incidentPhotoFile&&incidentPhotoConfirmed){
     "MB"
   );
 
-  console.log(
-    "Original:",
-    (incidentPhotoFile.size/1024/1024).toFixed(2),
-    "MB"
-  );
+  const photoPathForStorage=
+    `rescuer_emergency/${userId}/${requestId}.jpg`;
 
-  console.log(
-    "Compressed:",
-    (compressedPhoto.size/1024/1024).toFixed(2),
-    "MB"
-  );
-
-  const photoRef=storage.ref().child(`rescuer_emergency/${userId}/emergency_photo.jpg`);
+  const photoRef=
+    storage.ref().child(photoPathForStorage);
 
   uploadedPhotoRef=photoRef;
+
+  status.innerText="Uploading photo...";
 
   await photoRef.put(
     compressedPhoto,
     {contentType:"image/jpeg"}
   );
 
-  photoPath=`rescuer_emergency/${userId}/emergency_photo.jpg`;
+  photoPath=photoPathForStorage;
   photoAvailable=true;
 }
-const requestRef=await db.collection("rescuer_emergency_requests").add({targetUserUid:userId,targetUserName:userData.Name||"SurakshaQR Member",rescuerName:rescuerName,rescuerPhone:normalizedPhone,withPerson:true,status:"PENDING",createdAt:firebase.firestore.FieldValue.serverTimestamp(),source:"QR_WEB",userAgent:navigator.userAgent,photoAvailable:photoAvailable,photoPath:photoPath});
-        console.log(
-            "🚨 Rescuer emergency request created:",
-            requestRef.id
-        );
 
+await requestRef.set({
+  targetUserUid:userId,
+  targetUserName:userData.Name||"SurakshaQR Member",
+  rescuerName:rescuerName,
+  rescuerPhone:normalizedPhone,
+  withPerson:true,
+  status:"PENDING",
+  createdAt:firebase.firestore.FieldValue.serverTimestamp(),
+  source:"QR_WEB",
+  userAgent:navigator.userAgent,
+  photoAvailable:photoAvailable,
+  photoPath:photoPath
+});
+
+console.log(
+  "🚨 Rescuer emergency request created:",
+  requestId
+);
+    
         // --------------------------------------
         // Success
         // --------------------------------------
