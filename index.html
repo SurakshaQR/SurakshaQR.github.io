@@ -2174,22 +2174,7 @@ if (socialDiv) {
             });
     }
 }
-        // ======================================================
-        // 9. WHATSAPP
-        // ======================================================
-
-        if (user.Mobile) {
-
-            const msg =
-                encodeURIComponent(
-                    `SURAKSHAQR ALERT: Your vehicle needs attention. Please check immediately_ ${user.Name}!`
-                );
-
-            document
-                .getElementById('notifyBtn')
-                .href =
-                    `https://wa.me/${user.Mobile}?text=${msg}`;
-        }
+        
 
         // ======================================================
         // SUCCESS
