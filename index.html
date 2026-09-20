@@ -7,6 +7,7 @@
     
     <script src="https://www.gstatic.com/firebasejs/9.6.1/firebase-app-compat.js"></script>
     <script src="https://www.gstatic.com/firebasejs/9.6.1/firebase-auth-compat.js"></script>
+<script src="https://www.gstatic.com/firebasejs/9.6.1/firebase-functions-compat.js"></script>
 <script src="https://www.gstatic.com/firebasejs/9.6.1/firebase-firestore-compat.js"></script>
     <script src="https://www.gstatic.com/firebasejs/9.6.1/firebase-storage-compat.js"></script>
     
@@ -1262,6 +1263,7 @@
 
 const db = firebase.firestore();
 const storage = firebase.storage();
+const functions = firebase.app().functions("asia-south1");
 
 const auth = firebase.auth();
 
@@ -2841,7 +2843,7 @@ function confirmIncidentPhoto(){if(!incidentPhotoFile)return;incidentPhotoConfir
 
   try {
     const reserveRequest =
-      firebase.functions().httpsCallable(
+      functions.httpsCallable(
         "createRescuerEmergencyRequest"
       );
 
@@ -2902,7 +2904,7 @@ function confirmIncidentPhoto(){if(!incidentPhotoFile)return;incidentPhotoConfir
     status.innerText = "Contacting emergency guardians...";
 
     const finalizeRequest =
-      firebase.functions().httpsCallable(
+      functions.httpsCallable(
         "finalizeRescuerEmergencyRequest"
       );
 
