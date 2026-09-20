@@ -2632,6 +2632,23 @@ function closeRescuerEmergency() {
 }
 
             let incidentPhotoFile=null,incidentPhotoConfirmed=false;
+            async function compressIncidentPhoto(file){
+  const bitmap=await createImageBitmap(file);
+  const maxSize=1280;
+  const scale=Math.min(1,maxSize/Math.max(bitmap.width,bitmap.height));
+  const canvas=document.createElement("canvas");
+  canvas.width=Math.round(bitmap.width*scale);
+  canvas.height=Math.round(bitmap.height*scale);
+  const ctx=canvas.getContext("2d");
+  ctx.drawImage(bitmap,0,0,canvas.width,canvas.height);
+  bitmap.close();
+  return new Promise((resolve,reject)=>{
+    canvas.toBlob(blob=>{
+      if(blob)resolve(new File([blob],"emergency_photo.jpg",{type:"image/jpeg"}));
+      else reject(new Error("Photo compression failed"));
+    },"image/jpeg",0.72);
+  });
+}
 function openIncidentCamera(){const i=document.getElementById("incidentPhotoInput");if(i)i.click()}
 document.getElementById("incidentPhotoInput")?.addEventListener("change",function(){const f=this.files?.[0];if(!f)return;if(!f.type.startsWith("image/")){alert("Please select an image.");this.value="";return}incidentPhotoFile=f;incidentPhotoConfirmed=false;const p=document.getElementById("incidentPhotoPreview"),img=document.getElementById("incidentPhotoImage");img.src=URL.createObjectURL(f);p.style.display="block";document.getElementById("takeIncidentPhotoBtn").innerHTML='<i class="fas fa-camera"></i> PHOTO SELECTED'});
 function retakeIncidentPhoto(){incidentPhotoFile=null;incidentPhotoConfirmed=false;document.getElementById("incidentPhotoInput").value="";document.getElementById("incidentPhotoPreview").style.display="none";document.getElementById("takeIncidentPhotoBtn").innerHTML='<i class="fas fa-camera"></i> TAKE A LIVE PICTURE';openIncidentCamera()}
@@ -2793,7 +2810,49 @@ if (!withPerson.checked) {
         const userData = userDoc.data();
 
       let photoPath=null,photoAvailable=false,uploadedPhotoRef=null;
-if(incidentPhotoFile&&incidentPhotoConfirmed){const photoRef=storage.ref().child(`rescuer_emergency/${userId}/emergency_photo.jpg`);uploadedPhotoRef=photoRef;await photoRef.put(incidentPhotoFile);photoPath=`rescuer_emergency/${userId}/emergency_photo.jpg`;photoAvailable=true}
+if(incidentPhotoFile&&incidentPhotoConfirmed){
+  status.innerText="Preparing photo...";
+
+  const compressedPhoto=await compressIncidentPhoto(incidentPhotoFile);
+
+  status.innerText="Uploading photo...";
+
+  console.log(
+    "Original:",
+    (incidentPhotoFile.size/1024/1024).toFixed(2),
+    "MB"
+  );
+
+  console.log(
+    "Compressed:",
+    (compressedPhoto.size/1024/1024).toFixed(2),
+    "MB"
+  );
+
+  console.log(
+    "Original:",
+    (incidentPhotoFile.size/1024/1024).toFixed(2),
+    "MB"
+  );
+
+  console.log(
+    "Compressed:",
+    (compressedPhoto.size/1024/1024).toFixed(2),
+    "MB"
+  );
+
+  const photoRef=storage.ref().child(`rescuer_emergency/${userId}/emergency_photo.jpg`);
+
+  uploadedPhotoRef=photoRef;
+
+  await photoRef.put(
+    compressedPhoto,
+    {contentType:"image/jpeg"}
+  );
+
+  photoPath=`rescuer_emergency/${userId}/emergency_photo.jpg`;
+  photoAvailable=true;
+}
 const requestRef=await db.collection("rescuer_emergency_requests").add({targetUserUid:userId,targetUserName:userData.Name||"SurakshaQR Member",rescuerName:rescuerName,rescuerPhone:normalizedPhone,withPerson:true,status:"PENDING",createdAt:firebase.firestore.FieldValue.serverTimestamp(),source:"QR_WEB",userAgent:navigator.userAgent,photoAvailable:photoAvailable,photoPath:photoPath});
         console.log(
             "🚨 Rescuer emergency request created:",
