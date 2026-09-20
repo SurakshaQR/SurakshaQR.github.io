@@ -1228,7 +1228,7 @@
     maxlength="15"
 >
 
-<label class="rescuer-checkbox"><input type="checkbox" id="rescuerWithPerson"><span>I am with this person</span></label>
+
 <div class="incident-photo-box"><div class="incident-photo-title"><i class="fas fa-camera"></i> TAKE A LIVE PICTURE <span>(OPTIONAL)</span></div><div class="incident-photo-subtitle">Take a live picture of the situation for the emergency guardians.</div><input type="file" id="incidentPhotoInput" accept="image/*" capture="environment" style="display:none;"><button type="button" id="takeIncidentPhotoBtn" class="incident-photo-btn pulse-hint" onclick="openIncidentCamera()"><i class="fas fa-camera"></i> TAKE A LIVE PICTURE</button><div id="incidentPhotoPreview" style="display:none;"><img id="incidentPhotoImage" alt="Incident photo"><div class="incident-photo-actions"><button type="button" onclick="retakeIncidentPhoto()">RETAKE</button> <button
     type="button"
     class="pulse-hint"
@@ -2722,11 +2722,6 @@ function confirmIncidentPhoto(){if(!incidentPhotoFile)return;incidentPhotoConfir
     const phoneInput =
         document.getElementById("rescuerPhone");
 
-    const withPerson =
-        document.getElementById("rescuerWithPerson");
-
-
-
     const status =
         document.getElementById("rescuerStatus");
 
@@ -2814,17 +2809,6 @@ if (!/^[6-9]\d{9}$/.test(normalizedPhone)) {
 
     return;
 }
-
-if (!withPerson.checked) {
-
-        status.className =
-            "rescuer-status error";
-
-        status.innerText =
-            "Please confirm that you are with this person.";
-
-        return;
-    }
 
     // ------------------------------------------
     // Loading state
