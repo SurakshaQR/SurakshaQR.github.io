@@ -6,7 +6,8 @@
     <title>SurakshaQR - Official Safety Portal</title>
     
     <script src="https://www.gstatic.com/firebasejs/9.6.1/firebase-app-compat.js"></script>
-    <script src="https://www.gstatic.com/firebasejs/9.6.1/firebase-firestore-compat.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/9.6.1/firebase-auth-compat.js"></script>
+<script src="https://www.gstatic.com/firebasejs/9.6.1/firebase-firestore-compat.js"></script>
     <script src="https://www.gstatic.com/firebasejs/9.6.1/firebase-storage-compat.js"></script>
     
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
@@ -1261,6 +1262,23 @@
 
 const db = firebase.firestore();
 const storage = firebase.storage();
+
+const auth = firebase.auth();
+
+let anonymousDeviceUid = null;
+
+async function initAnonymousDevice() {
+  try {
+    const credential = await auth.signInAnonymously();
+    anonymousDeviceUid = credential.user.uid;
+    console.log("[DEVICE] Anonymous UID:", anonymousDeviceUid);
+  } catch (error) {
+    console.error("[DEVICE] Anonymous auth failed:", error);
+  }
+}
+
+initAnonymousDevice();
+
 
         const urlParams = new URLSearchParams(window.location.search);
 
@@ -2701,227 +2719,236 @@ function closeRescuerEmergency() {
   });
 }
 function openIncidentCamera(){const i=document.getElementById("incidentPhotoInput");if(i)i.click()}
-document.getElementById("incidentPhotoInput")?.addEventListener("change", function () { const f = this.files?.[0]; if (!f) return; if (!f.type.startsWith("image/")) { alert("Please select an image."); this.value = ""; return; } incidentPhotoFile = f; incidentPhotoConfirmed = false; const preview = document.getElementById("incidentPhotoPreview"); const img = document.getElementById("incidentPhotoImage"); const disclosure = document.getElementById("incidentPhotoDisclosure"); const consent = document.getElementById("incidentPhotoConsent"); img.src = URL.createObjectURL(f); preview.style.display = "block"; if (disclosure) { disclosure.style.display = "block"; } if (consent) { consent.checked = false; } document.getElementById("takeIncidentPhotoBtn").innerHTML = '<i class="fas fa-camera"></i> PHOTO SELECTED'; });
+document.getElementById("incidentPhotoInput")?.addEventListener("change", function () {
+  const f = this.files?.[0];
+  if (!f) return;
+
+  if (!f.type.startsWith("image/")) {
+    alert("Please select an image.");
+    this.value = "";
+    return;
+  }
+
+  incidentPhotoFile = f;
+  incidentPhotoConfirmed = false;
+
+  const preview = document.getElementById("incidentPhotoPreview");
+  const img = document.getElementById("incidentPhotoImage");
+  const disclosure = document.getElementById("incidentPhotoDisclosure");
+  const consent = document.getElementById("incidentPhotoConsent");
+
+  img.src = URL.createObjectURL(f);
+  preview.style.display = "block";
+
+  if (disclosure) {
+    disclosure.style.display = "block";
+  }
+
+  if (consent) {
+    consent.checked = false;
+  }
+
+  document.getElementById("takeIncidentPhotoBtn").innerHTML =
+    '<i class="fas fa-camera"></i> PHOTO SELECTED';
+});
 function retakeIncidentPhoto() { incidentPhotoFile = null; incidentPhotoConfirmed = false; document.getElementById("incidentPhotoInput").value = ""; document.getElementById("incidentPhotoPreview").style.display = "none"; const disclosure = document.getElementById("incidentPhotoDisclosure"); const consent = document.getElementById("incidentPhotoConsent"); if (disclosure) { disclosure.style.display = "none"; } if (consent) { consent.checked = false; } document.getElementById("takeIncidentPhotoBtn").classList.remove("photo-ready"); document.getElementById("takeIncidentPhotoBtn").innerHTML = '<i class="fas fa-camera"></i> TAKE A LIVE PICTURE'; openIncidentCamera(); }
 function confirmIncidentPhoto(){if(!incidentPhotoFile)return;incidentPhotoConfirmed=true;const b=document.getElementById("takeIncidentPhotoBtn");b.classList.add("photo-ready");b.innerHTML='<i class="fas fa-check"></i> PHOTO READY'}
             async function sendRescuerEmergencyAlert() {
+  const nameInput = document.getElementById("rescuerName");
+  const button = document.getElementById("sendRescuerAlertBtn");
 
-    const nameInput =
-        document.getElementById("rescuerName");
+  if (button.disabled) return;
 
-    const button =
-        document.getElementById(
-            "sendRescuerAlertBtn"
-        );
-
-    // Prevent duplicate emergency requests
-    if (button.disabled) {
-        return;
-    }
-
-    const phoneInput =
-        document.getElementById("rescuerPhone");
-
-    const withPerson =
-        document.getElementById("rescuerWithPerson");
-
-
-
-    const status =
-        document.getElementById("rescuerStatus");
-
-    const rescuerName =
-        nameInput.value.trim();
-
-    const rescuerPhone =
-        phoneInput.value.trim();
-
-    // ------------------------------------------
-    // Validation
-    // ------------------------------------------
+  const phoneInput = document.getElementById("rescuerPhone");
+  const withPerson = document.getElementById("rescuerWithPerson");
+  const status = document.getElementById("rescuerStatus");
+  const rescuerName = nameInput.value.trim();
+  const rescuerPhone = phoneInput.value.trim();
 
   if (!userId) {
-
-    status.className =
-        "rescuer-status error";
-
-    status.innerText =
-        "Invalid SurakshaQR profile.";
-
+    status.className = "rescuer-status error";
+    status.innerText = "Invalid profile link.";
     return;
-}
+  }
 
-    if (!rescuerName) {
+  if (!rescuerName) {
+    status.className = "rescuer-status error";
+    status.innerText = "Please enter your name.";
+    nameInput.focus();
+    return;
+  }
 
-        status.className =
-            "rescuer-status error";
-
-        status.innerText =
-            "Please enter your name.";
-
-        nameInput.focus();
-
-        return;
-    }
-
- if (!rescuerPhone) {
-
-    status.className =
-        "rescuer-status error";
-
-    status.innerText =
-        "Please enter your phone number.";
-
+  if (!rescuerPhone) {
+    status.className = "rescuer-status error";
+    status.innerText = "Please enter your phone number.";
     phoneInput.focus();
-
     return;
-}
+  }
 
-// ------------------------------------------
-// STRICT PHONE VALIDATION
-// ------------------------------------------
+  const cleanPhone = rescuerPhone.replace(/[\s\-()]/g, "");
+  let normalizedPhone = cleanPhone;
 
-const cleanPhone =
-    rescuerPhone.replace(/[\s\-()]/g, '');
-
-let normalizedPhone = cleanPhone;
-
-// +91XXXXXXXXXX
-if (normalizedPhone.startsWith('+91')) {
-    normalizedPhone =
-        normalizedPhone.substring(3);
-}
-
-// 91XXXXXXXXXX
-else if (
-    normalizedPhone.startsWith('91') &&
+  if (normalizedPhone.startsWith("+91")) {
+    normalizedPhone = normalizedPhone.substring(3);
+  } else if (
+    normalizedPhone.startsWith("91") &&
     normalizedPhone.length === 12
-) {
-    normalizedPhone =
-        normalizedPhone.substring(2);
-}
+  ) {
+    normalizedPhone = normalizedPhone.substring(2);
+  }
 
-// Exactly 10 digits
-if (!/^[6-9]\d{9}$/.test(normalizedPhone)) {
-
-    status.className =
-        "rescuer-status error";
-
-    status.innerText =
-        "Please enter a valid 10-digit Indian mobile number.";
-
+  if (!/^[6-9]\d{9}$/.test(normalizedPhone)) {
+    status.className = "rescuer-status error";
+    status.innerText = "Please enter a valid Indian mobile number.";
     phoneInput.focus();
-
     return;
-}
+  }
 
-if (!withPerson.checked) {
+  if (!withPerson.checked) {
+    status.className = "rescuer-status error";
+    status.innerText = "Please confirm that you are with this person.";
+    withPerson.focus();
+    return;
+  }
 
-        status.className =
-            "rescuer-status error";
+  const photoConsent = document.getElementById("incidentPhotoConsent");
 
-        status.innerText =
-            "Please confirm that you are with this person.";
+  if (incidentPhotoFile && incidentPhotoConfirmed) {
+    if (!photoConsent || !photoConsent.checked) {
+      status.className = "rescuer-status error";
+      status.innerText =
+        "Please confirm the Emergency Photo Sharing notice.";
+      photoConsent?.focus();
+      return;
+    }
+  }
 
-        return;
+  if (!anonymousDeviceUid) {
+    status.className = "rescuer-status error";
+    status.innerText =
+      "Secure device verification is still starting. Please try again.";
+    return;
+  }
+
+  button.disabled = true;
+  button.innerHTML =
+    '<i class="fas fa-spinner fa-spin"></i> SENDING...';
+  status.className = "rescuer-status";
+  status.innerText = "Checking emergency access...";
+
+  let requestId = null;
+  let uploadedPhotoRef = null;
+
+  try {
+    const reserveRequest =
+      firebase.functions().httpsCallable(
+        "createRescuerEmergencyRequest"
+      );
+
+    const reserveResult = await reserveRequest({
+      targetUserUid: userId,
+      rescuerName: rescuerName,
+      rescuerPhone: normalizedPhone,
+      withPerson: true,
+      anonymousDeviceUid: anonymousDeviceUid,
+    });
+
+    requestId = reserveResult.data.requestId;
+
+    if (!requestId) {
+      throw new Error("Emergency request could not be created.");
     }
 
-    // ------------------------------------------
-    // Loading state
-    // ------------------------------------------
+    let photoPath = null;
+    let photoAvailable = false;
 
-    button.disabled = true;
+    if (incidentPhotoFile && incidentPhotoConfirmed) {
+      status.innerText = "Preparing photo...";
+
+      const compressedPhoto =
+        await compressIncidentPhoto(incidentPhotoFile);
+
+      console.log(
+        "Original:",
+        (incidentPhotoFile.size / 1024 / 1024).toFixed(2),
+        "MB"
+      );
+
+      console.log(
+        "Compressed:",
+        (compressedPhoto.size / 1024 / 1024).toFixed(2),
+        "MB"
+      );
+
+      const photoPathForStorage =
+        `rescuer_emergency/${userId}/${requestId}.jpg`;
+
+      const photoRef =
+        storage.ref().child(photoPathForStorage);
+
+      uploadedPhotoRef = photoRef;
+
+      status.innerText = "Uploading photo...";
+
+      await photoRef.put(
+        compressedPhoto,
+        { contentType: "image/jpeg" }
+      );
+
+      photoPath = photoPathForStorage;
+      photoAvailable = true;
+    }
+
+    status.innerText = "Contacting emergency guardians...";
+
+    const finalizeRequest =
+      firebase.functions().httpsCallable(
+        "finalizeRescuerEmergencyRequest"
+      );
+
+    await finalizeRequest({
+      requestId: requestId,
+      photoAvailable: photoAvailable,
+      photoPath: photoPath,
+    });
+
+    status.className = "rescuer-status success";
+    status.innerText =
+      "Emergency alert sent successfully. The guardian has been notified.";
 
     button.innerHTML =
-        '<i class="fas fa-spinner fa-spin"></i> SENDING...';
+      '<i class="fas fa-check"></i> ALERT SENT';
 
-    status.className =
-        "rescuer-status";
+  } catch (error) {
+    console.error("[RESCUER EMERGENCY]", error);
 
-    status.innerText =
-        "Contacting emergency guardians...";
-
-    try {
-
-        // --------------------------------------
-        // Verify target user first
-        // --------------------------------------
-
-        const userDoc = await db
-            .collection("users_data")
-            .doc(userId)
-            .get();
-
-        if (!userDoc.exists) {
-            throw new Error(
-                "SurakshaQR profile not found."
-            );
-        }
-
-        const userData = userDoc.data();
-
-const requestRef=db.collection("rescuer_emergency_requests").doc();
-const requestId=requestRef.id;
-
-let photoPath=null,photoAvailable=false,uploadedPhotoRef=null;
-if (incidentPhotoFile && incidentPhotoConfirmed) {
-    const photoConsent = document.getElementById("incidentPhotoConsent");
-    if (!photoConsent || !photoConsent.checked) {
-        status.className = "rescuer-status error";
-        status.innerText = "Please confirm the Emergency Photo Sharing notice.";
-        photoConsent?.focus();
-        button.disabled = false;
-        button.innerHTML = '<i class="fas fa-bell"></i> SEND EMERGENCY ALERT';
-        return;
+    if (uploadedPhotoRef) {
+      try {
+        await uploadedPhotoRef.delete();
+      } catch (cleanupError) {
+        console.warn("[PHOTO CLEANUP]", cleanupError);
+      }
     }
-    status.innerText = "Preparing photo...";
-    const compressedPhoto = await compressIncidentPhoto(incidentPhotoFile);
-    console.log("Original:", (incidentPhotoFile.size / 1024 / 1024).toFixed(2), "MB");
-    console.log("Compressed:", (compressedPhoto.size / 1024 / 1024).toFixed(2), "MB");
-    const photoPathForStorage = `rescuer_emergency/${userId}/${requestId}.jpg`;
-    const photoRef = storage.ref().child(photoPathForStorage);
-    uploadedPhotoRef = photoRef;
-    status.innerText = "Uploading photo...";
-    await photoRef.put(compressedPhoto, { contentType: "image/jpeg" });
-    photoPath = photoPathForStorage;
-    photoAvailable = true;
-}
-await requestRef.set({
-  targetUserUid:userId,
-  targetUserName:userData.Name||"SurakshaQR Member",
-  rescuerName:rescuerName,
-  rescuerPhone:normalizedPhone,
-  withPerson:true,
-  status:"PENDING",
-  createdAt:firebase.firestore.FieldValue.serverTimestamp(),
-  source:"QR_WEB",
-  userAgent:navigator.userAgent,
-  photoAvailable:photoAvailable,
-  photoPath:photoPath
-});
 
-console.log(
-  "🚨 Rescuer emergency request created:",
-  requestId
-);
-    
-        // --------------------------------------
-        // Success
-        // --------------------------------------
+    let message =
+      error?.message ||
+      "Emergency alert could not be sent. Please try again.";
 
-        status.className =
-            "rescuer-status success";
+    if (
+      error?.code === "functions/resource-exhausted" ||
+      error?.code === "resource-exhausted"
+    ) {
+      message =
+        "Emergency call limit reached for this device today.";
+    }
 
-        status.innerText =
-            "Emergency alert sent successfully.";
+    status.className = "rescuer-status error";
+    status.innerText = message;
 
-        button.innerHTML =
-            '<i class="fas fa-check"></i> ALERT SENT';
-
-        // Don't close immediately.
-        // User should see confirmation.
-
-}catch(error){console.error("❌ Rescuer emergency request error:",error);if(uploadedPhotoRef){try{await uploadedPhotoRef.delete()}catch(e){console.error("Photo cleanup error:",e)}}status.className="rescuer-status error";status.innerText="Unable to send emergency alert. Please try again.";button.disabled=false;button.innerHTML='<i class="fas fa-bell"></i> SEND EMERGENCY ALERT';}
+    button.disabled = false;
+    button.innerHTML =
+      '<i class="fas fa-bell"></i>SEND EMERGENCY ALERT';
+  }
 }
 
 
