@@ -1228,7 +1228,7 @@
     maxlength="15"
 >
 
-
+<label class="rescuer-checkbox"><input type="checkbox" id="rescuerWithPerson"><span>I am with this person</span></label>
 <div class="incident-photo-box"><div class="incident-photo-title"><i class="fas fa-camera"></i> TAKE A LIVE PICTURE <span>(OPTIONAL)</span></div><div class="incident-photo-subtitle">Take a live picture of the situation for the emergency guardians.</div><input type="file" id="incidentPhotoInput" accept="image/*" capture="environment" style="display:none;"><button type="button" id="takeIncidentPhotoBtn" class="incident-photo-btn pulse-hint" onclick="openIncidentCamera()"><i class="fas fa-camera"></i> TAKE A LIVE PICTURE</button><div id="incidentPhotoPreview" style="display:none;"><img id="incidentPhotoImage" alt="Incident photo"><div class="incident-photo-actions"><button type="button" onclick="retakeIncidentPhoto()">RETAKE</button> <button
     type="button"
     class="pulse-hint"
@@ -1778,133 +1778,229 @@ function isBloodBuddyQRVisible(user) {
     );
 }
 
-    
-    // ------------------------------------------------------
-    // OPEN BLOOD BUDDIES
-    // ------------------------------------------------------
-    
-    function openBloodBuddies() {
-    
-        const modal =
-            document.getElementById('bloodBuddyModal');
-    
-        if (!modal) return;
-    
-        bloodBuddyList.innerHTML = '';
-    
-        // --------------------------------------------------
-        // QR OFF
-        // --------------------------------------------------
-    
-        if (!isBloodBuddyQRVisible(user)) {
-    
-            bloodBuddyList.innerHTML = `
-                <div class="buddy-empty">
-    
-                    <i class="fas fa-lock"></i>
-    
-                    <div>
-                        Blood Buddy contacts are
-                        currently protected.
-                    </div>
-    
-                    <div style="
-                        margin-top:6px;
-                        font-size:9px;
-                        opacity:0.5;
-                    ">
-                        Enable QR from the SurakshaQR app
-                        to view emergency contacts.
-                    </div>
-    
+
+// ------------------------------------------------------
+// OPEN BLOOD BUDDIES
+// ------------------------------------------------------
+
+function openBloodBuddies() {
+
+    const modal =
+        document.getElementById('bloodBuddyModal');
+
+    if (!modal) return;
+
+    bloodBuddyList.innerHTML = '';
+
+    // --------------------------------------------------
+    // QR OFF
+    // --------------------------------------------------
+
+    if (!isBloodBuddyQRVisible(user)) {
+
+        bloodBuddyList.innerHTML = `
+            <div class="buddy-empty">
+
+                <i class="fas fa-lock"></i>
+
+                <div>
+                    Blood Buddy contacts are
+                    currently protected.
                 </div>
-            `;
-    
-            modal.classList.add('show');
-    
-            return;
-        }
-    
-    
-        // --------------------------------------------------
-        // QR ON
-        // --------------------------------------------------
-    
-        const raw =
-            user.Blood_Buddy || '';
-    
-    
-        const buddies =
-            raw
-                .split(',')
-                .map(item => item.trim())
-                .filter(item => item.length > 0)
-                .map(item => {
-    
-                    const parts =
-                        item.split(':');
-    
-                    return {
-                        name:
-                            (parts[0] || '').trim(),
-    
-                        phone:
-                            (parts.slice(1).join(':') || '').trim()
-                    };
-    
-                })
-                .filter(item =>
-                    item.name &&
-                    item.phone
-                )
-                .slice(0, 3);
-    
-    
-        // --------------------------------------------------
-        // NO DATA
-        // --------------------------------------------------
-    
-        if (buddies.length === 0) {
-    
-            bloodBuddyList.innerHTML = `
-                <div class="buddy-empty">
-    
-                    <i class="fas fa-user-group"></i>
-    
-                    No Blood Buddies available.
-    
+
+                <div style="
+                    margin-top:6px;
+                    font-size:9px;
+                    opacity:0.5;
+                ">
+                    Enable QR from the SurakshaQR app
+                    to view emergency contacts.
                 </div>
-            `;
-    
-            modal.classList.add('show');
-    
-            return;
-        }
 
-// --------------------------------------------------
-// CREATE BUDDY CARDS
-// --------------------------------------------------
+            </div>
+        `;
 
-buddies.forEach((buddy, index) => { const item = document.createElement('div'); item.className = 'buddy-item'; const info = document.createElement('div'); info.className = 'buddy-info'; const number = document.createElement('div'); number.className = 'buddy-number'; number.textContent = `Blood Buddy ${index + 1}`; const name = document.createElement('div'); name.className = 'buddy-name'; name.textContent = buddy.name; const phone = document.createElement('div'); phone.className = 'buddy-phone'; phone.textContent = buddy.phone; info.appendChild(number); info.appendChild(name); info.appendChild(phone);
+        modal.classList.add('show');
 
-// ------------------------------------------------
-// CALL BUTTON
-// ------------------------------------------------
+        return;
+    }
 
-const call = document.createElement('a'); call.className = 'buddy-call-btn'; call.href = `tel:${buddy.phone}`; call.innerHTML = `<i class="fas fa-phone"></i> CALL`; item.appendChild(info); item.appendChild(call); bloodBuddyList.appendChild(item); });
 
-modal.classList.add('show');
+    // --------------------------------------------------
+    // QR ON
+    // --------------------------------------------------
+
+    const raw =
+        user.Blood_Buddy || '';
+
+
+    const buddies =
+        raw
+            .split(',')
+            .map(item => item.trim())
+            .filter(item => item.length > 0)
+            .map(item => {
+
+                const parts =
+                    item.split(':');
+
+                return {
+                    name:
+                        (parts[0] || '').trim(),
+
+                    phone:
+                        (parts.slice(1).join(':') || '').trim()
+                };
+
+            })
+            .filter(item =>
+                item.name &&
+                item.phone
+            )
+            .slice(0, 3);
+
+
+    // --------------------------------------------------
+    // NO DATA
+    // --------------------------------------------------
+
+    if (buddies.length === 0) {
+
+        bloodBuddyList.innerHTML = `
+            <div class="buddy-empty">
+
+                <i class="fas fa-user-group"></i>
+
+                No Blood Buddies available.
+
+            </div>
+        `;
+
+        modal.classList.add('show');
+
+        return;
+    }
+
+
+    // --------------------------------------------------
+    // CREATE BUDDY CARDS
+    // --------------------------------------------------
+
+    buddies.forEach((buddy, index) => {
+
+        const item =
+            document.createElement('div');
+
+        item.className =
+            'buddy-item';
+
+
+        const info =
+            document.createElement('div');
+
+        info.className =
+            'buddy-info';
+
+
+        const number =
+            document.createElement('div');
+
+        number.className =
+            'buddy-number';
+
+        number.textContent =
+            `Blood Buddy ${index + 1}`;
+
+
+        const name =
+            document.createElement('div');
+
+        name.className =
+            'buddy-name';
+
+        name.textContent =
+            buddy.name;
+
+
+        const phone =
+            document.createElement('div');
+
+        phone.className =
+            'buddy-phone';
+
+        phone.textContent =
+            buddy.phone;
+
+
+        info.appendChild(number);
+        info.appendChild(name);
+        info.appendChild(phone);
+
+
+        // ------------------------------------------------
+        // CALL BUTTON
+        // ------------------------------------------------
+
+        const call =
+            document.createElement('a');
+
+        call.className =
+            'buddy-call-btn';
+
+        call.href =
+            `tel:${buddy.phone}`;
+
+        call.innerHTML =
+            `<i class="fas fa-phone"></i> CALL`;
+
+
+        item.appendChild(info);
+        item.appendChild(call);
+
+        bloodBuddyList.appendChild(item);
+
+    });
+
+
+    modal.classList.add('show');
 }
 
-// CLOSE BLOOD BUDDIES
 
-function closeBloodBuddies() { const modal = document.getElementById('bloodBuddyModal'); if (!modal) return; modal.classList.remove('show'); }
+// ------------------------------------------------------
+// CLOSE BLOOD BUDDIES
+// ------------------------------------------------------
+
+function closeBloodBuddies() {
+
+    const modal =
+        document.getElementById('bloodBuddyModal');
+
+    if (!modal) return;
+
+    modal.classList.remove('show');
+}
+
 
 // ------------------------------------------------------
 // CLOSE WHEN CLICKING OUTSIDE
 // ------------------------------------------------------
 
-document.addEventListener('click', function(event) { const modal = document.getElementById('bloodBuddyModal'); if (modal && event.target === modal) { closeBloodBuddies(); } });
+document.addEventListener(
+    'click',
+    function(event) {
+
+        const modal =
+            document.getElementById('bloodBuddyModal');
+
+        if (
+            modal &&
+            event.target === modal
+        ) {
+            closeBloodBuddies();
+        }
+
+    }
+);
 // ======================================================
 // 8. SOCIAL LINKS — FINAL WORKING VERSION
 // ======================================================
@@ -1975,23 +2071,185 @@ if (socialDiv) {
 
                 }
 
+                // ------------------------------------------
                 // Convert www.facebook.com/... to https://
                 // Convert facebook.com/... to https://
-if (!/^https?:\/\//i.test(cleanLink)) { cleanLink = 'https://' + cleanLink.replace(/^\/+/, ''); }                
- // Remove accidental spaces
+                // ------------------------------------------
 
-cleanLink = cleanLink.replace(/\s+/g, ''); const lowerLink = cleanLink.toLowerCase(); let icon = 'fas fa-link'; if (lowerLink.includes('facebook.com') || lowerLink.includes('facebook')) { icon = 'fab fa-facebook-f'; } else if (lowerLink.includes('instagram.com') || lowerLink.includes('instagram')) { icon = 'fab fa-instagram'; } else if (lowerLink.includes('youtube.com') || lowerLink.includes('youtu.be') || lowerLink.includes('youtube')) { icon = 'fab fa-youtube'; }
-const a = document.createElement('a'); a.href = cleanLink; a.target = '_blank'; a.rel = 'noopener noreferrer'; a.title = cleanLink; a.addEventListener('click', function (event) { event.preventDefault(); event.stopPropagation(); window.open(cleanLink, '_blank', 'noopener,noreferrer'); }); a.innerHTML = `<i class="${icon}"></i>`; socialDiv.appendChild(a); });
-} } 
+                if (
+                    !/^https?:\/\//i.test(cleanLink)
+                ) {
 
-// SUCCESS
-console.log('[PROFILE] ✅ Profile loaded successfully:', user.Name); console.log('[PROFILE] UID:', userId); console.log('================================'); } catch (error) { console.error('[PROFILE] ❌ Firestore error:', error); console.error('[PROFILE] UID used:', userId); nameEl.classList.remove('shimmer'); nameEl.innerText = 'Profile Error'; } } loadFirestoreData();
+                    cleanLink =
+                        'https://' +
+                        cleanLink.replace(
+                            /^\/+/,
+                            ''
+                        );
+                }
+
+                // ------------------------------------------
+                // Remove accidental spaces
+                // ------------------------------------------
+
+                cleanLink =
+                    cleanLink.replace(/\s+/g, '');
+
+                // ------------------------------------------
+                // Detect platform
+                // ------------------------------------------
+
+                const lowerLink =
+                    cleanLink.toLowerCase();
+
+                let icon =
+                    'fas fa-link';
+
+                if (
+                    lowerLink.includes('facebook.com') ||
+                    lowerLink.includes('facebook')
+                ) {
+
+                    icon =
+                        'fab fa-facebook-f';
+
+                } else if (
+                    lowerLink.includes('instagram.com') ||
+                    lowerLink.includes('instagram')
+                ) {
+
+                    icon =
+                        'fab fa-instagram';
+
+                } else if (
+                    lowerLink.includes('youtube.com') ||
+                    lowerLink.includes('youtu.be') ||
+                    lowerLink.includes('youtube')
+                ) {
+
+                    icon =
+                        'fab fa-youtube';
+                }
+
+                // ------------------------------------------
+                // Create link
+                // ------------------------------------------
+
+                const a =
+                    document.createElement('a');
+
+                a.href =
+                    cleanLink;
+
+                a.target =
+                    '_blank';
+
+                a.rel =
+                    'noopener noreferrer';
+
+                a.title =
+                    cleanLink;
+
+                // ------------------------------------------
+                // IMPORTANT:
+                // Prevent any page/router click handler
+                // from treating social URL as local page.
+                // ------------------------------------------
+
+                a.addEventListener(
+                    'click',
+                    function (event) {
+
+                        event.preventDefault();
+                        event.stopPropagation();
+
+                        window.open(
+                            cleanLink,
+                            '_blank',
+                            'noopener,noreferrer'
+                        );
+                    }
+                );
+
+                a.innerHTML =
+                    `<i class="${icon}"></i>`;
+
+                socialDiv.appendChild(a);
+            });
+    }
+}
+        
+
+        // ======================================================
+        // SUCCESS
+        // ======================================================
+
+        console.log(
+            '[PROFILE] ✅ Profile loaded successfully:',
+            user.Name
+        );
+
+        console.log(
+            '[PROFILE] UID:',
+            userId
+        );
+
+        console.log(
+            '================================'
+        );
+
+    } catch (error) {
+
+        console.error(
+            '[PROFILE] ❌ Firestore error:',
+            error
+        );
+
+        console.error(
+            '[PROFILE] UID used:',
+            userId
+        );
+
+        nameEl.classList.remove('shimmer');
+
+        nameEl.innerText =
+            'Profile Error';
+
+    }
+}
+
+loadFirestoreData();
+
+            // ==========================================================
 // SECURE VAULT WEB FLOW
 // ==========================================================
 
-function openVault() { const modal = document.getElementById('vaultModal'); const content = document.getElementById('vaultContent'); modal.classList.add('show'); content.innerHTML = `<div class="vault-loading"><i class="fas fa-spinner fa-spin"></i><br><br>Verifying vault access...</div>`; loadVaultDocuments(); }
+function openVault() {
 
+    const modal =
+        document.getElementById('vaultModal');
+
+    const content =
+        document.getElementById('vaultContent');
+
+    modal.classList.add('show');
+
+    content.innerHTML = `
+        <div class="vault-loading">
+            <i class="fas fa-spinner fa-spin"></i>
+            <br><br>
+            Verifying vault access...
+        </div>
+    `;
+
+    loadVaultDocuments();
+}
+
+
+// ==========================================================
 // CLOSE VAULT
+// ==========================================================
+
 function closeVault() {
 
     document
@@ -1999,6 +2257,8 @@ function closeVault() {
         .classList.remove('show');
 }
 
+
+// ==========================================================
 // LOAD VAULT DOCUMENTS
 // ==========================================================
 
@@ -2007,34 +2267,414 @@ async function loadVaultDocuments() {
     const content =
         document.getElementById('vaultContent');
 
+    // ======================================================
     // CHECK USER ID
+    // ======================================================
 
- if (!userId) { console.error('[VAULT] ❌ No userId available.'); content.innerHTML = `<div class="vault-error">Invalid SurakshaQR profile.</div>`; return; } console.log('[VAULT] 🔐 Loading vault for UID:', userId); try {
+    if (!userId) {
 
+        console.error(
+            '[VAULT] ❌ No userId available.'
+        );
+
+        content.innerHTML = `
+            <div class="vault-error">
+                Invalid SurakshaQR profile.
+            </div>
+        `;
+
+        return;
+    }
+
+    console.log(
+        '[VAULT] 🔐 Loading vault for UID:',
+        userId
+    );
+
+    try {
+
+        // ======================================================
         // ONLY THESE TWO DOCUMENTS CAN BE SHARED
+        // ======================================================
 
-const allowedDocuments = [{ folder: 'driving_licence', title: 'Driving Licence', icon: 'fa-id-card' }, { folder: 'mediclaim', title: 'Mediclaim', icon: 'fa-file-medical' }]; const visibleDocuments = [];
+        const allowedDocuments = [
 
+            {
+                folder: 'driving_licence',
+                title: 'Driving Licence',
+                icon: 'fa-id-card'
+            },
+
+            {
+                folder: 'mediclaim',
+                title: 'Mediclaim',
+                icon: 'fa-file-medical'
+            }
+
+        ];
+
+        const visibleDocuments = [];
+
+        // ======================================================
         // CHECK EACH DOCUMENT
-for (const document of allowedDocuments) { console.log('[VAULT] 🔎 Checking:', document.folder); try { const metadataPath = `vault_documents/${userId}/${document.folder}/metadata.json`; console.log('[VAULT] 📄 Metadata path:', metadataPath); const metadataRef = storage.ref().child(metadataPath); console.log('[VAULT] 📄 Getting metadata URL:', document.folder); const metadataUrl = await metadataRef.getDownloadURL(); console.log('[VAULT] ✅ Metadata URL received:', document.folder);
-const response = await fetch(metadataUrl, { method: 'GET', cache: 'no-store' }); if (!response.ok) { throw new Error(`Metadata HTTP error: ${response.status}`); } const metadata = await response.json(); console.log('[VAULT] ✅ Metadata read successfully:', document.folder, metadata);
+        // ======================================================
 
-                // QR VISIBILITY
-const visibleOnQr = metadata.visible_on_qr === true; console.log('[VAULT] 👁 visible_on_qr:', document.folder, visibleOnQr); if (!visibleOnQr) { console.log('[VAULT] 🚫 Document OFF:', document.title); continue; } const imagePath = `vault_documents/${userId}/${document.folder}/document.jpg`; console.log('[VAULT] 🖼 Image path:', imagePath); const imageRef = storage.ref().child(imagePath); let imageUrl; try { imageUrl = await imageRef.getDownloadURL(); console.log('[VAULT] ✅ Image URL received:', document.folder); } catch (imageError) { console.error('[VAULT] ❌ Image URL error:', document.folder, imageError); continue; }
-visibleDocuments.push({ title: document.title, icon: document.icon, imageUrl: imageUrl, expiryDate: metadata.expiry_date || null }); console.log('[VAULT] ✅ Document available:', document.title);
-} catch (documentError) { console.error('[VAULT] ❌ Document unavailable:', document.folder, documentError); // One document failing should not stop the other document from loading. continue; }
+        for (const document of allowedDocuments) {
+
+            console.log(
+                '[VAULT] 🔎 Checking:',
+                document.folder
+            );
+
+            try {
+
+                // ------------------------------------------------
+                // METADATA PATH
+                // ------------------------------------------------
+
+                const metadataPath =
+                    `vault_documents/${userId}/${document.folder}/metadata.json`;
+
+                console.log(
+                    '[VAULT] 📄 Metadata path:',
+                    metadataPath
+                );
+
+
+const metadataRef =
+    storage
+        .ref()
+        .child(metadataPath);
+
+console.log(
+    '[VAULT] 📄 Getting metadata URL:',
+    document.folder
+);
+
+const metadataUrl =
+    await metadataRef.getDownloadURL();
+
+console.log(
+    '[VAULT] ✅ Metadata URL received:',
+    document.folder
+);
+
+const response =
+    await fetch(
+        metadataUrl,
+        {
+            method: 'GET',
+            cache: 'no-store'
+        }
+    );
+
+if (!response.ok) {
+
+    throw new Error(
+        `Metadata HTTP error: ${response.status}`
+    );
 }
-if (visibleDocuments.length === 0) { console.warn('[VAULT] ⚠️ No QR-visible documents found.'); content.innerHTML = `<div class="vault-empty"><i class="fas fa-eye-slash" style="font-size:28px;opacity:.35;margin-bottom:12px;"></i><br>No emergency documents have been shared by this member.</div>`; return; }
 
+const metadata =
+    await response.json();
 
+console.log(
+    '[VAULT] ✅ Metadata read successfully:',
+    document.folder,
+    metadata
+);
+                // ==================================================
+                // QR VISIBILITY
+                // ==================================================
+
+                const visibleOnQr =
+                    metadata.visible_on_qr === true;
+
+                console.log(
+                    '[VAULT] 👁 visible_on_qr:',
+                    document.folder,
+                    visibleOnQr
+                );
+
+                // --------------------------------------------------
+                // DOCUMENT IS OFF
+                // --------------------------------------------------
+
+                if (!visibleOnQr) {
+
+                    console.log(
+                        '[VAULT] 🚫 Document OFF:',
+                        document.title
+                    );
+
+                    continue;
+                }
+
+                // ==================================================
+                // GET DOCUMENT IMAGE
+                // ==================================================
+
+                const imagePath =
+                    `vault_documents/${userId}/${document.folder}/document.jpg`;
+
+                console.log(
+                    '[VAULT] 🖼 Image path:',
+                    imagePath
+                );
+
+                const imageRef =
+                    storage
+                        .ref()
+                        .child(imagePath);
+
+                let imageUrl;
+
+                try {
+
+                    imageUrl =
+                        await imageRef.getDownloadURL();
+
+                    console.log(
+                        '[VAULT] ✅ Image URL received:',
+                        document.folder
+                    );
+
+                } catch (imageError) {
+
+                    console.error(
+                        '[VAULT] ❌ Image URL error:',
+                        document.folder,
+                        imageError
+                    );
+
+                    continue;
+                }
+
+                // ==================================================
+                // ADD TO VISIBLE DOCUMENT LIST
+                // ==================================================
+
+                visibleDocuments.push({
+
+                    title:
+                        document.title,
+
+                    icon:
+                        document.icon,
+
+                    imageUrl:
+                        imageUrl,
+
+                    expiryDate:
+                        metadata.expiry_date ||
+                        null
+
+                });
+
+                console.log(
+                    '[VAULT] ✅ Document available:',
+                    document.title
+                );
+
+            } catch (documentError) {
+
+                console.error(
+                    '[VAULT] ❌ Document unavailable:',
+                    document.folder,
+                    documentError
+                );
+
+                // One document failing should not stop
+                // the other document from loading.
+
+                continue;
+            }
+        }
+
+        // ======================================================
+        // NOTHING SHARED
+        // ======================================================
+
+        if (visibleDocuments.length === 0) {
+
+            console.warn(
+                '[VAULT] ⚠️ No QR-visible documents found.'
+            );
+
+            content.innerHTML = `
+                <div class="vault-empty">
+
+                    <i
+                        class="fas fa-eye-slash"
+                        style="
+                            font-size:28px;
+                            opacity:.35;
+                            margin-bottom:12px;
+                        ">
+                    </i>
+
+                    <br>
+
+                    No emergency documents have been
+                    shared by this member.
+
+                </div>
+            `;
+
+            return;
+        }
+
+        // ======================================================
         // RENDER SHARED DOCUMENTS
-console.log('[VAULT] ✅ Total visible documents:', visibleDocuments.length); content.innerHTML = visibleDocuments.map(document => { let expiryText = ''; if (document.expiryDate) { const date = new Date(document.expiryDate); if (!isNaN(date.getTime())) { expiryText = `<div style="margin-top:8px;font-size:10px;opacity:.55;">Expiry: ${date.toLocaleDateString('en-GB')}</div>`; } } return `<div class="vault-document"><div class="vault-document-title"><strong><i class="fas ${document.icon}" style="color:#00e5ff;margin-right:7px;"></i>${document.title}</strong><span class="vault-visible"><i class="fas fa-eye"></i> SHARED</span></div><img src="${document.imageUrl}" alt="${document.title}" loading="lazy">${expiryText}</div>`; }).join('');
-console.log('[VAULT] 🎉 Vault rendered successfully.');
-} catch (error) { console.error('[VAULT] ❌ Vault loading error:', error); content.innerHTML = `<div class="vault-error"><i class="fas fa-triangle-exclamation" style="font-size:24px;"></i><br><br>Unable to access the emergency vault.<br><br>Please try again.</div>`; }
+        // ======================================================
+
+        console.log(
+            '[VAULT] ✅ Total visible documents:',
+            visibleDocuments.length
+        );
+
+        content.innerHTML =
+            visibleDocuments
+                .map(document => {
+
+                    let expiryText = '';
+
+                    if (document.expiryDate) {
+
+                        const date =
+                            new Date(
+                                document.expiryDate
+                            );
+
+                        if (
+                            !isNaN(
+                                date.getTime()
+                            )
+                        ) {
+
+                            expiryText = `
+                                <div style="
+                                    margin-top:8px;
+                                    font-size:10px;
+                                    opacity:.55;
+                                ">
+                                    Expiry:
+                                    ${date.toLocaleDateString(
+                                        'en-GB'
+                                    )}
+                                </div>
+                            `;
+                        }
+                    }
+
+                    return `
+                        <div class="vault-document">
+
+                            <div class="vault-document-title">
+
+                                <strong>
+
+                                    <i
+                                        class="fas ${document.icon}"
+                                        style="
+                                            color:#00e5ff;
+                                            margin-right:7px;
+                                        ">
+                                    </i>
+
+                                    ${document.title}
+
+                                </strong>
+
+                                <span class="vault-visible">
+
+                                    <i class="fas fa-eye"></i>
+
+                                    SHARED
+
+                                </span>
+
+                            </div>
+
+                            <img
+                                src="${document.imageUrl}"
+                                alt="${document.title}"
+                                loading="lazy"
+                            >
+
+                            ${expiryText}
+
+                        </div>
+                    `;
+
+                })
+                .join('');
+
+        console.log(
+            '[VAULT] 🎉 Vault rendered successfully.'
+        );
+
+    } catch (error) {
+
+        console.error(
+            '[VAULT] ❌ Vault loading error:',
+            error
+        );
+
+        content.innerHTML = `
+            <div class="vault-error">
+
+                <i
+                    class="fas fa-triangle-exclamation"
+                    style="font-size:24px;">
+                </i>
+
+                <br><br>
+
+                Unable to access the emergency vault.
+
+                <br><br>
+
+                Please try again.
+
+            </div>
+        `;
+    }
+}
           // ==========================================
 // RESCUER EMERGENCY WEB FLOW
 // ==========================================
-function openRescuerEmergency() { const modal = document.getElementById("rescuerEmergencyModal"); const targetName = document.getElementById("rescuerTargetName"); const currentName = document.getElementById("userName").innerText; targetName.innerText = currentName && currentName !== "Scanning Profile..." && currentName !== "System Ready" ? currentName : "SurakshaQR Member"; document.getElementById("rescuerStatus").innerText = ""; modal.classList.add("show"); }
+
+function openRescuerEmergency() {
+
+    const modal =
+        document.getElementById(
+            "rescuerEmergencyModal"
+        );
+
+    const targetName =
+        document.getElementById(
+            "rescuerTargetName"
+        );
+
+    const currentName =
+        document.getElementById(
+            "userName"
+        ).innerText;
+
+    targetName.innerText =
+        currentName &&
+        currentName !== "Scanning Profile..." &&
+        currentName !== "System Ready"
+            ? currentName
+            : "SurakshaQR Member";
+
+    document.getElementById(
+        "rescuerStatus"
+    ).innerText = "";
+
+    modal.classList.add("show");
+}
 function closeRescuerEmergency() {
 
     document
@@ -2066,7 +2706,159 @@ function retakeIncidentPhoto() { incidentPhotoFile = null; incidentPhotoConfirme
 function confirmIncidentPhoto(){if(!incidentPhotoFile)return;incidentPhotoConfirmed=true;const b=document.getElementById("takeIncidentPhotoBtn");b.classList.add("photo-ready");b.innerHTML='<i class="fas fa-check"></i> PHOTO READY'}
             async function sendRescuerEmergencyAlert() {
 
-const nameInput = document.getElementById("rescuerName"); const button = document.getElementById("sendRescuerAlertBtn"); if (button.disabled) { return; } const phoneInput = document.getElementById("rescuerPhone"); const status = document.getElementById("rescuerStatus"); const rescuerName = nameInput.value.trim(); const rescuerPhone = phoneInput.value.trim(); if (!userId) { status.className = "rescuer-status error"; status.innerText = "Invalid SurakshaQR profile."; return; } if (!rescuerName) { status.className = "rescuer-status error"; status.innerText = "Please enter your name."; nameInput.focus(); return; } if (!rescuerPhone) { status.className = "rescuer-status error"; status.innerText = "Please enter your phone number."; phoneInput.focus(); return; } const cleanPhone = rescuerPhone.replace(/[\s\-()]/g, ''); let normalizedPhone = cleanPhone; if (normalizedPhone.startsWith('+91')) { normalizedPhone = normalizedPhone.substring(3); } else if (normalizedPhone.startsWith('91') && normalizedPhone.length === 12) { normalizedPhone = normalizedPhone.substring(2); } if (!/^[6-9]\d{9}$/.test(normalizedPhone)) { status.className = "rescuer-status error"; status.innerText = "Please enter a valid 10-digit Indian mobile number."; phoneInput.focus(); return; } button.disabled = true; button.innerHTML = '<i class="fas fa-spinner fa-spin"></i> SENDING...'; status.className = "rescuer-status"; status.innerText = "Contacting emergency guardians..."; try { const userDoc = await db.collection("users_data").doc(userId).get(); if (!userDoc.exists) { throw new Error("SurakshaQR profile not found."); } const userData = userDoc.data();
+    const nameInput =
+        document.getElementById("rescuerName");
+
+    const button =
+        document.getElementById(
+            "sendRescuerAlertBtn"
+        );
+
+    // Prevent duplicate emergency requests
+    if (button.disabled) {
+        return;
+    }
+
+    const phoneInput =
+        document.getElementById("rescuerPhone");
+
+    const withPerson =
+        document.getElementById("rescuerWithPerson");
+
+
+
+    const status =
+        document.getElementById("rescuerStatus");
+
+    const rescuerName =
+        nameInput.value.trim();
+
+    const rescuerPhone =
+        phoneInput.value.trim();
+
+    // ------------------------------------------
+    // Validation
+    // ------------------------------------------
+
+  if (!userId) {
+
+    status.className =
+        "rescuer-status error";
+
+    status.innerText =
+        "Invalid SurakshaQR profile.";
+
+    return;
+}
+
+    if (!rescuerName) {
+
+        status.className =
+            "rescuer-status error";
+
+        status.innerText =
+            "Please enter your name.";
+
+        nameInput.focus();
+
+        return;
+    }
+
+ if (!rescuerPhone) {
+
+    status.className =
+        "rescuer-status error";
+
+    status.innerText =
+        "Please enter your phone number.";
+
+    phoneInput.focus();
+
+    return;
+}
+
+// ------------------------------------------
+// STRICT PHONE VALIDATION
+// ------------------------------------------
+
+const cleanPhone =
+    rescuerPhone.replace(/[\s\-()]/g, '');
+
+let normalizedPhone = cleanPhone;
+
+// +91XXXXXXXXXX
+if (normalizedPhone.startsWith('+91')) {
+    normalizedPhone =
+        normalizedPhone.substring(3);
+}
+
+// 91XXXXXXXXXX
+else if (
+    normalizedPhone.startsWith('91') &&
+    normalizedPhone.length === 12
+) {
+    normalizedPhone =
+        normalizedPhone.substring(2);
+}
+
+// Exactly 10 digits
+if (!/^[6-9]\d{9}$/.test(normalizedPhone)) {
+
+    status.className =
+        "rescuer-status error";
+
+    status.innerText =
+        "Please enter a valid 10-digit Indian mobile number.";
+
+    phoneInput.focus();
+
+    return;
+}
+
+if (!withPerson.checked) {
+
+        status.className =
+            "rescuer-status error";
+
+        status.innerText =
+            "Please confirm that you are with this person.";
+
+        return;
+    }
+
+    // ------------------------------------------
+    // Loading state
+    // ------------------------------------------
+
+    button.disabled = true;
+
+    button.innerHTML =
+        '<i class="fas fa-spinner fa-spin"></i> SENDING...';
+
+    status.className =
+        "rescuer-status";
+
+    status.innerText =
+        "Contacting emergency guardians...";
+
+    try {
+
+        // --------------------------------------
+        // Verify target user first
+        // --------------------------------------
+
+        const userDoc = await db
+            .collection("users_data")
+            .doc(userId)
+            .get();
+
+        if (!userDoc.exists) {
+            throw new Error(
+                "SurakshaQR profile not found."
+            );
+        }
+
+        const userData = userDoc.data();
 
 const requestRef=db.collection("rescuer_emergency_requests").doc();
 const requestId=requestRef.id;
@@ -2113,16 +2905,49 @@ console.log(
   requestId
 );
     
-           // -------------------------------------- // Success // -------------------------------------- status.className = "rescuer-status success"; status.innerText = "Emergency alert sent successfully."; button.innerHTML = '<i class="fas fa-check"></i> ALERT SENT'; // Don't close immediately. // User should see confirmation.
+        // --------------------------------------
+        // Success
+        // --------------------------------------
+
+        status.className =
+            "rescuer-status success";
+
+        status.innerText =
+            "Emergency alert sent successfully.";
+
+        button.innerHTML =
+            '<i class="fas fa-check"></i> ALERT SENT';
+
+        // Don't close immediately.
+        // User should see confirmation.
+
 }catch(error){console.error("❌ Rescuer emergency request error:",error);if(uploadedPhotoRef){try{await uploadedPhotoRef.delete()}catch(e){console.error("Photo cleanup error:",e)}}status.className="rescuer-status error";status.innerText="Unable to send emergency alert. Please try again.";button.disabled=false;button.innerHTML='<i class="fas fa-bell"></i> SEND EMERGENCY ALERT';}
 }
 
-// VAULT MODAL — CLOSE WHEN CLICKING OUTSIDE THE CARD
 
-document.getElementById('vaultModal').addEventListener('click', function (event) { // Only close when the dark background itself is clicked. // Clicking inside the Vault card will NOT close it. if (event.target === this) { closeVault(); } });
-</script>
+// ==========================================================
+// VAULT MODAL — CLOSE WHEN CLICKING OUTSIDE THE CARD
+// ==========================================================
+
+document
+    .getElementById('vaultModal')
+    .addEventListener('click', function (event) {
+
+        // Only close when the dark background itself is clicked.
+        // Clicking inside the Vault card will NOT close it.
+
+        if (event.target === this) {
+            closeVault();
+        }
+
+    });
+
+    </script>
 </body>
 </html>
+        
+
+
 
 
 
