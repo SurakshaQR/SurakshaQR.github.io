@@ -464,35 +464,7 @@
 .rescuer-modal.show {
     display: flex;
 }
-
-.rescuer-modal-card {
-
-    width: 100%;
-
-    max-width: 390px;
-
-    background:
-        linear-gradient(
-            145deg,
-            rgba(35, 20, 28, 0.98),
-            rgba(8, 10, 14, 0.98)
-        );
-
-    border: 1px solid rgba(255, 71, 87, 0.35);
-
-    border-radius: 28px;
-
-    padding: 25px;
-
-    box-sizing: border-box;
-
-    box-shadow:
-        0 25px 80px rgba(0, 0, 0, 0.7),
-        0 0 30px rgba(255, 71, 87, 0.12);
-
-    position: relative;
-
-    animation: rescuerModalIn 0.25s ease;
+.rescuer-modal-card{width:100%;max-width:390px;max-height:calc(100dvh - 40px);overflow-y:auto;-webkit-overflow-scrolling:touch;background:linear-gradient(145deg,rgba(35,20,28,.98),rgba(8,10,14,.98));border:1px solid rgba(255,71,87,.35);border-radius:28px;padding:25px;box-sizing:border-box;box-shadow:0 25px 80px rgba(0,0,0,.7),0 0 30px rgba(255,71,87,.12);position:relative;animation:rescuerModalIn .25s ease}
 }
 
 @keyframes rescuerModalIn {
