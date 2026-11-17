@@ -2383,387 +2383,141 @@ function closeVault() {
 // ==========================================================
 
 async function loadVaultDocuments() {
-
-    const content =
-        document.getElementById('vaultContent');
-
-    // ======================================================
-    // CHECK USER ID
-    // ======================================================
+    const content = document.getElementById('vaultContent');
 
     if (!userId) {
-
-        console.error(
-            '[VAULT] âŒ No userId available.'
-        );
-
-        content.innerHTML = `
-            <div class="vault-error">
-                Invalid SurakshaQR profile.
-            </div>
-        `;
-
+        content.innerHTML =
+            '<div class="vault-error">Invalid LyfQR profile.</div>';
         return;
     }
 
-    console.log(
-        '[VAULT] ðŸ” Loading vault for UID:',
-        userId
-    );
-
     try {
-
-        // ======================================================
-        // ONLY THESE TWO DOCUMENTS CAN BE SHARED
-        // ======================================================
-
-        const allowedDocuments = [
-
-            {
-                folder: 'driving_licence',
+        const callable =
+            functions.httpsCallable('lyfqrGetPublicQrDocuments');
+        const result = await callable({ userUid: userId });
+        const allowedDocuments = new Map([
+            ['driving_licence', {
                 title: 'Driving Licence',
                 icon: 'fa-id-card'
-            },
-
-            {
-                folder: 'mediclaim',
+            }],
+            ['mediclaim', {
                 title: 'Mediclaim',
                 icon: 'fa-file-medical'
-            }
-
-        ];
+            }]
+        ]);
 
         const visibleDocuments = [];
+        const returnedDocuments =
+            Array.isArray(result.data?.documents)
+                ? result.data.documents
+                : [];
 
-        // ======================================================
-        // CHECK EACH DOCUMENT
-        // ======================================================
+        for (const item of returnedDocuments) {
+            const display = allowedDocuments.get(item?.type);
+            const imageUrl =
+                typeof item?.imageUrl === 'string'
+                    ? item.imageUrl
+                    : '';
 
-        for (const document of allowedDocuments) {
-
-            console.log(
-                '[VAULT] ðŸ”Ž Checking:',
-                document.folder
-            );
-
-            try {
-
-                // ------------------------------------------------
-                // METADATA PATH
-                // ------------------------------------------------
-
-                const metadataPath =
-                    `vault_documents/${userId}/${document.folder}/metadata.json`;
-
-                console.log(
-                    '[VAULT] ðŸ“„ Metadata path:',
-                    metadataPath
-                );
-
-
-const metadataRef =
-    storage
-        .ref()
-        .child(metadataPath);
-
-console.log(
-    '[VAULT] ðŸ“„ Getting metadata URL:',
-    document.folder
-);
-
-const metadataUrl =
-    await metadataRef.getDownloadURL();
-
-console.log(
-    '[VAULT] âœ… Metadata URL received:',
-    document.folder
-);
-
-const response =
-    await fetch(
-        metadataUrl,
-        {
-            method: 'GET',
-            cache: 'no-store'
-        }
-    );
-
-if (!response.ok) {
-
-    throw new Error(
-        `Metadata HTTP error: ${response.status}`
-    );
-}
-
-const metadata =
-    await response.json();
-
-console.log(
-    '[VAULT] âœ… Metadata read successfully:',
-    document.folder,
-    metadata
-);
-                // ==================================================
-                // QR VISIBILITY
-                // ==================================================
-
-                const visibleOnQr =
-                    metadata.visible_on_qr === true;
-
-                console.log(
-                    '[VAULT] ðŸ‘ visible_on_qr:',
-                    document.folder,
-                    visibleOnQr
-                );
-
-                // --------------------------------------------------
-                // DOCUMENT IS OFF
-                // --------------------------------------------------
-
-                if (!visibleOnQr) {
-
-                    console.log(
-                        '[VAULT] ðŸš« Document OFF:',
-                        document.title
-                    );
-
-                    continue;
-                }
-
-                // ==================================================
-                // GET DOCUMENT IMAGE
-                // ==================================================
-
-                const imagePath =
-                    `vault_documents/${userId}/${document.folder}/document.jpg`;
-
-                console.log(
-                    '[VAULT] ðŸ–¼ Image path:',
-                    imagePath
-                );
-
-                const imageRef =
-                    storage
-                        .ref()
-                        .child(imagePath);
-
-                let imageUrl;
-
-                try {
-
-                    imageUrl =
-                        await imageRef.getDownloadURL();
-
-                    console.log(
-                        '[VAULT] âœ… Image URL received:',
-                        document.folder
-                    );
-
-                } catch (imageError) {
-
-                    console.error(
-                        '[VAULT] âŒ Image URL error:',
-                        document.folder,
-                        imageError
-                    );
-
-                    continue;
-                }
-
-                // ==================================================
-                // ADD TO VISIBLE DOCUMENT LIST
-                // ==================================================
-
-                visibleDocuments.push({
-
-                    title:
-                        document.title,
-
-                    icon:
-                        document.icon,
-
-                    imageUrl:
-                        imageUrl,
-
-                    expiryDate:
-                        metadata.expiry_date ||
-                        null
-
-                });
-
-                console.log(
-                    '[VAULT] âœ… Document available:',
-                    document.title
-                );
-
-            } catch (documentError) {
-
-                console.error(
-                    '[VAULT] âŒ Document unavailable:',
-                    document.folder,
-                    documentError
-                );
-
-                // One document failing should not stop
-                // the other document from loading.
-
+            if (!display || !imageUrl) {
                 continue;
             }
+
+            try {
+                const parsedImageUrl = new URL(imageUrl);
+                if (
+                    parsedImageUrl.protocol !== 'https:'
+                    || parsedImageUrl.hostname !== 'storage.googleapis.com'
+                ) {
+                    continue;
+                }
+            } catch (_) {
+                continue;
+            }
+
+            visibleDocuments.push({
+                title: display.title,
+                icon: display.icon,
+                imageUrl,
+                expiryDate:
+                    typeof item.expiryDate === 'string'
+                        ? item.expiryDate
+                        : null
+            });
         }
 
-        // ======================================================
-        // NOTHING SHARED
-        // ======================================================
-
         if (visibleDocuments.length === 0) {
-
-            console.warn(
-                '[VAULT] âš ï¸ No QR-visible documents found.'
-            );
-
-            content.innerHTML = `
-                <div class="vault-empty">
-
-                    <i
-                        class="fas fa-eye-slash"
-                        style="
-                            font-size:28px;
-                            opacity:.35;
-                            margin-bottom:12px;
-                        ">
-                    </i>
-
-                    <br>
-
-                    No emergency documents have been
-                    shared by this member.
-
-                </div>
-            `;
-
+            content.innerHTML =
+                '<div class="vault-empty">' +
+                '<i class="fas fa-eye-slash" ' +
+                'style="font-size:28px;opacity:.35;margin-bottom:12px;"></i>' +
+                '<br>No emergency documents have been shared by this member.' +
+                '</div>';
             return;
         }
 
-        // ======================================================
-        // RENDER SHARED DOCUMENTS
-        // ======================================================
+        content.replaceChildren();
 
-        console.log(
-            '[VAULT] âœ… Total visible documents:',
-            visibleDocuments.length
+        for (const sharedDoc of visibleDocuments) {
+            const card = document.createElement('div');
+            card.className = 'vault-document';
+
+            const titleRow = document.createElement('div');
+            titleRow.className = 'vault-document-title';
+
+            const title = document.createElement('strong');
+            const icon = document.createElement('i');
+            icon.className = 'fas ' + sharedDoc.icon;
+            icon.style.color = '#00e5ff';
+            icon.style.marginRight = '7px';
+            title.appendChild(icon);
+            title.appendChild(
+                document.createTextNode(sharedDoc.title)
+            );
+
+            const visibleBadge = document.createElement('span');
+            visibleBadge.className = 'vault-visible';
+            visibleBadge.innerHTML =
+                '<i class="fas fa-eye"></i> SHARED';
+
+            titleRow.append(title, visibleBadge);
+
+            const image = document.createElement('img');
+            image.src = sharedDoc.imageUrl;
+            image.alt = sharedDoc.title;
+            image.loading = 'lazy';
+
+            card.append(titleRow, image);
+
+            if (sharedDoc.expiryDate) {
+                const expiry = new Date(sharedDoc.expiryDate);
+                if (!Number.isNaN(expiry.getTime())) {
+                    const expiryText = document.createElement('div');
+                    expiryText.style.marginTop = '8px';
+                    expiryText.style.fontSize = '10px';
+                    expiryText.style.opacity = '.55';
+                    expiryText.textContent =
+                        'Expiry: ' + expiry.toLocaleDateString('en-GB');
+                    card.appendChild(expiryText);
+                }
+            }
+
+            content.appendChild(card);
+        }
+    } catch (error) {
+        console.error(
+            '[VAULT] Public QR document lookup failed.',
+            error?.code || 'unknown'
         );
 
         content.innerHTML =
-            visibleDocuments
-                .map(document => {
-
-                    let expiryText = '';
-
-                    if (document.expiryDate) {
-
-                        const date =
-                            new Date(
-                                document.expiryDate
-                            );
-
-                        if (
-                            !isNaN(
-                                date.getTime()
-                            )
-                        ) {
-
-                            expiryText = `
-                                <div style="
-                                    margin-top:8px;
-                                    font-size:10px;
-                                    opacity:.55;
-                                ">
-                                    Expiry:
-                                    ${date.toLocaleDateString(
-                                        'en-GB'
-                                    )}
-                                </div>
-                            `;
-                        }
-                    }
-
-                    return `
-                        <div class="vault-document">
-
-                            <div class="vault-document-title">
-
-                                <strong>
-
-                                    <i
-                                        class="fas ${document.icon}"
-                                        style="
-                                            color:#00e5ff;
-                                            margin-right:7px;
-                                        ">
-                                    </i>
-
-                                    ${document.title}
-
-                                </strong>
-
-                                <span class="vault-visible">
-
-                                    <i class="fas fa-eye"></i>
-
-                                    SHARED
-
-                                </span>
-
-                            </div>
-
-                            <img
-                                src="${document.imageUrl}"
-                                alt="${document.title}"
-                                loading="lazy"
-                            >
-
-                            ${expiryText}
-
-                        </div>
-                    `;
-
-                })
-                .join('');
-
-        console.log(
-            '[VAULT] ðŸŽ‰ Vault rendered successfully.'
-        );
-
-    } catch (error) {
-
-        console.error(
-            '[VAULT] âŒ Vault loading error:',
-            error
-        );
-
-        content.innerHTML = `
-            <div class="vault-error">
-
-                <i
-                    class="fas fa-triangle-exclamation"
-                    style="font-size:24px;">
-                </i>
-
-                <br><br>
-
-                Unable to access the emergency vault.
-
-                <br><br>
-
-                Please try again.
-
-            </div>
-        `;
+            '<div class="vault-error">' +
+            '<i class="fas fa-triangle-exclamation" style="font-size:24px;"></i>' +
+            '<br><br>Unable to access the emergency vault.' +
+            '<br><br>Please try again.' +
+            '</div>';
     }
 }
-          // ==========================================
-// RESCUER EMERGENCY WEB FLOW
-// ==========================================
 
 function openRescuerEmergency() {
 
@@ -2983,7 +2737,7 @@ function confirmIncidentPhoto(){if(!incidentPhotoFile)return;incidentPhotoConfir
       );
 
       const photoPathForStorage =
-        `rescuer_emergency/${userId}/${requestId}.jpg`;
+        `rescuer_emergency/${userId}/${requestId}/photo.jpg`;
 
       const photoRef =
         storage.ref().child(photoPathForStorage);
