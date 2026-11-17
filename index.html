@@ -936,7 +936,7 @@
         
     <style>
 
-    /* আপনার existing CSS */
+    /* à¦†à¦ªà¦¨à¦¾à¦° existing CSS */
 
     .incident-photo-box {
         /* ... */
@@ -975,6 +975,86 @@
         }
     }
 
+
+/* GREEN–YELLOW REFERENCE COLOR THEME — colors only */
+:root {
+    --glass: rgba(255, 255, 255, 0.68) !important;
+    --border: rgba(41, 112, 38, 0.22) !important;
+    --gold: #6b8e00 !important;
+    --bg: #75ed00 !important;
+}
+html, body {
+    background-color: #a9ed00 !important;
+    background-image: linear-gradient(180deg, #71f000 0%, #9be900 45%, #d9e900 100%) !important;
+    color: #173b12 !important;
+}
+.container { color: #173b12; }
+.brand-name, .brand-name .brand-small, .member-socials a, .social-pill a {
+    color: #173b12 !important;
+}
+.brand-name span, .trust-badge { color: #246b18 !important; }
+.trust-badge {
+    background: rgba(255,255,255,.55) !important;
+    border-color: rgba(52,126,28,.28) !important;
+}
+.card, .social-pill, .btn-hosp, .action-card, .buddy-item, .buddy-empty,
+.vault-document, .incident-photo-box, .rescuer-target {
+    background: rgba(255,255,255,.68) !important;
+    border-color: rgba(48,112,28,.22) !important;
+    color: #183b16 !important;
+    box-shadow: 0 10px 28px rgba(40,91,12,.10) !important;
+}
+.card:hover { background: rgba(255,255,255,.82) !important; }
+.label, .action-card .card-subtitle, .buddy-number, .buddy-phone,
+.blood-buddy-subtitle, .vault-header p, .incident-photo-subtitle,
+.blood-buddy-footer, .rescuer-subtitle { color: #42623a !important; }
+.blood-buddy-modal, .rescuer-modal, .vault-modal {
+    background: rgba(45,75,17,.36) !important;
+}
+.blood-buddy-card, .rescuer-modal-card, .vault-modal-card {
+    background: linear-gradient(145deg, rgba(255,255,235,.98), rgba(235,255,205,.99)) !important;
+    border-color: rgba(82,145,23,.42) !important;
+    color: #173b12 !important;
+    box-shadow: 0 25px 70px rgba(38,85,12,.26) !important;
+}
+.blood-buddy-title, .blood-buddy-icon, .vault-header-icon { color: #397b18 !important; }
+.blood-buddy-icon, .vault-header-icon {
+    background: rgba(127,219,34,.16) !important;
+    border-color: rgba(88,155,24,.28) !important;
+}
+.blood-buddy-close, .rescuer-close, .vault-close {
+    background: rgba(84,141,28,.12) !important;
+    border-color: rgba(67,120,21,.20) !important;
+    color: #315d1c !important;
+}
+.buddy-name, .rescuer-modal-card h2, .vault-document-title strong,
+.incident-photo-title { color: #183b16 !important; }
+.vault-visible {
+    color: #34771c !important;
+    background: rgba(125,218,42,.16) !important;
+    border-color: rgba(86,157,31,.30) !important;
+}
+.vault-document img, #incidentPhotoImage { background: #eaf5dc !important; }
+.rescuer-modal-card input[type="text"], .rescuer-modal-card input[type="tel"] {
+    background: rgba(255,255,255,.82) !important;
+    border-color: rgba(75,126,34,.30) !important;
+    color: #173b12 !important;
+}
+.rescuer-modal-card input::placeholder { color: #66815a !important; }
+.rescuer-modal-card label:not(.rescuer-checkbox), .rescuer-checkbox { color: #31552a !important; }
+.incident-photo-btn, .btn-buddy {
+    background: rgba(169,222,43,.18) !important;
+    border-color: rgba(102,151,20,.42) !important;
+    color: #436b12 !important;
+}
+.btn-notify, .buddy-call-btn, .incident-photo-actions button:last-child {
+    background: linear-gradient(135deg, #72df21, #c6e800) !important;
+    color: #173b12 !important;
+}
+.vault-loading { color: #4e8a1c !important; }
+/* Keep emergency and error indicators clearly recognizable. */
+.blood-tag, .action-card.buddies .card-title, .rescuer-icon,
+.rescuer-status.error, .incident-photo-actions button:first-child { color: #d83a43 !important; }
 </style>
 </head>
 <!-- ======================================================
@@ -1348,7 +1428,7 @@ console.log('================================');
 
 
 // ======================================================
-// BLOOD BUDDIES MODAL — GLOBAL FUNCTIONS
+// BLOOD BUDDIES MODAL â€” GLOBAL FUNCTIONS
 // ======================================================
 
 let currentBloodBuddyUser = null;
@@ -1621,7 +1701,7 @@ async function loadFirestoreData() {
     if (!userId) {
 
         console.error(
-            '[PROFILE] ❌ No user ID found in URL.'
+            '[PROFILE] âŒ No user ID found in URL.'
         );
 
         nameEl.classList.remove('shimmer');
@@ -1665,7 +1745,7 @@ async function loadFirestoreData() {
         if (!doc.exists) {
 
             console.error(
-                '[PROFILE] ❌ Profile not found:',
+                '[PROFILE] âŒ Profile not found:',
                 `users_data/${userId}`
             );
 
@@ -1693,7 +1773,7 @@ if (!qrEnabled) {
         "[QR SECURITY] QR is disabled for this user."
     );
 
-    // পুরো profile UI বন্ধ করুন
+    // à¦ªà§à¦°à§‹ profile UI à¦¬à¦¨à§à¦§ à¦•à¦°à§à¦¨
     document.querySelector(".container").innerHTML = `
         <div style="
             min-height:100vh;
@@ -1777,7 +1857,7 @@ currentBloodBuddyUser =
     user;
 
 console.log(
-    '[PROFILE] ✅ User data received:',
+    '[PROFILE] âœ… User data received:',
     user
 );
        
@@ -1789,7 +1869,7 @@ console.log(
         if (user.Status !== 'Active') {
 
             console.warn(
-                '[PROFILE] ⚠️ User is not Active:',
+                '[PROFILE] âš ï¸ User is not Active:',
                 user.Status
             );
 
@@ -1827,7 +1907,7 @@ const bloodBuddyList =
 // ------------------------------------------------------
 //
 // IMPORTANT:
-// Flutter app থেকে Firestore-এ এই field রাখতে হবে:
+// Flutter app à¦¥à§‡à¦•à§‡ Firestore-à¦ à¦à¦‡ field à¦°à¦¾à¦–à¦¤à§‡ à¦¹à¦¬à§‡:
 //
 // Blood_Buddy_QR_Enabled: true / false
 //
@@ -2066,7 +2146,7 @@ document.addEventListener(
     }
 );
 // ======================================================
-// 8. SOCIAL LINKS — FINAL WORKING VERSION
+// 8. SOCIAL LINKS â€” FINAL WORKING VERSION
 // ======================================================
 
 const socialDiv = document.getElementById('socialLinks');
@@ -2249,7 +2329,7 @@ if (socialDiv) {
         // ======================================================
 
         console.log(
-            '[PROFILE] ✅ Profile loaded successfully:',
+            '[PROFILE] âœ… Profile loaded successfully:',
             user.Name
         );
 
@@ -2265,7 +2345,7 @@ if (socialDiv) {
     } catch (error) {
 
         console.error(
-            '[PROFILE] ❌ Firestore error:',
+            '[PROFILE] âŒ Firestore error:',
             error
         );
 
@@ -2338,7 +2418,7 @@ async function loadVaultDocuments() {
     if (!userId) {
 
         console.error(
-            '[VAULT] ❌ No userId available.'
+            '[VAULT] âŒ No userId available.'
         );
 
         content.innerHTML = `
@@ -2351,7 +2431,7 @@ async function loadVaultDocuments() {
     }
 
     console.log(
-        '[VAULT] 🔐 Loading vault for UID:',
+        '[VAULT] ðŸ” Loading vault for UID:',
         userId
     );
 
@@ -2386,7 +2466,7 @@ async function loadVaultDocuments() {
         for (const document of allowedDocuments) {
 
             console.log(
-                '[VAULT] 🔎 Checking:',
+                '[VAULT] ðŸ”Ž Checking:',
                 document.folder
             );
 
@@ -2400,7 +2480,7 @@ async function loadVaultDocuments() {
                     `vault_documents/${userId}/${document.folder}/metadata.json`;
 
                 console.log(
-                    '[VAULT] 📄 Metadata path:',
+                    '[VAULT] ðŸ“„ Metadata path:',
                     metadataPath
                 );
 
@@ -2411,7 +2491,7 @@ const metadataRef =
         .child(metadataPath);
 
 console.log(
-    '[VAULT] 📄 Getting metadata URL:',
+    '[VAULT] ðŸ“„ Getting metadata URL:',
     document.folder
 );
 
@@ -2419,7 +2499,7 @@ const metadataUrl =
     await metadataRef.getDownloadURL();
 
 console.log(
-    '[VAULT] ✅ Metadata URL received:',
+    '[VAULT] âœ… Metadata URL received:',
     document.folder
 );
 
@@ -2443,7 +2523,7 @@ const metadata =
     await response.json();
 
 console.log(
-    '[VAULT] ✅ Metadata read successfully:',
+    '[VAULT] âœ… Metadata read successfully:',
     document.folder,
     metadata
 );
@@ -2455,7 +2535,7 @@ console.log(
                     metadata.visible_on_qr === true;
 
                 console.log(
-                    '[VAULT] 👁 visible_on_qr:',
+                    '[VAULT] ðŸ‘ visible_on_qr:',
                     document.folder,
                     visibleOnQr
                 );
@@ -2467,7 +2547,7 @@ console.log(
                 if (!visibleOnQr) {
 
                     console.log(
-                        '[VAULT] 🚫 Document OFF:',
+                        '[VAULT] ðŸš« Document OFF:',
                         document.title
                     );
 
@@ -2482,7 +2562,7 @@ console.log(
                     `vault_documents/${userId}/${document.folder}/document.jpg`;
 
                 console.log(
-                    '[VAULT] 🖼 Image path:',
+                    '[VAULT] ðŸ–¼ Image path:',
                     imagePath
                 );
 
@@ -2499,14 +2579,14 @@ console.log(
                         await imageRef.getDownloadURL();
 
                     console.log(
-                        '[VAULT] ✅ Image URL received:',
+                        '[VAULT] âœ… Image URL received:',
                         document.folder
                     );
 
                 } catch (imageError) {
 
                     console.error(
-                        '[VAULT] ❌ Image URL error:',
+                        '[VAULT] âŒ Image URL error:',
                         document.folder,
                         imageError
                     );
@@ -2536,14 +2616,14 @@ console.log(
                 });
 
                 console.log(
-                    '[VAULT] ✅ Document available:',
+                    '[VAULT] âœ… Document available:',
                     document.title
                 );
 
             } catch (documentError) {
 
                 console.error(
-                    '[VAULT] ❌ Document unavailable:',
+                    '[VAULT] âŒ Document unavailable:',
                     document.folder,
                     documentError
                 );
@@ -2562,7 +2642,7 @@ console.log(
         if (visibleDocuments.length === 0) {
 
             console.warn(
-                '[VAULT] ⚠️ No QR-visible documents found.'
+                '[VAULT] âš ï¸ No QR-visible documents found.'
             );
 
             content.innerHTML = `
@@ -2593,7 +2673,7 @@ console.log(
         // ======================================================
 
         console.log(
-            '[VAULT] ✅ Total visible documents:',
+            '[VAULT] âœ… Total visible documents:',
             visibleDocuments.length
         );
 
@@ -2675,13 +2755,13 @@ console.log(
                 .join('');
 
         console.log(
-            '[VAULT] 🎉 Vault rendered successfully.'
+            '[VAULT] ðŸŽ‰ Vault rendered successfully.'
         );
 
     } catch (error) {
 
         console.error(
-            '[VAULT] ❌ Vault loading error:',
+            '[VAULT] âŒ Vault loading error:',
             error
         );
 
@@ -2999,7 +3079,7 @@ function confirmIncidentPhoto(){if(!incidentPhotoFile)return;incidentPhotoConfir
 
 
 // ==========================================================
-// VAULT MODAL — CLOSE WHEN CLICKING OUTSIDE THE CARD
+// VAULT MODAL â€” CLOSE WHEN CLICKING OUTSIDE THE CARD
 // ==========================================================
 
 document
