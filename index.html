@@ -1723,43 +1723,19 @@ async function loadFirestoreData() {
             `users_data/${userId}`
         );
 
-        const docRef =
-            db
-                .collection('users_data')
-                .doc(userId);
+        const profileCallable =
+            functions.httpsCallable('lyfqrGetPublicQrProfile');
 
-        const doc =
-            await docRef.get();
+        const profileResult =
+            await profileCallable({ userUid: userId });
+
+        const user = profileResult.data || {};
 
         nameEl.classList.remove('shimmer');
 
         console.log(
-            '[PROFILE] Firestore document exists:',
-            doc.exists
+            '[PROFILE] Public QR profile response received'
         );
-
-        // ======================================================
-        // 3. PROFILE NOT FOUND
-        // ======================================================
-
-        if (!doc.exists) {
-
-            console.error(
-                '[PROFILE] âŒ Profile not found:',
-                `users_data/${userId}`
-            );
-
-            nameEl.innerText =
-                'Profile Not Found';
-
-            return;
-        }
-
-        // ======================================================
-        // 4. USER DATA
-        // ======================================================
-
-    const user = doc.data();
 
 // ======================================================
 // MAIN QR SECURITY CHECK
