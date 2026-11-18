@@ -936,7 +936,7 @@
         
     <style>
 
-    /* à¦†à¦ªà¦¨à¦¾à¦° existing CSS */
+    /* Ã Â¦â€ Ã Â¦ÂªÃ Â¦Â¨Ã Â¦Â¾Ã Â¦Â° existing CSS */
 
     .incident-photo-box {
         /* ... */
@@ -976,7 +976,7 @@
     }
 
 
-/* GREEN–YELLOW REFERENCE COLOR THEME — colors only */
+/* GREENâ€“YELLOW REFERENCE COLOR THEME â€” colors only */
 :root {
     --glass: rgba(255, 255, 255, 0.68) !important;
     --border: rgba(41, 112, 38, 0.22) !important;
@@ -1055,6 +1055,28 @@ html, body {
 /* Keep emergency and error indicators clearly recognizable. */
 .blood-tag, .action-card.buddies .card-title, .rescuer-icon,
 .rescuer-status.error, .incident-photo-actions button:first-child { color: #d83a43 !important; }
+
+/* RESCUER FLOW GUIDANCE AND VIDEO HELP */
+.rescuer-target { background:rgba(110,125,105,.12) !important; border:1px solid rgba(90,110,84,.22) !important; box-shadow:none !important; opacity:.82; }
+.rescuer-target span { color:#687660 !important; }
+.rescuer-target strong { color:#53634c !important; }
+.how-to-help-trigger { position:absolute; top:60px; right:22px; z-index:2; display:inline-flex; align-items:center; gap:9px; padding:7px 13px 7px 8px; border:1px solid rgba(225,40,48,.38); border-radius:16px; background:rgba(255,255,255,.94); color:#477217; font:800 13px 'Plus Jakarta Sans',sans-serif; cursor:pointer; box-shadow:0 7px 20px rgba(57,105,19,.16); }
+.how-to-help-trigger i { color:#e32935; font-size:34px; line-height:1; filter:drop-shadow(0 3px 4px rgba(227,41,53,.22)); }
+.how-to-help-trigger:hover,.how-to-help-trigger:focus-visible { outline:3px solid rgba(178,220,30,.72); outline-offset:3px; }
+.flow-guide { outline:3px solid #f3c900 !important; outline-offset:2px !important; box-shadow:0 0 0 5px rgba(243,201,0,.24),0 8px 22px rgba(66,104,17,.16) !important; animation:guidePulse 1.45s ease-in-out infinite; }
+.rescuer-modal-card input.flow-guide,.rescuer-checkbox.flow-guide,.incident-photo-btn.flow-guide,.incident-photo-actions button.flow-guide,.rescuer-send-btn.flow-guide { border-color:#e7bc00 !important; }
+.rescuer-checkbox.flow-guide { border-radius:11px; padding:8px; background:rgba(255,226,74,.16); }
+.rescuer-send-btn:disabled { opacity:.48; cursor:not-allowed; box-shadow:none; }
+.flow-hint { margin:10px 2px 0; color:#45623a; text-align:center; font-size:11px; line-height:1.5; }
+@keyframes guidePulse { 0%,100% { transform:scale(1); } 50% { transform:scale(1.015); } }
+.help-video-modal { display:none; position:fixed; inset:0; z-index:100100; align-items:center; justify-content:center; padding:18px; box-sizing:border-box; background:rgba(31,58,13,.78); backdrop-filter:blur(10px); }
+.help-video-modal.show { display:flex; }
+.help-video-card { position:relative; width:100%; max-width:540px; max-height:90vh; overflow:auto; padding:18px; box-sizing:border-box; border:1px solid rgba(96,151,34,.42); border-radius:22px; background:linear-gradient(145deg,#fbffe8,#e8f8c9); box-shadow:0 24px 70px rgba(0,0,0,.38); }
+.help-video-title { margin:0 46px 14px 0; color:#356515; font-size:18px; font-weight:900; }
+.help-video-close { position:absolute; top:12px; right:12px; width:36px; height:36px; border:0; border-radius:50%; background:rgba(74,119,30,.12); color:#315b1b; font-size:18px; cursor:pointer; }
+.help-video-card video { display:block; width:100%; max-height:68vh; border-radius:14px; background:#16210f; }
+.help-video-fallback { display:none; margin:12px 2px 0; color:#4c633f; font-size:12px; line-height:1.5; }
+@media (max-width:380px) { .how-to-help-trigger { top:58px; right:17px; gap:6px; padding:6px 10px 6px 7px; font-size:12px; } .how-to-help-trigger i { font-size:30px; } }
 </style>
 </head>
 <!-- ======================================================
@@ -1267,6 +1289,8 @@ html, body {
         </button>
 
 
+        <button type="button" class="how-to-help-trigger" onclick="openHowToHelpVideo()" aria-label="Watch how to help"><i class="fas fa-circle-play" aria-hidden="true"></i><span>How to help</span></button>
+
         <!-- Emergency Icon -->
         <div class="rescuer-icon">
 
@@ -1291,7 +1315,7 @@ html, body {
 
             <span>PERSON NEEDING HELP</span>
 
-            <strong id="rescuerTargetName">
+            <strong id="rescuerTargetName" aria-disabled="true">
                 Loading...
             </strong>
 
@@ -1307,7 +1331,7 @@ html, body {
 
         <input
             type="text"
-            id="rescuerName"
+            id="rescuerName" class="flow-control"
             placeholder="Enter your name"
             autocomplete="name"
         >
@@ -1322,32 +1346,43 @@ html, body {
 
         <input
     type="tel"
-    id="rescuerPhone"
+    id="rescuerPhone" class="flow-control"
     placeholder="10-digit mobile number"
     autocomplete="tel"
     inputmode="numeric"
     maxlength="15"
 >
 
-<label class="rescuer-checkbox"><input type="checkbox" id="rescuerWithPerson"><span>I am with this person</span></label>
-<div class="incident-photo-box"><div class="incident-photo-title"><i class="fas fa-camera"></i> TAKE A LIVE PICTURE <span>(OPTIONAL)</span></div><div class="incident-photo-subtitle">Take a live picture of the situation for the emergency guardians.</div><input type="file" id="incidentPhotoInput" accept="image/*" capture="environment" style="display:none;"><button type="button" id="takeIncidentPhotoBtn" class="incident-photo-btn pulse-hint" onclick="openIncidentCamera()"><i class="fas fa-camera"></i> TAKE A LIVE PICTURE</button><div id="incidentPhotoPreview" style="display:none;"><img id="incidentPhotoImage" alt="Incident photo"><div class="incident-photo-actions"><button type="button" onclick="retakeIncidentPhoto()">RETAKE</button> <button
+<label class="rescuer-checkbox" id="rescuerWithPersonLabel"><input type="checkbox" id="rescuerWithPerson"><span>I am with this person</span></label>
+<div class="incident-photo-box"><div class="incident-photo-title"><i class="fas fa-camera"></i> TAKE A LIVE PICTURE <span>(OPTIONAL)</span></div><div class="incident-photo-subtitle">Take a live picture of the situation for the emergency guardians.</div><input type="file" id="incidentPhotoInput" accept="image/*" capture="environment" style="display:none;"><button type="button" id="takeIncidentPhotoBtn" class="incident-photo-btn" onclick="openIncidentCamera()"><i class="fas fa-camera"></i> TAKE A LIVE PICTURE</button><div id="incidentPhotoPreview" style="display:none;"><img id="incidentPhotoImage" alt="Incident photo"><div class="incident-photo-actions"><button type="button" onclick="retakeIncidentPhoto()">RETAKE</button> <button
     type="button"
-    class="pulse-hint"
+    id="confirmIncidentPhotoBtn"
     onclick="confirmIncidentPhoto()">
     OK
-</button>    </div><!-- NEW: EMERGENCY PHOTO DISCLOSURE --><div id="incidentPhotoDisclosure" style="display:none;margin-top:12px;padding:14px;border:1px solid rgba(255,255,255,.15);border-radius:12px;background:rgba(255,255,255,.05);"><div style="font-size:14px;font-weight:800;color:#fff;margin-bottom:8px;">Emergency Photo Sharing</div><div style="font-size:13px;line-height:1.55;color:#d7d7d7;">When you submit an emergency photo, LyfQR securely uploads the photo and shares it with the designated guardian to help with the emergency situation. Emergency photos are automatically deleted after 3 days.</div><label style="display:flex;align-items:flex-start;gap:8px;margin-top:12px;font-size:13px;line-height:1.4;color:#fff;cursor:pointer;"><input
+</button>    </div><!-- NEW: EMERGENCY PHOTO DISCLOSURE --><div id="incidentPhotoDisclosure" style="display:none;margin-top:12px;padding:14px;border:1px solid rgba(255,255,255,.15);border-radius:12px;background:rgba(255,255,255,.05);"><div style="font-size:14px;font-weight:800;color:#fff;margin-bottom:8px;">Emergency Photo Sharing</div><div style="font-size:13px;line-height:1.55;color:#d7d7d7;">When you submit an emergency photo, LyfQR securely uploads the photo and shares it with the designated guardian to help with the emergency situation. Emergency photos are automatically deleted after 3 days.</div><label id="incidentPhotoConsentLabel" style="display:flex;align-items:flex-start;gap:8px;margin-top:12px;font-size:13px;line-height:1.4;color:#fff;cursor:pointer;"><input
     type="checkbox"
     id="incidentPhotoConsent"
-    class="pulse-hint"
     style="margin-top:3px;"
 ><span>I understand and agree to share this emergency photo with the designated guardian.</span></label></div></div></div>
-<button type="button" id="sendRescuerAlertBtn" class="rescuer-send-btn pulse-hint" onclick="sendRescuerEmergencyAlert()"><i class="fas fa-bell"></i>SEND EMERGENCY ALERT</button>
+<button type="button" id="sendRescuerAlertBtn" class="rescuer-send-btn" onclick="sendRescuerEmergencyAlert()"><i class="fas fa-bell"></i>SEND EMERGENCY ALERT</button>
 <div id="rescuerStatus" class="rescuer-status"></div>
+<p id="emergencyFlowHint" class="flow-hint">Fill in your details and confirm you are with this person. The photo is optional.</p>
 
     </div>
 
 </div>
 
+<div id="helpVideoModal" class="help-video-modal" role="dialog" aria-modal="true" aria-labelledby="helpVideoTitle" onclick="if(event.target===this)closeHowToHelpVideo()">
+    <div class="help-video-card">
+        <button type="button" class="help-video-close" onclick="closeHowToHelpVideo()" aria-label="Close video">&times;</button>
+        <h3 id="helpVideoTitle" class="help-video-title">How to help</h3>
+        <video id="howToHelpVideo" controls playsinline preload="none">
+            <source src="how-to-help.mp4" type="video/mp4">
+            Your browser does not support video playback.
+        </video>
+        <p id="helpVideoFallback" class="help-video-fallback">The instruction video is not available right now. Please follow the highlighted steps on this form.</p>
+    </div>
+</div>
         <script>
         const firebaseConfig = {
             apiKey: "AIzaSyBCkv-YOQd_RJJIE44EQ33WDH8oLoNtl5I",
@@ -1428,7 +1463,7 @@ console.log('================================');
 
 
 // ======================================================
-// BLOOD BUDDIES MODAL â€” GLOBAL FUNCTIONS
+// BLOOD BUDDIES MODAL Ã¢â‚¬â€ GLOBAL FUNCTIONS
 // ======================================================
 
 let currentBloodBuddyUser = null;
@@ -1701,7 +1736,7 @@ async function loadFirestoreData() {
     if (!userId) {
 
         console.error(
-            '[PROFILE] âŒ No user ID found in URL.'
+            '[PROFILE] Ã¢ÂÅ’ No user ID found in URL.'
         );
 
         nameEl.classList.remove('shimmer');
@@ -1749,7 +1784,7 @@ if (!qrEnabled) {
         "[QR SECURITY] QR is disabled for this user."
     );
 
-    // à¦ªà§à¦°à§‹ profile UI à¦¬à¦¨à§à¦§ à¦•à¦°à§à¦¨
+    // Ã Â¦ÂªÃ Â§ÂÃ Â¦Â°Ã Â§â€¹ profile UI Ã Â¦Â¬Ã Â¦Â¨Ã Â§ÂÃ Â¦Â§ Ã Â¦â€¢Ã Â¦Â°Ã Â§ÂÃ Â¦Â¨
     document.querySelector(".container").innerHTML = `
         <div style="
             min-height:100vh;
@@ -1833,7 +1868,7 @@ currentBloodBuddyUser =
     user;
 
 console.log(
-    '[PROFILE] âœ… User data received:',
+    '[PROFILE] Ã¢Å“â€¦ User data received:',
     user
 );
        
@@ -1845,7 +1880,7 @@ console.log(
         if (user.Status !== 'Active') {
 
             console.warn(
-                '[PROFILE] âš ï¸ User is not Active:',
+                '[PROFILE] Ã¢Å¡Â Ã¯Â¸Â User is not Active:',
                 user.Status
             );
 
@@ -1883,7 +1918,7 @@ const bloodBuddyList =
 // ------------------------------------------------------
 //
 // IMPORTANT:
-// Flutter app à¦¥à§‡à¦•à§‡ Firestore-à¦ à¦à¦‡ field à¦°à¦¾à¦–à¦¤à§‡ à¦¹à¦¬à§‡:
+// Flutter app Ã Â¦Â¥Ã Â§â€¡Ã Â¦â€¢Ã Â§â€¡ Firestore-Ã Â¦Â Ã Â¦ÂÃ Â¦â€¡ field Ã Â¦Â°Ã Â¦Â¾Ã Â¦â€“Ã Â¦Â¤Ã Â§â€¡ Ã Â¦Â¹Ã Â¦Â¬Ã Â§â€¡:
 //
 // Blood_Buddy_QR_Enabled: true / false
 //
@@ -2122,7 +2157,7 @@ document.addEventListener(
     }
 );
 // ======================================================
-// 8. SOCIAL LINKS â€” FINAL WORKING VERSION
+// 8. SOCIAL LINKS Ã¢â‚¬â€ FINAL WORKING VERSION
 // ======================================================
 
 const socialDiv = document.getElementById('socialLinks');
@@ -2305,7 +2340,7 @@ if (socialDiv) {
         // ======================================================
 
         console.log(
-            '[PROFILE] âœ… Profile loaded successfully:',
+            '[PROFILE] Ã¢Å“â€¦ Profile loaded successfully:',
             user.Name
         );
 
@@ -2321,7 +2356,7 @@ if (socialDiv) {
     } catch (error) {
 
         console.error(
-            '[PROFILE] âŒ Firestore error:',
+            '[PROFILE] Ã¢ÂÅ’ Firestore error:',
             error
         );
 
@@ -2548,8 +2583,10 @@ function openRescuerEmergency() {
     ).innerText = "";
 
     modal.classList.add("show");
+    updateEmergencyFlowGuide();
 }
 function closeRescuerEmergency() {
+    closeHowToHelpVideo();
 
     document
         .getElementById("rescuerEmergencyModal")
@@ -2578,38 +2615,115 @@ function openIncidentCamera(){const i=document.getElementById("incidentPhotoInpu
 document.getElementById("incidentPhotoInput")?.addEventListener("change", function () {
   const f = this.files?.[0];
   if (!f) return;
-
-  if (!f.type.startsWith("image/")) {
-    alert("Please select an image.");
-    this.value = "";
-    return;
-  }
-
+  if (!f.type.startsWith("image/")) { alert("Please select an image."); this.value = ""; updateEmergencyFlowGuide(); return; }
   incidentPhotoFile = f;
   incidentPhotoConfirmed = false;
-
   const preview = document.getElementById("incidentPhotoPreview");
   const img = document.getElementById("incidentPhotoImage");
   const disclosure = document.getElementById("incidentPhotoDisclosure");
   const consent = document.getElementById("incidentPhotoConsent");
-
   img.src = URL.createObjectURL(f);
   preview.style.display = "block";
-
-  if (disclosure) {
-    disclosure.style.display = "block";
-  }
-
-  if (consent) {
-    consent.checked = false;
-  }
-
-  document.getElementById("takeIncidentPhotoBtn").innerHTML =
-    '<i class="fas fa-camera"></i> PHOTO SELECTED';
+  if (disclosure) disclosure.style.display = "none";
+  if (consent) consent.checked = false;
+  document.getElementById("takeIncidentPhotoBtn").innerHTML = '<i class="fas fa-camera"></i> PHOTO SELECTED';
+  updateEmergencyFlowGuide();
 });
-function retakeIncidentPhoto() { incidentPhotoFile = null; incidentPhotoConfirmed = false; document.getElementById("incidentPhotoInput").value = ""; document.getElementById("incidentPhotoPreview").style.display = "none"; const disclosure = document.getElementById("incidentPhotoDisclosure"); const consent = document.getElementById("incidentPhotoConsent"); if (disclosure) { disclosure.style.display = "none"; } if (consent) { consent.checked = false; } document.getElementById("takeIncidentPhotoBtn").classList.remove("photo-ready"); document.getElementById("takeIncidentPhotoBtn").innerHTML = '<i class="fas fa-camera"></i> TAKE A LIVE PICTURE'; openIncidentCamera(); }
-function confirmIncidentPhoto(){if(!incidentPhotoFile)return;incidentPhotoConfirmed=true;const b=document.getElementById("takeIncidentPhotoBtn");b.classList.add("photo-ready");b.innerHTML='<i class="fas fa-check"></i> PHOTO READY'}
-            async function sendRescuerEmergencyAlert() {
+function retakeIncidentPhoto() {
+  incidentPhotoFile = null;
+  incidentPhotoConfirmed = false;
+  document.getElementById("incidentPhotoInput").value = "";
+  document.getElementById("incidentPhotoPreview").style.display = "none";
+  const disclosure = document.getElementById("incidentPhotoDisclosure");
+  const consent = document.getElementById("incidentPhotoConsent");
+  if (disclosure) disclosure.style.display = "none";
+  if (consent) consent.checked = false;
+  document.getElementById("takeIncidentPhotoBtn").classList.remove("photo-ready");
+  document.getElementById("takeIncidentPhotoBtn").innerHTML = '<i class="fas fa-camera"></i> TAKE A LIVE PICTURE';
+  updateEmergencyFlowGuide();
+  openIncidentCamera();
+}
+function confirmIncidentPhoto() {
+  if (!incidentPhotoFile) return;
+  incidentPhotoConfirmed = true;
+  const button = document.getElementById("takeIncidentPhotoBtn");
+  button.classList.add("photo-ready");
+  button.innerHTML = '<i class="fas fa-check"></i> PHOTO READY';
+  const disclosure = document.getElementById("incidentPhotoDisclosure");
+  const consent = document.getElementById("incidentPhotoConsent");
+  if (disclosure) disclosure.style.display = "block";
+  if (consent) consent.checked = false;
+  updateEmergencyFlowGuide();
+}
+function updateEmergencyFlowGuide() {
+  const name = document.getElementById("rescuerName");
+  const phone = document.getElementById("rescuerPhone");
+  const withPerson = document.getElementById("rescuerWithPerson");
+  const withPersonLabel = document.getElementById("rescuerWithPersonLabel");
+  const takePhoto = document.getElementById("takeIncidentPhotoBtn");
+  const confirmPhoto = document.getElementById("confirmIncidentPhotoBtn");
+  const disclosure = document.getElementById("incidentPhotoDisclosure");
+  const consent = document.getElementById("incidentPhotoConsent");
+  const consentLabel = document.getElementById("incidentPhotoConsentLabel");
+  const send = document.getElementById("sendRescuerAlertBtn");
+  const hint = document.getElementById("emergencyFlowHint");
+  if (!name || !phone || !withPerson || !send) return;
+  [name, phone, withPersonLabel, takePhoto, confirmPhoto, consentLabel, send].forEach((el) => el && el.classList.remove("flow-guide"));
+  if (incidentPhotoFile) {
+    if (!incidentPhotoConfirmed) {
+      send.disabled = true;
+      confirmPhoto?.classList.add("flow-guide");
+      if (hint) hint.textContent = "Review your picture, then tap OK to continue.";
+    } else if (!consent?.checked) {
+      send.disabled = true;
+      if (disclosure) disclosure.style.display = "block";
+      consentLabel?.classList.add("flow-guide");
+      if (hint) hint.textContent = "Read the photo-sharing notice and tick the consent box to continue.";
+    } else {
+      send.disabled = false;
+      send.classList.add("flow-guide");
+      if (hint) hint.textContent = "Now tap Send Emergency Alert to notify the guardians.";
+    }
+    return;
+  }
+  const ready = !!name.value.trim() && !!phone.value.trim() && withPerson.checked;
+  send.disabled = !ready;
+  if (ready) {
+    send.classList.add("flow-guide");
+    if (hint) hint.textContent = "Your details are ready. Tap Send Emergency Alert; a photo is optional.";
+  } else {
+    if (!name.value.trim()) name.classList.add("flow-guide");
+    if (!phone.value.trim()) phone.classList.add("flow-guide");
+    if (!withPerson.checked) withPersonLabel?.classList.add("flow-guide");
+    takePhoto?.classList.add("flow-guide");
+    if (hint) hint.textContent = "Fill in your name and phone, confirm you are with this person, and add a photo only if useful.";
+  }
+}
+["rescuerName", "rescuerPhone"].forEach((id) => document.getElementById(id)?.addEventListener("input", updateEmergencyFlowGuide));
+document.getElementById("rescuerWithPerson")?.addEventListener("change", updateEmergencyFlowGuide);
+document.getElementById("incidentPhotoConsent")?.addEventListener("change", updateEmergencyFlowGuide);
+function openHowToHelpVideo() {
+  const modal = document.getElementById("helpVideoModal");
+  const video = document.getElementById("howToHelpVideo");
+  const fallback = document.getElementById("helpVideoFallback");
+  if (!modal || !video) return;
+  if (fallback) fallback.style.display = "none";
+  modal.classList.add("show");
+  video.currentTime = 0;
+  const playAttempt = video.play();
+  if (playAttempt && typeof playAttempt.catch === "function") playAttempt.catch(() => { if (fallback) fallback.style.display = "block"; });
+}
+function closeHowToHelpVideo() {
+  const modal = document.getElementById("helpVideoModal");
+  const video = document.getElementById("howToHelpVideo");
+  if (video) { video.pause(); video.currentTime = 0; }
+  if (modal) modal.classList.remove("show");
+}
+document.getElementById("howToHelpVideo")?.addEventListener("error", function () {
+  const fallback = document.getElementById("helpVideoFallback");
+  if (fallback) fallback.style.display = "block";
+});
+async function sendRescuerEmergencyAlert() {
   const nameInput = document.getElementById("rescuerName");
   const button = document.getElementById("sendRescuerAlertBtn");
 
@@ -2809,7 +2923,7 @@ function confirmIncidentPhoto(){if(!incidentPhotoFile)return;incidentPhotoConfir
 
 
 // ==========================================================
-// VAULT MODAL â€” CLOSE WHEN CLICKING OUTSIDE THE CARD
+// VAULT MODAL Ã¢â‚¬â€ CLOSE WHEN CLICKING OUTSIDE THE CARD
 // ==========================================================
 
 document
@@ -2828,14 +2942,4 @@ document
     </script>
 </body>
 </html>
-        
-
-
-
-
-
-
-
-
-
 
